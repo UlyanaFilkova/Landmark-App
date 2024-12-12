@@ -24,7 +24,7 @@
   </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
@@ -33,7 +33,17 @@ import useVuelidate from '@vuelidate/core'
 import { checkUser } from '@/services/auth.js'
 import { useRouter } from 'vue-router'
 
-const inputFields = reactive([
+interface InputField {
+  model: string
+  type: string
+  placeholder: string
+  name: string
+  autocomplete: string
+  required: boolean
+  errorMessage: string
+}
+
+const inputFields: InputField[] = reactive([
   {
     model: '',
     type: 'email',
@@ -75,11 +85,11 @@ const submitButtonDisabled = computed(
   () => !validationFields.value.username || !validationFields.value.password,
 )
 
-const updateValue = (field, value) => {
+const updateValue = (field: InputField, value: string) => {
   errorMessage.value = ''
   field.model = value
 }
-const getValidateMessage = () => {
+const getValidateMessage = (): string => {
   const validationErrors = {
     'username.required': 'Email is required',
     'username.email': 'Invalid email',
@@ -91,8 +101,9 @@ const getValidateMessage = () => {
     const errors = Object.values(v$.value.validationFields.$errors)
     const firstError = errors.find((error) => error.$message !== '')
     if (firstError) {
-      const key = `${firstError.$property}.${firstError.$validator}`
-      return validationErrors[key] || firstError.$message
+      const key =
+        `${firstError.$property}.${firstError.$validator}` as keyof typeof validationErrors
+      return validationErrors[key] || (firstError.$message as string)
     }
   }
   return ''
