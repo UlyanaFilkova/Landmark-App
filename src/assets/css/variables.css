@@ -1,0 +1,37 @@
+:root {
+  --color-login-link: #0056b3;
+  --color-invalid-input: red;
+
+  --color-main: #fb6914;
+  --color-main-hover: #d74f00;
+  --color-main-disabled: #808080;
+  --color-second: #ffae80;
+  --color-second-hover: #ff8a47;
+  --color-third: #bababa;
+  --color-third-hover: #9c9c9c;
+  --color-forth: #aaaaaa;
+  --color-forth-hover: #888;
+  --color-sixth: #ffa876;
+  --color-sixth-hover: #ffebdf;
+  --color-seventh: #fd5d00;
+  --color-eighth: #a0a0a0;
+  --color-undone: #fa6610;
+  --color-done: #ffc258;
+  --color-tenth: #833700;
+  --color-eleventh: #d7b7a0;
+  --color-twelve: #652a00;
+
+  --color-card-first: #d8d8d8;
+  --color-card-second: #e2e2e2;
+  --color-card-third: #818181;
+
+  --color-text-main: white;
+  --color-text-second: #373737;
+  --color-text-third: #eaeaea;
+
+  --color-border-one: #ccc;
+  --color-border-one: #e0e0e0;
+
+  --color-delete: #fe2d2d;
+  --color-delete-hover: #d80000;
+}
