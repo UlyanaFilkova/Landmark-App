@@ -98,8 +98,7 @@ const getValidateMessage = () => {
   return ''
 }
 const clearForm = () => {
-  inputFields[0].model = ''
-  inputFields[1].model = ''
+  inputFields.forEach((field) => (field.model = ''))
 }
 const handleSubmit = async () => {
   v$.value.validationFields.$touch()
