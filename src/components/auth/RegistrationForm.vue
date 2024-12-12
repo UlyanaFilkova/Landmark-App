@@ -11,7 +11,7 @@
       :autocomplete="field.autocomplete"
       :required="field.required"
       :errorMessage="field.errorMessage"
-      @update:modelValue="(value) => (field.model = value)"
+      @update:modelValue="(value: string) => (field.model = value)"
     />
     <div class="invalid-input">
       {{ errorMessage }}
@@ -24,7 +24,7 @@
   </form>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
@@ -33,7 +33,17 @@ import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { registerUser, checkUsernameExists } from '@/services/auth.js'
 
-const inputFields = reactive([
+interface InputField {
+  model: string
+  type: string
+  placeholder: string
+  name: string
+  autocomplete: string
+  required: boolean
+  errorMessage: string
+}
+
+const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'email',
@@ -63,8 +73,8 @@ const inputFields = reactive([
   },
 ])
 
-const errorMessage = ref('')
-const requestIsProcessing = ref(false)
+const errorMessage = ref<string>('')
+const requestIsProcessing = ref<boolean>(false)
 const router = useRouter()
 
 const validationFields = computed(() => ({
@@ -88,14 +98,14 @@ const v$ = useVuelidate(rules, {
   validationFields,
 })
 
-const submitButtonDisabled = computed(
+const submitButtonDisabled = computed<boolean>(
   () =>
     !validationFields.value.username ||
     !validationFields.value.password ||
     !validationFields.value.repeatPassword,
 )
 
-const getValidateMessage = () => {
+const getValidateMessage = (): string => {
   const validationErrors = {
     'username.required': 'Email is required',
     'username.email': 'Invalid email',
@@ -105,25 +115,23 @@ const getValidateMessage = () => {
     'repeatPassword.sameAsPassword': 'Passwords must match',
   }
 
-  console.log(validationFields.value.password)
-  console.log(validationFields.value.repeatPassword)
-
   if (v$.value.validationFields.$invalid) {
     const errors = Object.values(v$.value.validationFields.$errors)
     const firstError = errors.find((error) => error.$message !== '')
     if (firstError) {
-      const key = `${firstError.$property}.${firstError.$validator}`
-      return validationErrors[key] || firstError.$message
+      const key =
+        `${firstError.$property}.${firstError.$validator}` as keyof typeof validationErrors
+      return validationErrors[key] || (firstError.$message as string)
     }
   }
   return ''
 }
 
-const clearForm = () => {
+const clearForm = (): void => {
   inputFields.forEach((field) => (field.model = ''))
 }
 
-const handleSubmit = async () => {
+const handleSubmit = async (): Promise<void> => {
   errorMessage.value = ''
   v$.value.$touch()
 
@@ -137,7 +145,7 @@ const handleSubmit = async () => {
       requestIsProcessing.value = false
       return
     }
-    console.log('registered')
+
     const result = await registerUser(inputFields[0].model, inputFields[1].model)
     if (result === true) {
       router.push({ name: 'home' })

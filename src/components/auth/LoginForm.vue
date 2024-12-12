@@ -11,7 +11,7 @@
       :autocomplete="field.autocomplete"
       :required="field.required"
       :errorMessage="field.errorMessage"
-      @update:modelValue="(value) => updateValue(field, value)"
+      @update:modelValue="(value: string) => (field.model = value)"
     />
     <div class="invalid-input">
       {{ errorMessage }}
@@ -43,7 +43,7 @@ interface InputField {
   errorMessage: string
 }
 
-const inputFields: InputField[] = reactive([
+const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'email',
@@ -63,8 +63,8 @@ const inputFields: InputField[] = reactive([
     errorMessage: '',
   },
 ])
-const errorMessage = ref('')
-const requestIsProcessing = ref(false)
+const errorMessage = ref<string>('')
+const requestIsProcessing = ref<boolean>(false)
 const router = useRouter()
 
 const rules = {
@@ -81,11 +81,20 @@ const validationFields = computed(() => ({
 
 const v$ = useVuelidate(rules, { validationFields })
 
-const submitButtonDisabled = computed(
+const submitButtonDisabled = computed<boolean>(
   () => !validationFields.value.username || !validationFields.value.password,
 )
 
-const updateValue = (field: InputField, value: string) => {
+const myObject: { a: number; b: boolean } = {
+  a: 12,
+  b: false,
+}
+
+;(Object.keys(myObject) as Array<keyof typeof myObject>).forEach((key) => {
+  // some logic for the key
+})
+
+const updateValue = (field: InputField, value: string): void => {
   errorMessage.value = ''
   field.model = value
 }
@@ -108,10 +117,10 @@ const getValidateMessage = (): string => {
   }
   return ''
 }
-const clearForm = () => {
+const clearForm = (): void => {
   inputFields.forEach((field) => (field.model = ''))
 }
-const handleSubmit = async () => {
+const handleSubmit = async (): Promise<void> => {
   v$.value.validationFields.$touch()
 
   if (v$.value.validationFields.$invalid) {
