@@ -1,70 +1,95 @@
-import { firebase } from '@/services/firebase.config.js'
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-} from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
-
-const usersCollection = collection(firebase, 'users')
-
-export const checkUser = async (username, password) => {
-  try {
-    const q = query(usersCollection, where('username', '==', username))
-    const querySnapshot = await getDocs(q)
-
-    if (!querySnapshot.empty) {
-      const userData = querySnapshot.docs[0].data()
-
-      if (userData.password === password) {
-        // if passwords match
-        localStorage.setItem('userId', querySnapshot.docs[0].id)
-        return true
-      }
+'use strict'
+var __awaiter =
+  (this && this.__awaiter) ||
+  function (thisArg, _arguments, P, generator) {
+    function adopt(value) {
+      return value instanceof P
+        ? value
+        : new P(function (resolve) {
+            resolve(value)
+          })
     }
-    // If the user is not found or the passwords do not match
-    return 'Invalid email or password'
-  } catch (error) {
-    console.error('Error checking user:', error)
+    return new (P || (P = Promise))(function (resolve, reject) {
+      function fulfilled(value) {
+        try {
+          step(generator.next(value))
+        } catch (e) {
+          reject(e)
+        }
+      }
+      function rejected(value) {
+        try {
+          step(generator['throw'](value))
+        } catch (e) {
+          reject(e)
+        }
+      }
+      function step(result) {
+        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected)
+      }
+      step((generator = generator.apply(thisArg, _arguments || [])).next())
+    })
   }
-}
-
-export const registerUser = async (username, password) => {
-  const registrationDate = new Date()
-  registrationDate.setHours(0, 0, 0, 0)
-  const docRef = await addDoc(usersCollection, {
-    username,
-    password,
-    registrationDate,
+Object.defineProperty(exports, '__esModule', { value: true })
+exports.checkUsernameExists = exports.registerUser = exports.checkUser = void 0
+const firebase_config_js_1 = require('@/services/firebase.config.js')
+const usersCollection = (0, firebase_config_js_1.collection)(firebase_config_js_1.firebase, 'users')
+const checkUser = (username, password) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    try {
+      const q = (0, firebase_config_js_1.query)(
+        usersCollection,
+        (0, firebase_config_js_1.where)('username', '==', username),
+      )
+      const querySnapshot = yield (0, firebase_config_js_1.getDocs)(q)
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data()
+        if (userData.password === password) {
+          // if passwords match
+          localStorage.setItem('userId', userData.id)
+          return true
+        }
+      }
+      // If the user is not found or the passwords do not match
+      return 'Invalid email or password'
+    } catch (error) {
+      console.error('Error checking user:', error)
+      return 'Error checking user'
+    }
   })
-  if (!docRef) {
-    return false
-  }
-
-  // Add the first tasks to the todos subcollection
-  const todosCollection = collection(docRef, 'todos')
-
-  await addDoc(todosCollection, {
-    title: 'Register on Clever To-do App',
-    description: 'Welcome to your task list!',
-    isDone: true,
-    date: new Date(),
+exports.checkUser = checkUser
+const registerUser = (username, password) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    try {
+      const newUser = {
+        username,
+        password,
+        role: 2,
+      }
+      const docRef = yield (0, firebase_config_js_1.addDoc)(usersCollection, newUser)
+      if (!docRef) {
+        return false
+      }
+      localStorage.setItem('userId', docRef.id)
+      return true
+    } catch (error) {
+      console.error('Error registering user:', error)
+      return false
+    }
   })
-  await addDoc(todosCollection, {
-    title: 'Create you first to-do',
-    description:
-      'Click "Add a new task" button and create your first to-do! Then mark this task as completed',
-    isDone: false,
-    date: new Date(),
+exports.registerUser = registerUser
+const checkUsernameExists = (username) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    try {
+      const q = (0, firebase_config_js_1.query)(
+        usersCollection,
+        (0, firebase_config_js_1.where)('username', '==', username),
+      )
+      const querySnapshot = yield (0, firebase_config_js_1.getDocs)(q)
+      return !querySnapshot.empty // true if user exists
+    } catch (error) {
+      console.error('Error checking username existence:', error)
+      return false
+    }
   })
-
-  localStorage.setItem('userId', docRef.id)
-  return true
-}
-
-export const checkUsernameExists = async (username) => {
-  const q = query(usersCollection, where('username', '==', username))
-  const querySnapshot = await getDocs(q)
-  return !querySnapshot.empty // true if user exists
-}
+exports.checkUsernameExists = checkUsernameExists

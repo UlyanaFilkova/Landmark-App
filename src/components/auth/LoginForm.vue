@@ -30,7 +30,7 @@ import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { required, email, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
-import { checkUser } from '@/services/auth.js'
+import { checkUser } from '@/services/auth.ts'
 import { useRouter } from 'vue-router'
 
 interface InputField {
