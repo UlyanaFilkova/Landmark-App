@@ -8,23 +8,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    linkText: {
-      type: String,
-      required: true,
-    },
-    linkTo: {
-      type: String,
-      required: true,
-    },
-    linkAction: {
-      type: String,
-      required: true,
-    },
-  },
+<script setup lang="ts">
+import { defineProps } from 'vue'
+
+interface Props {
+  linkText: string
+  linkTo: string
+  linkAction: string
 }
+
+defineProps<Props>()
 </script>
 
 <style scoped>
@@ -46,6 +39,7 @@ export default {
   color: var(--color-login-link);
   text-decoration: underline;
 }
+
 .login__link:hover {
   cursor: pointer;
   text-decoration: none;

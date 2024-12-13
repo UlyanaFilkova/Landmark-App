@@ -4,14 +4,7 @@
   </AuthContainer>
 </template>
 
-<script>
+<script lang="ts" setup>
 import RegistrationForm from '@/components/auth/RegistrationForm.vue'
 import AuthContainer from '@/components/auth/AuthContainer.vue'
-
-export default {
-  components: {
-    RegistrationForm,
-    AuthContainer,
-  },
-}
 </script>

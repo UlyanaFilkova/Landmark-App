@@ -1,5 +1,6 @@
 import LoginView from '@/views/LoginView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
+import GeneralMapView from '@/views/GeneralMapView.vue'
 
 export const routes = [
   {
@@ -15,5 +16,10 @@ export const routes = [
     path: '/registration',
     name: 'registration',
     component: RegistrationView,
+  },
+  {
+    path: '/general-map',
+    name: 'generalMap',
+    component: GeneralMapView,
   },
 ]

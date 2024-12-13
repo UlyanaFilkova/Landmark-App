@@ -11,7 +11,7 @@
       :autocomplete="field.autocomplete"
       :required="field.required"
       :errorMessage="field.errorMessage"
-      @update:modelValue="(value) => (field.model = value)"
+      @update:modelValue="(value: string) => (field.model = value)"
     />
     <div class="invalid-input">
       {{ errorMessage }}
@@ -24,130 +24,135 @@
   </form>
 </template>
 
-<script>
-import FormInput from '@/components/base/FormInput.vue'
-import BaseButton from '@/components/base/BaseButton.vue'
+<script lang="ts" setup>
+import { ref, reactive, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
-import { registerUser, checkUsernameExists } from '@/services/auth.js'
+import FormInput from '@/components/base/FormInput.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import { registerUser, checkUsernameExists } from '@/services/auth.ts'
 
-export default {
-  components: {
-    FormInput,
-    BaseButton,
+interface InputField {
+  model: string
+  type: string
+  placeholder: string
+  name: string
+  autocomplete: string
+  required: boolean
+  errorMessage: string
+}
+
+const inputFields = reactive<InputField[]>([
+  {
+    model: '',
+    type: 'email',
+    placeholder: 'Email',
+    name: 'username',
+    autocomplete: 'username',
+    required: true,
+    errorMessage: '',
   },
-  data() {
-    return {
-      v$: useVuelidate(),
-      errorMessage: '',
-      requestIsProcessing: false,
-      inputFields: [
-        {
-          model: '',
-          type: 'email',
-          placeholder: 'Email',
-          name: 'username',
-          autocomplete: 'username',
-          required: true,
-          errorMessage: '',
-        },
-        {
-          model: '',
-          type: 'password',
-          placeholder: 'Password',
-          name: 'password',
-          autocomplete: 'new-password',
-          required: true,
-          errorMessage: '',
-        },
-        {
-          model: '',
-          type: 'password',
-          placeholder: 'Repeat Password',
-          name: 'repeat-password',
-          autocomplete: 'new-password',
-          required: true,
-          errorMessage: '',
-        },
-      ],
+  {
+    model: '',
+    type: 'password',
+    placeholder: 'Password',
+    name: 'password',
+    autocomplete: 'new-password',
+    required: true,
+    errorMessage: '',
+  },
+  {
+    model: '',
+    type: 'password',
+    placeholder: 'Repeat Password',
+    name: 'repeat-password',
+    autocomplete: 'new-password',
+    required: true,
+    errorMessage: '',
+  },
+])
+
+const errorMessage = ref<string>('')
+const requestIsProcessing = ref<boolean>(false)
+const router = useRouter()
+
+const validationFields = computed(() => ({
+  username: inputFields[0].model,
+  password: inputFields[1].model,
+  repeatPassword: inputFields[2].model,
+}))
+
+const rules = {
+  validationFields: {
+    username: { required, email },
+    password: { required, minLength: minLength(6) },
+    repeatPassword: {
+      required,
+      sameAsPassword: sameAs(computed(() => inputFields[1].model)),
+    },
+  },
+}
+
+const v$ = useVuelidate(rules, {
+  validationFields,
+})
+
+const submitButtonDisabled = computed<boolean>(
+  () =>
+    !validationFields.value.username ||
+    !validationFields.value.password ||
+    !validationFields.value.repeatPassword,
+)
+
+const getValidateMessage = (): string => {
+  const validationErrors = {
+    'username.required': 'Email is required',
+    'username.email': 'Invalid email',
+    'password.required': 'Password is required',
+    'password.minLength': 'Password must be at least 6 characters long',
+    'repeatPassword.required': 'Please, repeat the password',
+    'repeatPassword.sameAsPassword': 'Passwords must match',
+  }
+
+  if (v$.value.validationFields.$invalid) {
+    const errors = Object.values(v$.value.validationFields.$errors)
+    const firstError = errors.find((error) => error.$message !== '')
+    if (firstError) {
+      const key =
+        `${firstError.$property}.${firstError.$validator}` as keyof typeof validationErrors
+      return validationErrors[key] || (firstError.$message as string)
     }
-  },
-  validations() {
-    return {
-      validationFields: {
-        username: { required, email },
-        password: { required, minLength: minLength(6) },
-        repeatPassword: { required, sameAsPassword: sameAs(this.inputFields[1].model) },
-      },
+  }
+  return ''
+}
+
+const clearForm = (): void => {
+  inputFields.forEach((field) => (field.model = ''))
+}
+
+const handleSubmit = async (): Promise<void> => {
+  errorMessage.value = ''
+  v$.value.$touch()
+
+  if (v$.value.$invalid) {
+    errorMessage.value = getValidateMessage()
+  } else {
+    requestIsProcessing.value = true
+    const userExists = await checkUsernameExists(inputFields[0].model)
+    if (userExists) {
+      errorMessage.value = 'This username is already taken'
+      requestIsProcessing.value = false
+      return
     }
-  },
-  computed: {
-    validationFields() {
-      return {
-        username: this.inputFields[0].model,
-        password: this.inputFields[1].model,
-        repeatPassword: this.inputFields[2].model,
-      }
-    },
-    submitButtonDisabled() {
-      return (
-        this.v$.validationFields.username.required.$invalid ||
-        this.v$.validationFields.password.required.$invalid ||
-        this.v$.validationFields.repeatPassword.required.$invalid
-      )
-    },
-  },
-  methods: {
-    getValidateMessage() {
-      const validationErrors = {
-        'username.required': 'Email is required',
-        'username.email': 'Invalid email',
-        'password.required': 'Password is required',
-        'password.minLength': 'Password must be at least 6 characters long',
-        'repeatPassword.required': 'Please, repeat the password',
-        'repeatPassword.sameAsPassword': 'Passwords must match',
-      }
 
-      if (this.v$.validationFields.$invalid) {
-        const firstInvalidField = Object.keys(this.v$.validationFields.$errors).find(
-          (key) => this.v$.validationFields.$errors[key].$message !== '',
-        )
-        const validator = this.v$.validationFields.$errors[firstInvalidField].$validator
-        const property = this.v$.validationFields.$errors[firstInvalidField].$property
-        const key = `${property}.${validator}`
-        return validationErrors[key] || this.v$.validationFields.$errors[firstInvalidField].$message
-      }
-      return ''
-    },
-    clearForm() {
-      this.inputFields[0].model = ''
-      this.inputFields[1].model = ''
-      this.inputFields[2].model = ''
-    },
-    async handleSubmit() {
-      this.errorMessage = ''
-      this.v$.validationFields.$touch()
-
-      if (this.v$.validationFields.$invalid) {
-        this.errorMessage = this.getValidateMessage()
-      } else {
-        this.requestIsProcessing = true
-        const userExists = await checkUsernameExists(this.inputFields[0].model)
-        if (userExists) {
-          this.errorMessage = 'This username is already taken'
-          this.requestIsProcessing = false
-          return
-        }
-        const result = await registerUser(this.inputFields[0].model, this.inputFields[1].model)
-        if (result === true) {
-          this.$router.push({ name: 'home' })
-          this.clearForm()
-          this.requestIsProcessing = false
-          return
-        }
-      }
-    },
-  },
+    const result = await registerUser(inputFields[0].model, inputFields[1].model)
+    if (result === true) {
+      router.push({ name: 'generalMap' })
+      clearForm()
+    }
+    requestIsProcessing.value = false
+  }
 }
 </script>
 
