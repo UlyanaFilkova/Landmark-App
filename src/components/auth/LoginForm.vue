@@ -85,15 +85,6 @@ const submitButtonDisabled = computed<boolean>(
   () => !validationFields.value.username || !validationFields.value.password,
 )
 
-const myObject: { a: number; b: boolean } = {
-  a: 12,
-  b: false,
-}
-
-;(Object.keys(myObject) as Array<keyof typeof myObject>).forEach((key) => {
-  // some logic for the key
-})
-
 const updateValue = (field: InputField, value: string): void => {
   errorMessage.value = ''
   field.model = value

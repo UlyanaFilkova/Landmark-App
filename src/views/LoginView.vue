@@ -4,16 +4,8 @@
   </AuthContainer>
 </template>
 
-<script>
-import LoginForm from '@/components/auth/LoginForm.vue'
-import AuthContainer from '@/components/auth/AuthContainer.vue'
+<script lang="ts" setup>
+import LoginForm from '@/components/auth/LoginForm.vue';
+import AuthContainer from '@/components/auth/AuthContainer.vue';
 
-export default {
-  components: {
-    LoginForm,
-    AuthContainer,
-  },
-}
 </script>
-
-
