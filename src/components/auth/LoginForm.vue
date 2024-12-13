@@ -128,8 +128,8 @@ const handleSubmit = async (): Promise<void> => {
   } else {
     requestIsProcessing.value = true
     const result = await checkUser(inputFields[0].model, inputFields[1].model)
-    if (result === true) {
-      router.push({ name: 'home' })
+    if (result === '') {
+      router.push({ name: 'generalMap' })
       clearForm()
     } else {
       errorMessage.value = result

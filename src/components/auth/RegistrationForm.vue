@@ -148,7 +148,7 @@ const handleSubmit = async (): Promise<void> => {
 
     const result = await registerUser(inputFields[0].model, inputFields[1].model)
     if (result === true) {
-      router.push({ name: 'home' })
+      router.push({ name: 'generalMap' })
       clearForm()
     }
     requestIsProcessing.value = false

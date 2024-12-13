@@ -9,7 +9,7 @@ interface User {
 
 const usersCollection = collection(firebase, 'users')
 
-export const checkUser = async (username: string, password: string): Promise<boolean | string> => {
+export const checkUser = async (username: string, password: string): Promise<string> => {
   try {
     const q = query(usersCollection, where('username', '==', username))
     const querySnapshot = await getDocs(q)
@@ -20,7 +20,7 @@ export const checkUser = async (username: string, password: string): Promise<boo
       if (userData.password === password) {
         // if passwords match
         localStorage.setItem('userId', userData.id)
-        return true
+        return ''
       }
     }
     // If the user is not found or the passwords do not match
