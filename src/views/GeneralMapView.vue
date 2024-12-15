@@ -1,17 +1,18 @@
 <template>
   <div class="container">
     <BaseLoader v-if="isLoading" />
+    <MapBlock />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
-// import HomeHeader from '@/components/home/HomeHeader.vue'
+import MapBlock from '@/components/map/MapBlock.vue'
 // import BaseButton from '@/components/base/BaseButton.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
 // import { useStore } from 'vuex'
 
-const isLoading = true
+const isLoading = false
 </script>
 
 <style scoped>
@@ -25,13 +26,5 @@ const isLoading = true
   .container {
     margin: 0 15px;
   }
-}
-
-.fixed-button {
-  display: block;
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 </style>

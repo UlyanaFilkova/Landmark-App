@@ -7,32 +7,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      required: true,
-    },
-    type: {
-      type: String,
-      default: 'text',
-    },
-    errorMessage: {
-      type: String,
-      default: '',
-    },
-  },
-  emits: ['update:modelValue'],
-  methods: {
-    handleInput(event) {
-      this.$emit('update:modelValue', event.target.value)
-    },
-  },
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue'
+
+const props = defineProps<{
+  modelValue: string,
+  placeholder: string,
+  type?: string,
+  errorMessage?: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  emit('update:modelValue', target.value)
 }
 </script>
 
