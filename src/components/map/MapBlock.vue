@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, h, defineComponent, createApp } from 'vue'
+import { onMounted, ref, createApp } from 'vue'
 import PopUp from '@/components/map/PopUp.vue'
 import L from 'leaflet'
 

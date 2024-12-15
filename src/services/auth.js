@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkUsernameExists = exports.registerUser = exports.checkUser = void 0;
 const firebase_config_js_1 = require("@/services/firebase.config.js");
-const usersCollection = (0, firebase_config_js_1.collection)(firebase_config_js_1.firebase, 'users');
+const usersCollection = (0, firebase_config_js_1.collection)(firebase_config_js_1.firestore, 'users');
 const checkUser = (username, password) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const q = (0, firebase_config_js_1.query)(usersCollection, (0, firebase_config_js_1.where)('username', '==', username));

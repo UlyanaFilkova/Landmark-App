@@ -19,7 +19,6 @@ import { defineProps } from 'vue'
 const props = defineProps<{
   rating: number
 }>()
-console.log(props.rating)
 const maxStars = 5
 </script>
 

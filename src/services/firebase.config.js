@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, where, getDocs } from 'firebase/firestore'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -10,6 +11,18 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
 }
 const app = initializeApp(firebaseConfig)
-const firebase = getFirestore(app)
+const firestore = getFirestore(app);
+const storage = getStorage(app)
 
-export { firebase, collection, addDoc, query, where, getDocs };
+export {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  firestore,
+  storage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+}

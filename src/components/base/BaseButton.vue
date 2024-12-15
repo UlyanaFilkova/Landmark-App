@@ -1,16 +1,13 @@
 <template>
-  <button>{{ text }}</button>
+  <button>{{ props.text }}</button>
 </template>
-<script>
-export default {
-  props: {
-    text: {
-      type: String,
-      required: true,
-    },
-  },
-}
+
+<script setup lang="ts">
+const props = defineProps<{
+  text: string
+}>()
 </script>
+
 <style scoped>
 .small-button {
   padding: 7px 10px;
@@ -41,8 +38,9 @@ export default {
   background-color: var(--color-main-disabled);
   cursor: auto;
 }
-.medium-button{
+.medium-button {
   width: 100%;
+  max-width: 200px;
   padding: 10px;
   background-color: var(--color-main);
   color: var(--color-text-main);

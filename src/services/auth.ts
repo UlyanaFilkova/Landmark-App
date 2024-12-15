@@ -1,4 +1,4 @@
-import { firebase, collection, addDoc, query, where, getDocs } from '@/services/firebase.config.js'
+import { firestore, collection, addDoc, query, where, getDocs } from '@/services/firebase.config.js'
 
 interface User {
   id: string
@@ -7,7 +7,7 @@ interface User {
   role: number
 }
 
-const usersCollection = collection(firebase, 'users')
+const usersCollection = collection(firestore, 'users')
 
 export const checkUser = async (username: string, password: string): Promise<string> => {
   try {
