@@ -6,7 +6,9 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
   GeoPoint,
+  doc,
 } from 'firebase/firestore'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
@@ -28,6 +30,8 @@ export {
   query,
   where,
   getDocs,
+  getDoc,
+  doc,
   firestore,
   storage,
   ref,

@@ -31,7 +31,7 @@ import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import { registerUser, checkUsernameExists } from '@/services/auth.ts'
+import { registerUser, checkUsernameExists } from '@/services/user'
 
 interface InputField {
   model: string

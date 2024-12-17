@@ -1,4 +1,13 @@
-import { firestore, collection, addDoc, query, where, getDocs } from '@/services/firebase.config.js'
+import {
+  firestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  doc,
+} from '@/services/firebase.config.js'
 
 interface User {
   id: string
@@ -15,11 +24,14 @@ export const checkUser = async (username: string, password: string): Promise<str
     const querySnapshot = await getDocs(q)
 
     if (!querySnapshot.empty) {
-      const userData = querySnapshot.docs[0].data() as User
+      const userDoc = querySnapshot.docs[0]
+      const userData = userDoc.data() as User
+
+      const userId = userDoc.id
 
       if (userData.password === password) {
         // if passwords match
-        localStorage.setItem('userId', userData.id)
+        localStorage.setItem('userId', userId)
         return ''
       }
     }
@@ -61,5 +73,20 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
   } catch (error) {
     console.error('Error checking username existence:', error)
     return false
+  }
+}
+
+export const getUserById = async (userId: string): Promise<User | null> => {
+  try {
+    const userDocRef = doc(firestore, `users/${userId}`)
+    const userDocSnap = await getDoc(userDocRef)
+    if (userDocSnap.exists()) {
+      return { id: userDocSnap.id, role: userDocSnap.role } as User
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.error('Error getting user by ID:', error)
+    throw new Error('Error getting user by ID')
   }
 }

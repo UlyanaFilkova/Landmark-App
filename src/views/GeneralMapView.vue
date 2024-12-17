@@ -6,27 +6,21 @@
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
+<script lang="ts" setup>
+import { ref, computed, onMounted } from 'vue'
 import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-import { uploadImage } from '@/services/storage'
 
-const isLoading = false
+import { useMapStore } from '@/stores/index'
 
-const handleFileUpload = async (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    try {
-      const placeId = 'xSwJyG2uw1YyekTQyBBu'
-      const imageId = await uploadImage(file, placeId)
-      console.log('Image uploaded with ID: ', imageId)
-    } catch (error) {
-      console.error('Error uploading image: ', error)
-    }
-  }
-}
+const store = useMapStore()
+const isLoading = ref(true)
+
+onMounted(async () => {
+  await store.loadInitialData()
+  isLoading.value = false
+})
 </script>
 
 <style scoped>
