@@ -40,7 +40,6 @@ const props = defineProps<{
 }
 .medium-button {
   width: 100%;
-  max-width: 200px;
   padding: 10px;
   background-color: var(--color-main);
   color: var(--color-text-main);

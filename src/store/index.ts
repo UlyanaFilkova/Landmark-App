@@ -1,31 +1,33 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-interface Todo {
+interface Place {
   title: string
+  description: string
+  location: [number, number]
+  rating: number
+  authorId: string
 }
 
-interface MapState {
-  todos: Todo[]
+interface User {
+  id: string
+  role: number
+}
+
+interface Rating {
+  rating: number
+  placeId: string
+  userId: string
 }
 
 export const useMapStore = defineStore('map', () => {
-  const todos = ref<Todo[]>([])
+  const places = ref<Place[]>([])
 
-  const totalTodos = computed(() => todos.value.length)
+  const user = computed(() => localStorage.getItem('userId'))
 
-  const addTodo = (title: string) => {
-    todos.value.push({ title })
-  }
-
-  const removeTodo = (index: number) => {
-    todos.value.splice(index, 1)
-  }
 
   return {
-    todos,
-    totalTodos,
-    addTodo,
-    removeTodo,
+    places,
+    user,
   }
 })

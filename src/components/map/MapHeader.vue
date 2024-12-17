@@ -11,11 +11,14 @@ import BaseButton from '@/components/base/BaseButton.vue'
 
 <style scoped>
 .map-header {
-  padding: 20px 0;
+  padding: 25px 0 20px 0;
   display: flex;
   justify-content: space-between;
 }
 .map-header__h1 {
-    color: #555;
+  color: #555;
+}
+.medium-button {
+  max-width: 200px;
 }
 </style>
