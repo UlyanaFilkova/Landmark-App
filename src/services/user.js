@@ -66,7 +66,6 @@ export const getUserById = (userId) => __awaiter(void 0, void 0, void 0, functio
         const userDocRef = doc(firestore, `users/${userId}`);
         const userDocSnap = yield getDoc(userDocRef);
         if (userDocSnap.exists()) {
-            console.log(userDocSnap);
             const userData = userDocSnap.data();
             return { id: userDocSnap.id, role: userData.role };
         }

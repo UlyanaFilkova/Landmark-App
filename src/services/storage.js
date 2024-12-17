@@ -15,7 +15,6 @@ function fetchImages(placeId) {
         try {
             const q = query(collection(firestore, 'places'), where('id', '==', placeId));
             const snapshot = yield getDocs(q);
-            console.log(snapshot.docs);
             const images = snapshot.docs.map((doc) => (Object.assign({ id: doc.id }, doc.data())));
             return images;
         }

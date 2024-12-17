@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { getPlaces, getRatings } from '@/services/map'
+import { getPlacesData, getRatingsData } from '@/services/map'
 import { getUserById } from '@/services/user'
 
 interface Place {
@@ -28,13 +28,13 @@ export const useMapStore = defineStore('map', () => {
   const user = ref<User>()
 
   const userId = computed(() => localStorage.getItem('userId'))
-  const getPlacesData = computed(() => places.value)
-  const getRatingsData = computed(() => ratings.value)
-  const getUserData = computed(() => user.value)
+  const getPlaces = computed(() => places.value)
+  const getRatings = computed(() => ratings.value)
+  const getUser = computed(() => user.value)
 
   const fetchPlaces = async () => {
     try {
-      const fetchedPlaces = await getPlaces()
+      const fetchedPlaces = await getPlacesData()
       places.value = fetchedPlaces
     } catch (error) {
       console.error(error)
@@ -43,7 +43,7 @@ export const useMapStore = defineStore('map', () => {
 
   const fetchRatings = async () => {
     try {
-      const fetchedRatings = await getRatings()
+      const fetchedRatings = await getRatingsData()
       ratings.value = fetchedRatings
     } catch (error) {
       console.error(error)
@@ -55,7 +55,6 @@ export const useMapStore = defineStore('map', () => {
       const userIdValue = userId.value
       if (userIdValue) {
         user.value = (await getUserById(userIdValue)) as User
-        console.log(user)
       }
     } catch (error) {
       console.error('Error fetching user:', error)
@@ -69,9 +68,9 @@ export const useMapStore = defineStore('map', () => {
   }
 
   return {
-    getPlacesData,  
-    getRatingsData,
-    getUserData, 
+    getPlaces,
+    getRatings,
+    getUser,
     fetchPlaces,
     fetchRatings,
     loadInitialData,

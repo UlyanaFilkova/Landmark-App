@@ -9,19 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { getPlaces, getRatings } from '@/services/map';
+import { getPlacesData, getRatingsData } from '@/services/map';
 import { getUserById } from '@/services/user';
 export const useMapStore = defineStore('map', () => {
     const places = ref([]);
     const ratings = ref([]);
     const user = ref();
     const userId = computed(() => localStorage.getItem('userId'));
-    const getPlacesData = computed(() => places.value);
-    const getRatingsData = computed(() => ratings.value);
-    const getUserData = computed(() => user.value);
+    const getPlaces = computed(() => places.value);
+    const getRatings = computed(() => ratings.value);
+    const getUser = computed(() => user.value);
     const fetchPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const fetchedPlaces = yield getPlaces();
+            const fetchedPlaces = yield getPlacesData();
             places.value = fetchedPlaces;
         }
         catch (error) {
@@ -30,7 +30,7 @@ export const useMapStore = defineStore('map', () => {
     });
     const fetchRatings = () => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const fetchedRatings = yield getRatings();
+            const fetchedRatings = yield getRatingsData();
             ratings.value = fetchedRatings;
         }
         catch (error) {
@@ -42,7 +42,6 @@ export const useMapStore = defineStore('map', () => {
             const userIdValue = userId.value;
             if (userIdValue) {
                 user.value = (yield getUserById(userIdValue));
-                console.log(user);
             }
         }
         catch (error) {
@@ -55,9 +54,9 @@ export const useMapStore = defineStore('map', () => {
         yield fetchRatings();
     });
     return {
-        getPlacesData,
-        getRatingsData,
-        getUserData,
+        getPlaces,
+        getRatings,
+        getUser,
         fetchPlaces,
         fetchRatings,
         loadInitialData,

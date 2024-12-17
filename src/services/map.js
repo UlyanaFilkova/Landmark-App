@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { firestore, collection, getDocs } from '@/services/firebase.config.js';
 const placesCollection = collection(firestore, 'places');
 const ratingsCollection = collection(firestore, 'ratings');
-export const getPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
+export const getPlacesData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const querySnapshot = yield getDocs(placesCollection);
         const places = querySnapshot.docs.map((doc) => doc.data());
@@ -21,7 +21,7 @@ export const getPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
         throw new Error('Error getting places');
     }
 });
-export const getRatings = () => __awaiter(void 0, void 0, void 0, function* () {
+export const getRatingsData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const querySnapshot = yield getDocs(ratingsCollection);
         const ratings = querySnapshot.docs.map((doc) => doc.data());

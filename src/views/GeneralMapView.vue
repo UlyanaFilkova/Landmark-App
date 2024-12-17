@@ -7,17 +7,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-
 import { useMapStore } from '@/stores/store'
 
 const store = useMapStore()
 const isLoading = ref(true)
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await store.loadInitialData()
   isLoading.value = false
 })

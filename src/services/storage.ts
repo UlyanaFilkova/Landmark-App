@@ -16,7 +16,7 @@ async function fetchImages(placeId: number) {
   try {
     const q = query(collection(firestore, 'places'), where('id', '==', placeId))
     const snapshot = await getDocs(q)
-    console.log(snapshot.docs)
+   
     const images = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     return images
   } catch (error) {

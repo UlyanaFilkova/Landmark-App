@@ -16,7 +16,7 @@ interface Rating {
 const placesCollection = collection(firestore, 'places')
 const ratingsCollection = collection(firestore, 'ratings')
 
-export const getPlaces = async (): Promise<Place[]> => {
+export const getPlacesData = async (): Promise<Place[]> => {
   try {
     const querySnapshot = await getDocs(placesCollection)
     const places: Place[] = querySnapshot.docs.map((doc) => doc.data() as Place)
@@ -27,7 +27,7 @@ export const getPlaces = async (): Promise<Place[]> => {
   }
 }
 
-export const getRatings = async (): Promise<Rating[]> => {
+export const getRatingsData = async (): Promise<Rating[]> => {
   try {
     const querySnapshot = await getDocs(ratingsCollection)
     const ratings: Rating[] = querySnapshot.docs.map((doc) => doc.data() as Rating)
