@@ -26,9 +26,11 @@ export const useMapStore = defineStore('map', () => {
   const places = ref<Place[]>([])
   const ratings = ref<Rating[]>([])
   const user = ref<User>()
-  const isLoading = ref<boolean>(false)
 
   const userId = computed(() => localStorage.getItem('userId'))
+  const getPlacesData = computed(() => places.value)
+  const getRatingsData = computed(() => ratings.value)
+  const getUserData = computed(() => user.value)
 
   const fetchPlaces = async () => {
     try {
@@ -61,17 +63,15 @@ export const useMapStore = defineStore('map', () => {
   }
 
   const loadInitialData = async () => {
-    console.log('start initialising')
     await fetchUser()
     await fetchPlaces()
     await fetchRatings()
   }
 
   return {
-    places,
-    ratings,
-    isLoading,
-    user,
+    getPlacesData,  
+    getRatingsData,
+    getUserData, 
     fetchPlaces,
     fetchRatings,
     loadInitialData,

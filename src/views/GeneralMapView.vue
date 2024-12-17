@@ -12,7 +12,7 @@ import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
 
-import { useMapStore } from '@/stores/index'
+import { useMapStore } from '@/stores/store'
 
 const store = useMapStore()
 const isLoading = ref(true)

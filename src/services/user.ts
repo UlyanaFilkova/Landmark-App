@@ -81,7 +81,9 @@ export const getUserById = async (userId: string): Promise<User | null> => {
     const userDocRef = doc(firestore, `users/${userId}`)
     const userDocSnap = await getDoc(userDocRef)
     if (userDocSnap.exists()) {
-      return { id: userDocSnap.id, role: userDocSnap.role } as User
+      console.log(userDocSnap)
+      const userData = userDocSnap.data()
+      return { id: userDocSnap.id, role: userData.role } as User
     } else {
       return null
     }

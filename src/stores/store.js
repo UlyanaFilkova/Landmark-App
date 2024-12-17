@@ -15,8 +15,10 @@ export const useMapStore = defineStore('map', () => {
     const places = ref([]);
     const ratings = ref([]);
     const user = ref();
-    const isLoading = ref(false);
     const userId = computed(() => localStorage.getItem('userId'));
+    const getPlacesData = computed(() => places.value);
+    const getRatingsData = computed(() => ratings.value);
+    const getUserData = computed(() => user.value);
     const fetchPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const fetchedPlaces = yield getPlaces();
@@ -48,16 +50,14 @@ export const useMapStore = defineStore('map', () => {
         }
     });
     const loadInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
-        console.log('start initialising');
         yield fetchUser();
         yield fetchPlaces();
         yield fetchRatings();
     });
     return {
-        places,
-        ratings,
-        isLoading,
-        user,
+        getPlacesData,
+        getRatingsData,
+        getUserData,
         fetchPlaces,
         fetchRatings,
         loadInitialData,
