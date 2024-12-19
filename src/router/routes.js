@@ -1,6 +1,7 @@
 import LoginView from '@/views/LoginView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
 import GeneralMapView from '@/views/GeneralMapView.vue'
+import AddPlaceView from '@/views/AddPlaceView.vue'
 
 export const routes = [
   {
@@ -21,6 +22,12 @@ export const routes = [
     path: '/general-map',
     name: 'generalMap',
     component: GeneralMapView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/add-place',
+    name: 'AddPlace',
+    component: AddPlaceView,
     meta: { requiresAuth: true },
   },
 ]

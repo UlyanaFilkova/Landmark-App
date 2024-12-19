@@ -1,7 +1,9 @@
 <template>
   <div class="map-header">
     <h1 class="map-header__h1">General Map</h1>
-    <BaseButton class="medium-button" text="Add new place" />
+    <router-link to="/add-place">
+      <BaseButton class="medium-button" text="Add new place" />
+    </router-link>
   </div>
 </template>
 
