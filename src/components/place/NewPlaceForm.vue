@@ -28,28 +28,10 @@
         <p v-if="descriptionTooLong" class="error-message">Description exceeds maximum length of 00 characters.</p>
       </div>
 
-      <div class="form-group form-group-inline">
-        <label>Location</label>
-        <input
-          v-model="formData.latitude"
-          type="number"
-          step="any"
-          placeholder="Latitude"
-          required
-          min="-90"
-          max="90"
-        />
-        <input
-          v-model="formData.longitude"
-          type="number"
-          step="any"
-          placeholder="Longitude"
-          required
-          min="-180"
-          max="180"
-        />
-        <p v-if="locationInvalid" class="error-message">Latitude must be between -90 and 90 and Longitude between -180 and 180.</p>
-      </div>
+      <LocationInput
+        v-model:latitude="formData.latitude"
+        v-model:longitude="formData.longitude"
+      />
 
       <div class="form-group">
         <label for="rating">Your Rating</label>
@@ -102,13 +84,14 @@
 import { ref, computed, onMounted } from 'vue'
 import L from 'leaflet'
 import { Place } from '@/types/interfaces'
+import LocationInput from '@/components/place/LocationInput.vue'
 
 const formData = ref({
   id: '',
   title: '',
   description: '',
-  latitude: 0,
-  longitude: 0,
+  latitude: 53.9,
+  longitude: 27.5667,
   photos: [] as File[],
   rating: 1,
   authorId: '',
