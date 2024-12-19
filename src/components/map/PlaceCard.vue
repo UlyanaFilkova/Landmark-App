@@ -59,11 +59,19 @@ const handleInput = (event: Event) => {
   display: flex;
   gap: 20px;
   width: 100%;
+  padding: 7px 13px 7px 10px;
+  border-radius: 8px;
+}
+
+.place-container:hover{
+  background-color: var(--color-card-second);
+  cursor: pointer;
 }
 .place_img {
   width: 80px;
   height: 80px;
   flex-shrink: 0;
+  align-self: center;
 }
 
 .place_img img {
@@ -78,14 +86,17 @@ const handleInput = (event: Event) => {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
+  /* align-items: center; */
   gap: 15px;
   padding: 5px 0 10px 0;
+  height: 100%;
 }
 
 .place_text {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  height: 100%;
 }
 
 .place_title {
@@ -97,26 +108,19 @@ const handleInput = (event: Event) => {
   font-size: 15px;
   line-height: 1.2;
   color: var(--color-text-second);
-  
-  /* Для всех браузеров */
+
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  /* Для Firefox */
   display: -moz-box;
   -moz-line-clamp: 2;
   -moz-box-orient: vertical;
 }
 
-/* .place_description {
-  font-size: 15px;
-  line-height: 1.2;
-  color: var(--color-text-second);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-} */
+.place_rating {
+  font-size: 20px;
+}
 </style>
