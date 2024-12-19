@@ -13,7 +13,11 @@ const ratingsCollection = collection(firestore, 'ratings');
 export const getPlacesData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const querySnapshot = yield getDocs(placesCollection);
-        const places = querySnapshot.docs.map((doc) => doc.data());
+        const places = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            data.id = doc.id;
+            return data;
+        });
         return places;
     }
     catch (error) {
@@ -24,7 +28,11 @@ export const getPlacesData = () => __awaiter(void 0, void 0, void 0, function* (
 export const getRatingsData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const querySnapshot = yield getDocs(ratingsCollection);
-        const ratings = querySnapshot.docs.map((doc) => doc.data());
+        const ratings = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            data.id = doc.id;
+            return data;
+        });
         return ratings;
     }
     catch (error) {

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, createApp, watch } from 'vue'
+import { onMounted, ref, createApp, watch, computed } from 'vue'
 import PopUp from '@/components/map/PopUp.vue'
 import { useMapStore } from '@/stores/store'
 import L from 'leaflet'
@@ -22,37 +22,32 @@ const createPopUp = (title: string, link: string, rating: number) => {
   return popupContainer
 }
 
-const places = ref<Place[]>([])
+const addMarkers = (places: Place[]) => {
+  if (map.value && places.length > 0) {
+    places.forEach((place) => {
+      L.marker(place.location)
+        .addTo(map.value!)
+        .bindPopup(createPopUp(place.title, 'https://example.com', place.rating))
+    })
+  }
+}
+
+const places = computed(() => store.getPlaces)
 
 onMounted(async () => {
-  await store.fetchPlaces()
-  places.value = store.getPlaces
-
   if (mapContainer.value) {
     map.value = L.map(mapContainer.value).setView([53.9, 27.5667], 11)
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
 
-    if (places.value.length > 0) {
-      places.value.forEach((place) => {
-        L.marker(place.location)
-          .addTo(map.value!)
-          .bindPopup(createPopUp(place.title, 'https://example.com', place.rating))
-      })
-    }
+    addMarkers(places.value)
   }
 })
 
 watch(
   places,
   (newPlaces) => {
-    if (map.value && newPlaces.length > 0) {
-      newPlaces.forEach((place) => {
-        L.marker(place.location)
-          .addTo(map.value!)
-          .bindPopup(createPopUp(place.title, 'https://example.com', place.rating))
-      })
-    }
+    addMarkers(newPlaces)
   },
   { immediate: true },
 )

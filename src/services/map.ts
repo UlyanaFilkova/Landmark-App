@@ -7,7 +7,11 @@ const ratingsCollection = collection(firestore, 'ratings')
 export const getPlacesData = async (): Promise<Place[]> => {
   try {
     const querySnapshot = await getDocs(placesCollection)
-    const places: Place[] = querySnapshot.docs.map((doc) => doc.data() as Place)
+    const places: Place[] = querySnapshot.docs.map((doc) => {
+      const data = doc.data() as Place
+      data.id = doc.id
+      return data
+    })
     return places
   } catch (error) {
     console.error('Error getting places:', error)
@@ -15,10 +19,15 @@ export const getPlacesData = async (): Promise<Place[]> => {
   }
 }
 
+
 export const getRatingsData = async (): Promise<Rating[]> => {
   try {
     const querySnapshot = await getDocs(ratingsCollection)
-    const ratings: Rating[] = querySnapshot.docs.map((doc) => doc.data() as Rating)
+    const ratings: Rating[] = querySnapshot.docs.map((doc) => {
+      const data = doc.data() as Rating
+      data.id = doc.id
+      return data
+    })
     return ratings
   } catch (error) {
     console.error('Error getting ratings:', error)

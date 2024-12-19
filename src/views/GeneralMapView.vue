@@ -3,6 +3,7 @@
     <BaseLoader v-if="isLoading" />
     <MapHeader />
     <MapBlock />
+    <TopPlaces/>
 
     <!-- <div>
       <input type="file" @change="handleFileUpload" accept="image/*" />
@@ -16,6 +17,7 @@
 import { ref, computed, onBeforeMount } from 'vue'
 import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
+import TopPlaces from '@/components/map/TopPlaces.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
 import { useMapStore } from '@/stores/store'
 

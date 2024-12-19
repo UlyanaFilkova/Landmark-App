@@ -2,14 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getPlacesData, getRatingsData } from '@/services/map'
 import { getUserById } from '@/services/user'
-import { Place, User } from '@/types/interfaces'
-
-
-interface Rating {
-  rating: number
-  placeId: string
-  userId: string
-}
+import { Place, User, Rating } from '@/types/interfaces'
 
 export const useMapStore = defineStore('map', () => {
   const places = ref<Place[]>([])

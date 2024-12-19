@@ -1,7 +1,9 @@
 export interface Place {
+  id: string
   title: string
   description: string
   location: [number, number]
+  photos: string[]
   rating: number
   authorId: string
 }
@@ -19,17 +21,18 @@ export interface User {
 }
 
 export interface Rating {
+  id: string
   rating: number
   placeId: string
   userId: string
 }
 
 export interface InputField {
-    model: string
-    type: string
-    placeholder: string
-    name: string
-    autocomplete: string
-    required: boolean
-    errorMessage: string
-  }
+  model: string
+  type: string
+  placeholder: string
+  name: string
+  autocomplete: string
+  required: boolean
+  errorMessage: string
+}

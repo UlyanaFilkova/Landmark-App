@@ -34,16 +34,6 @@ import BaseButton from '@/components/base/BaseButton.vue'
 import { registerUser, checkUsernameExists } from '@/services/user'
 import { InputField } from '@/types/interfaces'
 
-interface InputField {
-  model: string
-  type: string
-  placeholder: string
-  name: string
-  autocomplete: string
-  required: boolean
-  errorMessage: string
-}
-
 const inputFields = reactive<InputField[]>([
   {
     model: '',
