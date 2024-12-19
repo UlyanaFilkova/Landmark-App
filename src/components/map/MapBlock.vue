@@ -7,14 +7,7 @@ import { onMounted, ref, createApp, watch } from 'vue'
 import PopUp from '@/components/map/PopUp.vue'
 import { useMapStore } from '@/stores/store'
 import L from 'leaflet'
-
-interface Place {
-  title: string
-  description: string
-  location: [number, number]
-  rating: number
-  authorId: string
-}
+import { Place } from '@/types/interfaces'
 
 const store = useMapStore()
 

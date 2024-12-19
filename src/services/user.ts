@@ -8,13 +8,7 @@ import {
   getDoc,
   doc,
 } from '@/services/firebase.config.js'
-
-interface User {
-  id: string
-  username: string
-  password: string
-  role: number
-}
+import { FullUser } from '@/types/interfaces'
 
 const usersCollection = collection(firestore, 'users')
 
@@ -25,7 +19,7 @@ export const checkUser = async (username: string, password: string): Promise<str
 
     if (!querySnapshot.empty) {
       const userDoc = querySnapshot.docs[0]
-      const userData = userDoc.data() as User
+      const userData = userDoc.data() as FullUser
 
       const userId = userDoc.id
 
@@ -45,7 +39,7 @@ export const checkUser = async (username: string, password: string): Promise<str
 
 export const registerUser = async (username: string, password: string): Promise<boolean> => {
   try {
-    const newUser: Omit<User, 'id'> = {
+    const newUser: Omit<FullUser, 'id'> = {
       username,
       password,
       role: 2,
@@ -76,14 +70,13 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
   }
 }
 
-export const getUserById = async (userId: string): Promise<User | null> => {
+export const getUserById = async (userId: string): Promise<FullUser | null> => {
   try {
     const userDocRef = doc(firestore, `users/${userId}`)
     const userDocSnap = await getDoc(userDocRef)
     if (userDocSnap.exists()) {
-   
       const userData = userDocSnap.data()
-      return { id: userDocSnap.id, role: userData.role } as User
+      return { id: userDocSnap.id, role: userData.role } as FullUser
     } else {
       return null
     }

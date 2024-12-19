@@ -3,6 +3,12 @@
     <BaseLoader v-if="isLoading" />
     <MapHeader />
     <MapBlock />
+
+    <!-- <div>
+      <input type="file" @change="handleFileUpload" accept="image/*" />
+      <p v-if="imageBase64">Base64 String:</p>
+      <textarea v-if="imageBase64" readonly>{{ imageBase64 }}</textarea>
+    </div> -->
   </div>
 </template>
 
@@ -20,6 +26,25 @@ onBeforeMount(async () => {
   await store.loadInitialData()
   isLoading.value = false
 })
+
+
+// const imageBase64 = ref<string | null>(null)
+
+// // Конвертация файла в строку Base64
+// const handleFileUpload = (event: Event) => {
+//   const file = (event.target as HTMLInputElement)?.files?.[0]
+//   if (!file) return
+
+//   const reader = new FileReader()
+//   reader.onload = () => {
+//     imageBase64.value = reader.result as string
+//   }
+//   reader.onerror = (error) => {
+//     console.error('Ошибка при чтении файла:', error)
+//   }
+//   reader.readAsDataURL(file) // Чтение файла и конвертация в Base64
+// }
+
 </script>
 
 <style scoped>

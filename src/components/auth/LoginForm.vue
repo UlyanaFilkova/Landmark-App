@@ -32,16 +32,8 @@ import { required, email, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import { checkUser } from '@/services/user'
 import { useRouter } from 'vue-router'
+import { InputField } from '@/types/interfaces'
 
-interface InputField {
-  model: string
-  type: string
-  placeholder: string
-  name: string
-  autocomplete: string
-  required: boolean
-  errorMessage: string
-}
 
 const inputFields = reactive<InputField[]>([
   {

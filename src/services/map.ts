@@ -1,17 +1,5 @@
 import { firestore, collection, addDoc, query, where, getDocs } from '@/services/firebase.config.js'
-
-interface Place {
-  title: string
-  description: string
-  location: [number, number]
-  rating: number
-  authorId: string
-}
-interface Rating {
-  rating: number
-  placeId: string
-  userId: string
-}
+import { Place, Rating } from '@/types/interfaces'
 
 const placesCollection = collection(firestore, 'places')
 const ratingsCollection = collection(firestore, 'ratings')

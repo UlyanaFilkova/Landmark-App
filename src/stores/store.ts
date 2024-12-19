@@ -2,19 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getPlacesData, getRatingsData } from '@/services/map'
 import { getUserById } from '@/services/user'
+import { Place, User } from '@/types/interfaces'
 
-interface Place {
-  title: string
-  description: string
-  location: [number, number]
-  rating: number
-  authorId: string
-}
-
-interface User {
-  id: string
-  role: number
-}
 
 interface Rating {
   rating: number
