@@ -1,13 +1,16 @@
-import { firebase, collection, addDoc, query, where, getDocs } from '@/services/firebase.config.js'
+import {
+  firestore,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  getDoc,
+  doc,
+} from '@/services/firebase.config.js'
+import { FullUser } from '@/types/interfaces'
 
-interface User {
-  id: string
-  username: string
-  password: string
-  role: number
-}
-
-const usersCollection = collection(firebase, 'users')
+const usersCollection = collection(firestore, 'users')
 
 export const checkUser = async (username: string, password: string): Promise<string> => {
   try {
@@ -15,11 +18,14 @@ export const checkUser = async (username: string, password: string): Promise<str
     const querySnapshot = await getDocs(q)
 
     if (!querySnapshot.empty) {
-      const userData = querySnapshot.docs[0].data() as User
+      const userDoc = querySnapshot.docs[0]
+      const userData = userDoc.data() as FullUser
+
+      const userId = userDoc.id
 
       if (userData.password === password) {
         // if passwords match
-        localStorage.setItem('userId', userData.id)
+        localStorage.setItem('userId', userId)
         return ''
       }
     }
@@ -33,7 +39,7 @@ export const checkUser = async (username: string, password: string): Promise<str
 
 export const registerUser = async (username: string, password: string): Promise<boolean> => {
   try {
-    const newUser: Omit<User, 'id'> = {
+    const newUser: Omit<FullUser, 'id'> = {
       username,
       password,
       role: 2,
@@ -61,5 +67,21 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
   } catch (error) {
     console.error('Error checking username existence:', error)
     return false
+  }
+}
+
+export const getUserById = async (userId: string): Promise<FullUser | null> => {
+  try {
+    const userDocRef = doc(firestore, `users/${userId}`)
+    const userDocSnap = await getDoc(userDocRef)
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data()
+      return { id: userDocSnap.id, role: userData.role } as FullUser
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.error('Error getting user by ID:', error)
+    throw new Error('Error getting user by ID')
   }
 }

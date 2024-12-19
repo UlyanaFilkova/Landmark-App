@@ -7,8 +7,10 @@ declare module '@/services/firebase.config.js' {
     QueryConstraint,
     QuerySnapshot,
   } from 'firebase/firestore'
+  import { FirebaseStorage, StorageReference, UploadResult, UploadMetadata } from 'firebase/storage'
 
-  const firebase: Firestore
+  const firestore: Firestore
+  const storage: FirebaseStorage
 
   function collection<T = DocumentData>(firestore: Firestore, path: string): CollectionReference<T>
 
@@ -37,5 +39,31 @@ declare module '@/services/firebase.config.js' {
 
   function getDocs<T = DocumentData>(query: Query<T>): Promise<QuerySnapshot<T>>
 
-  export { firebase, collection, addDoc, query, where, getDocs }
+  function ref(storage: FirebaseStorage, path: string): StorageReference
+
+  function doc<T = DocumentData>(firestore: Firestore, path: string): DocumentReference<T>
+  function getDoc<T = DocumentData>(docRef: DocumentReference<T>): Promise<DocumentSnapshot<T>>
+
+  function uploadBytes(
+    ref: StorageReference,
+    data: Blob | Uint8Array | ArrayBuffer,
+    metadata?: UploadMetadata,
+  ): Promise<UploadResult>
+
+  function getDownloadURL(ref: StorageReference): Promise<string>
+
+  export {
+    collection,
+    addDoc,
+    query,
+    where,
+    getDocs,
+    getDoc,
+    doc,
+    firestore,
+    storage,
+    ref,
+    uploadBytes,
+    getDownloadURL,
+  }
 }

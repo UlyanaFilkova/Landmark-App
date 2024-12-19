@@ -31,17 +31,8 @@ import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import { registerUser, checkUsernameExists } from '@/services/auth.ts'
-
-interface InputField {
-  model: string
-  type: string
-  placeholder: string
-  name: string
-  autocomplete: string
-  required: boolean
-  errorMessage: string
-}
+import { registerUser, checkUsernameExists } from '@/services/user'
+import { InputField } from '@/types/interfaces'
 
 const inputFields = reactive<InputField[]>([
   {

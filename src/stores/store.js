@@ -1,0 +1,64 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import { getPlacesData, getRatingsData } from '@/services/map';
+import { getUserById } from '@/services/user';
+export const useMapStore = defineStore('map', () => {
+    const places = ref([]);
+    const ratings = ref([]);
+    const user = ref();
+    const userId = computed(() => localStorage.getItem('userId'));
+    const getPlaces = computed(() => places.value);
+    const getRatings = computed(() => ratings.value);
+    const getUser = computed(() => user.value);
+    const fetchPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const fetchedPlaces = yield getPlacesData();
+            places.value = fetchedPlaces;
+        }
+        catch (error) {
+            console.error(error);
+        }
+    });
+    const fetchRatings = () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const fetchedRatings = yield getRatingsData();
+            ratings.value = fetchedRatings;
+        }
+        catch (error) {
+            console.error(error);
+        }
+    });
+    const fetchUser = () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const userIdValue = userId.value;
+            if (userIdValue) {
+                user.value = (yield getUserById(userIdValue));
+            }
+        }
+        catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    });
+    const loadInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
+        yield fetchUser();
+        yield fetchPlaces();
+        yield fetchRatings();
+    });
+    return {
+        getPlaces,
+        getRatings,
+        getUser,
+        fetchPlaces,
+        fetchRatings,
+        loadInitialData,
+    };
+});

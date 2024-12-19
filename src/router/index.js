@@ -10,7 +10,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('userId') !== null
 
-  if (isAuthenticated && (to.name === 'login' || to.name === 'registration')) {
+  if (isAuthenticated && (to.name === 'login' || to.name === 'registration' || to.name === '')) {
     return next({ name: 'generalMap' })
   }
 

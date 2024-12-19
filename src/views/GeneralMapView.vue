@@ -1,17 +1,52 @@
 <template>
   <div class="container">
     <BaseLoader v-if="isLoading" />
+    <MapHeader />
+    <MapBlock />
+    <TopPlaces/>
+
+    <!-- <div>
+      <input type="file" @change="handleFileUpload" accept="image/*" />
+      <p v-if="imageBase64">Base64 String:</p>
+      <textarea v-if="imageBase64" readonly>{{ imageBase64 }}</textarea>
+    </div> -->
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
-// import HomeHeader from '@/components/home/HomeHeader.vue'
-// import BaseButton from '@/components/base/BaseButton.vue'
+<script lang="ts" setup>
+import { ref, computed, onBeforeMount } from 'vue'
+import MapHeader from '@/components/map/MapHeader.vue'
+import MapBlock from '@/components/map/MapBlock.vue'
+import TopPlaces from '@/components/map/TopPlaces.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-// import { useStore } from 'vuex'
+import { useMapStore } from '@/stores/store'
 
-const isLoading = true
+const store = useMapStore()
+const isLoading = ref(true)
+
+onBeforeMount(async () => {
+  await store.loadInitialData()
+  isLoading.value = false
+})
+
+
+// const imageBase64 = ref<string | null>(null)
+
+// // Конвертация файла в строку Base64
+// const handleFileUpload = (event: Event) => {
+//   const file = (event.target as HTMLInputElement)?.files?.[0]
+//   if (!file) return
+
+//   const reader = new FileReader()
+//   reader.onload = () => {
+//     imageBase64.value = reader.result as string
+//   }
+//   reader.onerror = (error) => {
+//     console.error('Ошибка при чтении файла:', error)
+//   }
+//   reader.readAsDataURL(file) // Чтение файла и конвертация в Base64
+// }
+
 </script>
 
 <style scoped>
@@ -25,13 +60,5 @@ const isLoading = true
   .container {
     margin: 0 15px;
   }
-}
-
-.fixed-button {
-  display: block;
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 </style>

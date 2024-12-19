@@ -21,5 +21,6 @@ export const routes = [
     path: '/general-map',
     name: 'generalMap',
     component: GeneralMapView,
+    meta: { requiresAuth: true },
   },
 ]
