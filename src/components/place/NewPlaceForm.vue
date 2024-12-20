@@ -53,6 +53,8 @@ import LocationInput from '@/components/place/LocationInput.vue'
 import StarRatingInput from '@/components/base/StarRatingInput.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import FileInput from '@/components/base/FileInput.vue'
+import { useMapStore } from '@/stores/store'
+
 
 const formData = ref({
   title: '',
@@ -61,7 +63,6 @@ const formData = ref({
   longitude: 27.5667,
   photos: [] as File[],
   rating: 5,
-  authorId: '',
 })
 
 const locationInvalid = computed(
@@ -78,6 +79,8 @@ const fileTypeInvalid = ref(false)
 const ratingInvalidMessage = computed(() =>
   formData.value.rating >= 1 && formData.value.rating <= 5 ? '' : 'Rating must be from 1 to 5',
 )
+
+const store = useMapStore()
 
 const handleSubmit = async () => {
   if (
@@ -100,7 +103,8 @@ const handleSubmit = async () => {
         location: [formData.value.latitude, formData.value.longitude],
       }
 
-      console.log('New Place Data:', place)
+      await store.addNewPlace(place)
+
     } catch (error) {
       console.error('Error converting files to Base64:', error)
     }

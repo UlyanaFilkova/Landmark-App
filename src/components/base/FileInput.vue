@@ -1,5 +1,6 @@
 <template>
   <div class="file-input">
+    
     <label>{{ label }}</label>
     <div class="custom-file-upload">
       <input
@@ -10,9 +11,9 @@
         :multiple="multiple"
         :disabled="isDisabled"
       />
-      <button type="button" @click="triggerFileInput" :disabled="isDisabled">
-        {{ buttonText }}
-      </button>
+      <BaseButton type="button" @click="triggerFileInput" :disabled="isDisabled" :text="buttonText" class="small-button">
+        
+      </BaseButton>
       <p v-if="isFileLimitReached" class="warning-message">{{ warningMessage }}</p>
     </div>
     <div v-if="modelValue.length > 0">
@@ -30,6 +31,7 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, computed } from 'vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 const props = defineProps({
   modelValue: {
@@ -116,10 +118,12 @@ const triggerFileInput = () => {
   position: relative;
   overflow: hidden;
   display: inline-block;
+ 
 }
 
 .custom-file-upload input[type='file'] {
   position: absolute;
+  cursor: pointer;
   opacity: 0;
   right: 0;
   top: 0;

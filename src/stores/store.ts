@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getPlacesData, getRatingsData } from '@/services/map'
 import { getUserById } from '@/services/user'
+import { addPlace } from '@/services/place'
 import { Place, User, Rating } from '@/types/interfaces'
 
 export const useMapStore = defineStore('map', () => {
@@ -49,6 +50,21 @@ export const useMapStore = defineStore('map', () => {
     await fetchRatings()
   }
 
+  const addNewPlace = async (placeData: Omit<Place,'authorId' | 'id'>) => {
+    try {   
+      const authorId = userId.value 
+      if (!authorId) {
+        throw new Error("User ID is missing")
+      }
+
+      const response = await addPlace({ ...placeData, authorId})
+      places.value.push({ ...placeData, authorId, id: response.id })
+
+      console.log('New place added:', { ...placeData, authorId, id: response.id })
+    } catch (error) {
+      console.error('Error adding new place:', error)
+    }
+  }
   return {
     getPlaces,
     getRatings,
@@ -56,5 +72,6 @@ export const useMapStore = defineStore('map', () => {
     fetchPlaces,
     fetchRatings,
     loadInitialData,
+    addNewPlace,
   }
 })
