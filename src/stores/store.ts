@@ -50,17 +50,20 @@ export const useMapStore = defineStore('map', () => {
     await fetchRatings()
   }
 
-  const addNewPlace = async (placeData: Omit<Place,'authorId' | 'id'>) => {
-    try {   
-      const authorId = userId.value 
+  const addNewPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
+    try {
+      const authorId = userId.value
       if (!authorId) {
-        throw new Error("User ID is missing")
+        throw new Error('User ID is missing')
       }
 
-      const response = await addPlace({ ...placeData, authorId})
-      places.value.push({ ...placeData, authorId, id: response.id })
+      const response = await addPlace({ ...placeData, authorId })
 
-      console.log('New place added:', { ...placeData, authorId, id: response.id })
+      if (response && response.id) {
+        places.value.push({ ...placeData, authorId, id: response.id })
+        return 'success'
+      }
+      return 'Error adding new place'
     } catch (error) {
       console.error('Error adding new place:', error)
     }

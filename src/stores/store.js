@@ -58,11 +58,14 @@ export const useMapStore = defineStore('map', () => {
         try {
             const authorId = userId.value;
             if (!authorId) {
-                throw new Error("User ID is missing");
+                throw new Error('User ID is missing');
             }
             const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId }));
-            places.value.push(Object.assign(Object.assign({}, placeData), { authorId, id: response.id }));
-            console.log('New place added:', Object.assign(Object.assign({}, placeData), { authorId, id: response.id }));
+            if (response && response.id) {
+                places.value.push(Object.assign(Object.assign({}, placeData), { authorId, id: response.id }));
+                return 'success';
+            }
+            return 'Error adding new place';
         }
         catch (error) {
             console.error('Error adding new place:', error);

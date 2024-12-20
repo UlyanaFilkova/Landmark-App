@@ -54,16 +54,18 @@ import StarRatingInput from '@/components/base/StarRatingInput.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import FileInput from '@/components/base/FileInput.vue'
 import { useMapStore } from '@/stores/store'
+import { useRouter } from 'vue-router'
 
-
-const formData = ref({
+const initialFormData = {
   title: '',
   description: '',
   latitude: 53.9,
   longitude: 27.5667,
   photos: [] as File[],
   rating: 5,
-})
+}
+
+const formData = ref({ ...initialFormData })
 
 const locationInvalid = computed(
   () =>
@@ -81,6 +83,7 @@ const ratingInvalidMessage = computed(() =>
 )
 
 const store = useMapStore()
+const router = useRouter()
 
 const handleSubmit = async () => {
   if (
@@ -103,8 +106,11 @@ const handleSubmit = async () => {
         location: [formData.value.latitude, formData.value.longitude],
       }
 
-      await store.addNewPlace(place)
-
+      const result = await store.addNewPlace(place)
+      if (result === 'success') {
+        router.push({ name: 'generalMap' })
+        clearForm()
+      }
     } catch (error) {
       console.error('Error converting files to Base64:', error)
     }
@@ -140,6 +146,10 @@ const convertFilesToBase64 = (files: File[]): Promise<string[]> => {
       reader.readAsDataURL(file)
     })
   })
+}
+
+const clearForm = (): void => {
+  formData.value = { ...initialFormData }
 }
 </script>
 
