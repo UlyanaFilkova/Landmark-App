@@ -36,32 +36,12 @@
 
       <LocationInput v-model:latitude="formData.latitude" v-model:longitude="formData.longitude" />
 
-      <div class="form-group">
-        <label>Upload Photos</label>
-        <div class="custom-file-upload">
-          <input
-            @change="handlePhotoChange"
-            type="file"
-            id="photos"
-            accept="image/*"
-            multiple
-            :disabled="isPhotoLimitReached"
-          />
-          <button type="button" @click="triggerFileInput" :disabled="isPhotoLimitReached">
-            Choose Files
-          </button>
-        </div>
-        <div v-if="formData.photos.length > 0">
-          <p>Uploaded photos:</p>
-          <ul>
-            <li v-for="(photo, index) in formData.photos" :key="index">
-              {{ photo.name }}
-              <button type="button" @click="removePhoto(index)">✖</button>
-            </li>
-          </ul>
-        </div>
-        <p v-if="photoTypeInvalid" class="error-message">One or more files are not valid images.</p>
-      </div>
+      <FileInput
+        v-model:modelValue="formData.photos"
+        id="photos"
+        label="Upload Photos"
+        :maxFiles="5"
+      />
 
       <button type="submit">Add Place</button>
     </form>
@@ -74,6 +54,7 @@ import L from 'leaflet'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import FileInput from '@/components/base/FileInput.vue'
 
 const formData = ref({
   id: '',
@@ -133,9 +114,7 @@ const handleSubmit = () => {
     formData.value.rating >= 1 &&
     formData.value.rating <= 5 &&
     formData.value.photos.length <= 5 &&
-    !photoTypeInvalid.value &&
-    !titleTooLong.value &&
-    !descriptionTooLong.value
+    !photoTypeInvalid.value
   ) {
     const place: Place = {
       ...formData.value,
