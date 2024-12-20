@@ -3,50 +3,38 @@
     <h2>Add a New Place</h2>
 
     <form @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label for="title">Place Title</label>
-        <input
-          v-model="formData.title"
-          type="text"
-          id="title"
-          placeholder="Enter place title"
-          required
-          maxlength="100"
-        />
-        <p v-if="titleTooLong" class="error-message">Title exceeds maximum length of 100 characters.</p>
-      </div>
-
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea
-          v-model="formData.description"
-          id="description"
-          placeholder="Enter description"
-          required
-          maxlength="500"
-        ></textarea>
-        <p v-if="descriptionTooLong" class="error-message">Description exceeds maximum length of 00 characters.</p>
-      </div>
-
-      <LocationInput
-        v-model:latitude="formData.latitude"
-        v-model:longitude="formData.longitude"
+      <BaseInput
+        v-model:modelValue="formData.title"
+        type="text"
+        id="title"
+        label="Place Title"
+        
+        :maxlength="100"
+        :required="true"
       />
 
-      <div class="form-group">
-        <label for="rating">Your Rating</label>
-        <input
-          v-model="formData.rating"
-          type="number"
-          id="rating"
-          min="1"
-          max="5"
-          step="0.1"
-          placeholder="Rate the place (1.0-5.0)"
-          required
-        />
-        <p v-if="ratingInvalid" class="error-message">Rating must be a number between 1.0 and 5.0.</p>
-      </div>
+      <BaseInput
+        v-model:modelValue="formData.description"
+        type="text"
+        id="description"
+        label="Description"
+        
+        :maxlength="1000"
+        :required="true"
+      />
+
+      <BaseInput
+        v-model:modelValue="formData.rating"
+        type="number"
+        id="rating"
+        label="Your Rating"
+        :min="1"
+        :max="5"
+        :step="0.1"
+        placeholder="Rate the place (1.0-5.0)"
+      />
+
+      <LocationInput v-model:latitude="formData.latitude" v-model:longitude="formData.longitude" />
 
       <div class="form-group">
         <label>Upload Photos</label>
@@ -59,7 +47,9 @@
             multiple
             :disabled="isPhotoLimitReached"
           />
-          <button type="button" @click="triggerFileInput" :disabled="isPhotoLimitReached">Choose Files</button>
+          <button type="button" @click="triggerFileInput" :disabled="isPhotoLimitReached">
+            Choose Files
+          </button>
         </div>
         <div v-if="formData.photos.length > 0">
           <p>Uploaded photos:</p>
@@ -73,8 +63,6 @@
         <p v-if="photoTypeInvalid" class="error-message">One or more files are not valid images.</p>
       </div>
 
-      <div ref="mapContainer" id="map" class="map-container"></div>
-
       <button type="submit">Add Place</button>
     </form>
   </div>
@@ -85,6 +73,7 @@ import { ref, computed, onMounted } from 'vue'
 import L from 'leaflet'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
 
 const formData = ref({
   id: '',
@@ -103,17 +92,20 @@ const marker = ref<L.Marker>()
 
 const isPhotoLimitReached = computed(() => formData.value.photos.length >= 5)
 
-const titleTooLong = computed(() => formData.value.title.length >= 100)
-const descriptionTooLong = computed(() => formData.value.description.length >= 1000)
-const locationInvalid = computed(() => formData.value.latitude < -90 || formData.value.latitude > 90 || formData.value.longitude < -180 || formData.value.longitude > 180)
-const ratingInvalid = computed(() => formData.value.rating < 1.0 || formData.value.rating > 5.0)
+const locationInvalid = computed(
+  () =>
+    formData.value.latitude < -90 ||
+    formData.value.latitude > 90 ||
+    formData.value.longitude < -180 ||
+    formData.value.longitude > 180,
+)
 const photoTypeInvalid = ref(false)
 
 const handlePhotoChange = (event: Event) => {
   const input = event.target as HTMLInputElement
   if (input.files && input.files.length > 0) {
     const files = Array.from(input.files)
-    const invalidFiles = files.filter(file => !file.type.startsWith('image/'))
+    const invalidFiles = files.filter((file) => !file.type.startsWith('image/'))
     if (invalidFiles.length > 0) {
       photoTypeInvalid.value = true
       return
@@ -138,13 +130,16 @@ const handleSubmit = () => {
     formData.value.title &&
     formData.value.description &&
     !locationInvalid.value &&
-    !ratingInvalid.value &&
+    formData.value.rating >= 1 &&
+    formData.value.rating <= 5 &&
     formData.value.photos.length <= 5 &&
-    !photoTypeInvalid.value
+    !photoTypeInvalid.value &&
+    !titleTooLong.value &&
+    !descriptionTooLong.value
   ) {
     const place: Place = {
       ...formData.value,
-      location: [formData.value.latitude, formData.value.longitude]
+      location: [formData.value.latitude, formData.value.longitude],
     }
     console.log('New Place Data:', place)
   } else {
@@ -248,7 +243,7 @@ button:hover {
   display: inline-block;
 }
 
-.custom-file-upload input[type="file"] {
+.custom-file-upload input[type='file'] {
   position: absolute;
   opacity: 0;
   right: 0;

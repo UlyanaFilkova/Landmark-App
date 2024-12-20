@@ -1,49 +1,71 @@
 <template>
-  <div class="input-group">
-    <label v-if="label" :for="name">{{ label }}:</label>
-    <input :id="name" type="text" :value="modelValue" @input="handleInput" />
+  <div class="input-wrapper">
+    <label :for="id">{{ label }}</label>
+    <input
+      :id="id"
+      :value="modelValue"
+      @input="handleInput"
+      :type="type"
+      :placeholder="placeholder"
+      :step="step"
+      :min="min"
+      :max="max"
+      :maxlength="maxlength"
+      :required="required"
+    />
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      type: [String, Boolean],
-      default: '',
-    },
-    label: {
-      type: String,
-    },
-    name: {
-      type: String,
-    },
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue'
+
+const props = defineProps({
+  modelValue: [String, Number],
+  type: {
+    type: String,
+    default: 'text'
   },
-  emits: ['update:modelValue'],
-  methods: {
-    handleInput(event) {
-      this.$emit('update:modelValue', event.target.value)
-    },
+  id: {
+    type: String,
+    required: true
   },
+  label: {
+    type: String,
+    required: true
+  },
+  placeholder: {
+    type: String,
+    default: ''
+  },
+  step: Number,
+  min: Number,
+  max: Number,
+  maxlength: Number,
+  required: {
+    type: Boolean,
+    default: false
+  },
+  errorMessage: {
+    type: String,
+    default: ''
+  }
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const handleInput = (event: Event) => {
+  emit('update:modelValue', (event.target as HTMLInputElement).value)
 }
 </script>
 
 <style scoped>
-.input-group label {
-  display: block;
-  color: var(--color-tenth);
-  margin-bottom: 5px;
+.input-wrapper {
+  margin-bottom: 15px;
 }
-.input-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid var(--color-eleventh);
-  border-radius: 8px;
-  display: block;
-  margin-bottom: 20px;
-  outline: none;
-}
-.input-group input:focus{
-  outline: 1.5px solid var(--color-eleventh);
+
+.error-message {
+  color: red;
+  font-size: 12px;
 }
 </style>
