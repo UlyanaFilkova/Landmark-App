@@ -32,7 +32,11 @@
         placeholder="Rate the place (1.0-5.0)"
       />
 
-      <LocationInput v-model:latitude="formData.latitude" v-model:longitude="formData.longitude" />
+      <LocationInput
+        v-model:latitude="formData.latitude"
+        v-model:longitude="formData.longitude"
+        :locationInvalid="locationInvalid"
+      />
 
       <FileInput
         v-model:modelValue="formData.photos"
@@ -52,15 +56,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import L from 'leaflet'
+import { ref, computed } from 'vue'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import FileInput from '@/components/base/FileInput.vue'
 
 const formData = ref({
-  id: '',
   title: '',
   description: '',
   latitude: 53.9,
@@ -69,10 +71,6 @@ const formData = ref({
   rating: 1,
   authorId: '',
 })
-
-const mapContainer = ref<HTMLDivElement | null>(null)
-const map = ref<L.Map>()
-const marker = ref<L.Marker>()
 
 const locationInvalid = computed(
   () =>
@@ -88,7 +86,7 @@ const fileTypeInvalid = ref(false)
 const warningMessage = 'Maximum 5 photos'
 const errorMessage = 'One or more files are not valid images.'
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (
     formData.value.title &&
     formData.value.description &&
@@ -97,36 +95,55 @@ const handleSubmit = () => {
     formData.value.rating <= 5 &&
     formData.value.photos.length <= 5 &&
     !fileTypeInvalid.value
-  ) {
-    const place: Place = {
-      ...formData.value,
-      location: [formData.value.latitude, formData.value.longitude],
+  )
+    try {
+      const base64Photos = await convertFilesToBase64(formData.value.photos)
+
+      const place: Omit<Place, 'authorId' | 'id'> = {
+        title: formData.value.title,
+        description: formData.value.description,
+        rating: formData.value.rating,
+        photos: base64Photos,
+        location: [formData.value.latitude, formData.value.longitude],
+      }
+
+      console.log('New Place Data:', place)
+    } catch (error) {
+      console.error('Error converting files to Base64:', error)
     }
-    console.log('New Place Data:', place)
-  } else {
+  else {
     alert('Please fill out all fields correctly.')
   }
 }
 
-onMounted(() => {
-  if (mapContainer.value) {
-    map.value = L.map(mapContainer.value).setView([53.9, 27.5667], 11)
+const convertFilesToBase64 = (files: File[]): Promise<string[]> => {
+  return new Promise((resolve, reject) => {
+    if (files.length === 0) {
+      resolve([])
+      return
+    }
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
+    const base64Files: string[] = []
+    let processedCount = 0
 
-    map.value.on('click', (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng
-      formData.value.latitude = lat
-      formData.value.longitude = lng
-
-      if (marker.value) {
-        marker.value.setLatLng(e.latlng)
-      } else {
-        marker.value = L.marker(e.latlng).addTo(map.value)
+    files.forEach((file) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        base64Files.push(reader.result as string)
+        processedCount++
+        if (processedCount === files.length) {
+          resolve(base64Files)
+        }
       }
+
+      reader.onerror = (error) => {
+        reject(error)
+      }
+
+      reader.readAsDataURL(file)
     })
-  }
-})
+  })
+}
 </script>
 
 <style scoped>
