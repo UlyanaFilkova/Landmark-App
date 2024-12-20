@@ -8,7 +8,6 @@
         type="text"
         id="title"
         label="Place Title"
-        
         :maxlength="100"
         :required="true"
       />
@@ -18,7 +17,6 @@
         type="text"
         id="description"
         label="Description"
-        
         :maxlength="1000"
         :required="true"
       />
@@ -41,6 +39,11 @@
         id="photos"
         label="Upload Photos"
         :maxFiles="5"
+        :isFileLimitReached="isFileLimitReached"
+        :warningMessage="warningMessage"
+        :fileTypeInvalid="fileTypeInvalid"
+        :errorMessage="errorMessage"
+        :isDisabled="isFileLimitReached || fileTypeInvalid"
       />
 
       <button type="submit">Add Place</button>
@@ -71,8 +74,6 @@ const mapContainer = ref<HTMLDivElement | null>(null)
 const map = ref<L.Map>()
 const marker = ref<L.Marker>()
 
-const isPhotoLimitReached = computed(() => formData.value.photos.length >= 5)
-
 const locationInvalid = computed(
   () =>
     formData.value.latitude < -90 ||
@@ -80,31 +81,12 @@ const locationInvalid = computed(
     formData.value.longitude < -180 ||
     formData.value.longitude > 180,
 )
-const photoTypeInvalid = ref(false)
 
-const handlePhotoChange = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  if (input.files && input.files.length > 0) {
-    const files = Array.from(input.files)
-    const invalidFiles = files.filter((file) => !file.type.startsWith('image/'))
-    if (invalidFiles.length > 0) {
-      photoTypeInvalid.value = true
-      return
-    }
-    photoTypeInvalid.value = false
-    const totalPhotos = formData.value.photos.length + files.length
-    if (totalPhotos > 5) {
-      alert('You can upload up to 5 photos.')
-      return
-    }
-    formData.value.photos.push(...files)
-    input.value = ''
-  }
-}
+const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
+const fileTypeInvalid = ref(false)
 
-const removePhoto = (index: number) => {
-  formData.value.photos.splice(index, 1)
-}
+const warningMessage = 'Maximum 5 photos'
+const errorMessage = 'One or more files are not valid images.'
 
 const handleSubmit = () => {
   if (
@@ -114,7 +96,7 @@ const handleSubmit = () => {
     formData.value.rating >= 1 &&
     formData.value.rating <= 5 &&
     formData.value.photos.length <= 5 &&
-    !photoTypeInvalid.value
+    !fileTypeInvalid.value
   ) {
     const place: Place = {
       ...formData.value,
@@ -123,13 +105,6 @@ const handleSubmit = () => {
     console.log('New Place Data:', place)
   } else {
     alert('Please fill out all fields correctly.')
-  }
-}
-
-const triggerFileInput = () => {
-  const fileInput = document.getElementById('photos') as HTMLInputElement
-  if (fileInput) {
-    fileInput.click()
   }
 }
 

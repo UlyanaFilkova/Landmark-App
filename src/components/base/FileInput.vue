@@ -8,17 +8,17 @@
         :id="id"
         :accept="accept"
         :multiple="multiple"
-        :disabled="isPhotoLimitReached"
+        :disabled="isDisabled"
       />
-      <button type="button" @click="triggerFileInput" :disabled="isPhotoLimitReached">
+      <button type="button" @click="triggerFileInput" :disabled="isDisabled">
         {{ buttonText }}
       </button>
-      <p v-if="isPhotoLimitReached" class="warning-message">{{ warningMessage }}</p>
+      <p v-if="isFileLimitReached" class="warning-message">{{ warningMessage }}</p>
     </div>
-    <div v-if="files.length > 0">
+    <div v-if="modelValue.length > 0">
       <p>Uploaded files:</p>
       <ul>
-        <li v-for="(file, index) in files" :key="index">
+        <li v-for="(file, index) in modelValue" :key="index">
           {{ file.name }}
           <button type="button" @click="removeFile(index)">✖</button>
         </li>
@@ -29,11 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, watch, computed } from 'vue'
+import { defineProps, defineEmits, computed } from 'vue'
 
 const props = defineProps({
   modelValue: {
-    type: Array,
+    type: Array as () => File[],
     default: () => [],
   },
   id: {
@@ -64,40 +64,39 @@ const props = defineProps({
     type: String,
     default: 'Choose Files',
   },
+  isFileLimitReached: {
+    type: Boolean,
+    default: false,
+  },
+  warningMessage: {
+    type: String,
+    default: 'Maximum 5 photos',
+  },
+  fileTypeInvalid: {
+    type: Boolean,
+    default: false,
+  },
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
-const warningMessage = 'Maximum 5 photos'
-
-const files = ref<File[]>([])
-const fileTypeInvalid = ref(false)
-
-const isPhotoLimitReached = computed(() => files.value.length >= props.maxFiles)
 
 const handleFileChange = (event: Event) => {
   const input = event.target as HTMLInputElement
   if (input.files && input.files.length > 0) {
     const newFiles = Array.from(input.files)
-    const invalidFiles = newFiles.filter((file) => !file.type.startsWith('image/'))
-    if (invalidFiles.length > 0) {
-      fileTypeInvalid.value = true
-      return
-    }
-    fileTypeInvalid.value = false
-    const totalFiles = files.value.length + newFiles.length
-    if (totalFiles > props.maxFiles) {
-      alert(`You can upload up to ${props.maxFiles} files.`)
-      return
-    }
-    files.value.push(...newFiles)
-    input.value = ''
-    emit('update:modelValue', files.value)
+    const updatedFiles = [...props.modelValue, ...newFiles]
+    emit('update:modelValue', updatedFiles)
   }
 }
 
 const removeFile = (index: number) => {
-  files.value.splice(index, 1)
-  emit('update:modelValue', files.value)
+  const newFiles = [...props.modelValue]
+  newFiles.splice(index, 1)
+  emit('update:modelValue', newFiles)
 }
 
 const triggerFileInput = () => {
@@ -106,14 +105,6 @@ const triggerFileInput = () => {
     fileInput.click()
   }
 }
-
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    files.value = newVal as File[]
-  },
-  { immediate: true },
-)
 </script>
 
 <style scoped>
