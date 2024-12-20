@@ -58,7 +58,7 @@ const props = defineProps({
   },
   errorMessage: {
     type: String,
-    default: 'One or more files are not valid images.',
+    default: '',
   },
   buttonText: {
     type: String,
@@ -70,7 +70,7 @@ const props = defineProps({
   },
   warningMessage: {
     type: String,
-    default: 'Maximum 5 photos',
+    default: '',
   },
   fileTypeInvalid: {
     type: Boolean,
