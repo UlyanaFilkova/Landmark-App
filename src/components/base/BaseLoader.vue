@@ -1,6 +1,6 @@
 <template>
   <div class="loader-overlay">
-    <img src="@/assets/200w.webp" alt="Loading..." class="loader" />
+    <img src="@/assets/img/loader.webp" alt="Loading..." class="loader" />
   </div>
 </template>
 
