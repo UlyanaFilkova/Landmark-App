@@ -37,10 +37,13 @@ const places = computed(() => store.getPlaces)
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-left: -10px;
 }
 
 .place-number {
   font-size: 20px;
   color: #555;
+  min-width: 40px; 
+  text-align: center; 
 }
 </style>

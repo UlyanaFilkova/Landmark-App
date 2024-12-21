@@ -1,5 +1,5 @@
 <template>
-  <div class="place-container">
+  <div to="/place" class="place-container">
     <div class="place_img">
       <img :src="imageSrc" alt="Place Image" />
     </div>
