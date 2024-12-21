@@ -4,6 +4,7 @@ import { getPlacesData, getRatingsData } from '@/services/map'
 import { getUserById } from '@/services/user'
 import { addPlace } from '@/services/place'
 import { Place, User, Rating } from '@/types/interfaces'
+import router from '@/router'
 
 export const useMapStore = defineStore('map', () => {
   const places = ref<Place[]>([])
@@ -79,6 +80,17 @@ export const useMapStore = defineStore('map', () => {
     currentPlace.value = undefined
     localStorage.removeItem('currentPlaceId')
   }
+  const logout = () => {
+    localStorage.removeItem('userId')
+    router.push({ name: 'login' })
+    resetStore()
+  }
+  const resetStore = () => {
+    places.value = []
+    ratings.value = []
+    user.value = undefined
+    currentPlace.value = undefined
+  }
   return {
     getPlaces,
     getRatings,
@@ -90,5 +102,6 @@ export const useMapStore = defineStore('map', () => {
     addNewPlace,
     setCurrentPlace,
     removeCurrentPlace,
+    logout,
   }
 })
