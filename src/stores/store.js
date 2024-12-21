@@ -38,7 +38,7 @@ export const useMapStore = defineStore('map', () => {
     });
     const filterPlaces = () => {
         if (onlyUserPlaces.value) {
-            filteredPlaces.value = places.value.filter((place) => place.authorId !== userId.value);
+            filteredPlaces.value = places.value.filter((place) => place.authorId === userId.value);
         }
         else {
             filteredPlaces.value = places.value;
