@@ -1,6 +1,6 @@
 <template>
   <div class="place-view">
-    <PlaceHeader title="Add a New Place"/>
+    <PlaceHeader title="Add a New Place" />
     <NewPlaceForm />
   </div>
 </template>
@@ -9,3 +9,10 @@
 import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
 import PlaceHeader from '@/components/place/PlaceHeader.vue'
 </script>
+
+<style scoped>
+.place-view {
+  width: 90%;
+  max-width: 600px;
+}
+</style>

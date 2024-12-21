@@ -44,9 +44,12 @@ const addMarkers = (places: Place[]) => {
   }
 }
 
-const places = computed(() => store.getPlaces)
+const places = computed(() => store.getFilteredPlaces)
+
+const checkboxChecked = ref<Boolean>(false)
 
 onMounted(async () => {
+  checkboxChecked.value = store.getOnlyUserPlaces
   if (mapContainer.value) {
     map.value = L.map(mapContainer.value).setView([53.9, 27.5667], 11)
 
@@ -60,14 +63,12 @@ onMounted(async () => {
 })
 
 watch(
-  () => store.getPlaces,
+  () => store.getFilteredPlaces,
   (newPlaces) => {
     addMarkers(newPlaces)
   },
   { immediate: true },
 )
-
-const checkboxChecked = ref<Boolean>(false)
 
 const handleCheckboxChange = () => {
   checkboxChecked.value = !checkboxChecked.value

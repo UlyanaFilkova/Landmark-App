@@ -159,7 +159,7 @@ h2 {
   margin: -10px 0 20px 0;
 }
 .new-place-form {
-  max-width: 600px;
+
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ddd;

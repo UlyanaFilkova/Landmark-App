@@ -22,6 +22,8 @@ const handleBackClick = () => {
 
 <style scoped>
 .place-header {
+  max-width: 762px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: start;

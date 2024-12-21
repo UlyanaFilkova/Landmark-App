@@ -15,7 +15,8 @@ export const useMapStore = defineStore('map', () => {
   const onlyUserPlaces = ref<Boolean>(false)
 
   const userId = computed(() => localStorage.getItem('userId'))
-  const getPlaces = computed(() => filteredPlaces.value)
+  const getPlaces = computed(() => places.value)
+  const getFilteredPlaces = computed(() => filteredPlaces.value)
   const getRatings = computed(() => ratings.value)
   const getUser = computed(() => user.value)
   const getCurrentPlace = computed(() => currentPlace.value)
@@ -114,6 +115,7 @@ export const useMapStore = defineStore('map', () => {
     getUser,
     getCurrentPlace,
     getOnlyUserPlaces,
+    getFilteredPlaces,
     fetchPlaces,
     fetchRatings,
     loadInitialData,
