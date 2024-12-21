@@ -1,17 +1,26 @@
 <template>
   <div class="popup-content">
-    <RouterLink to="/place" class="popup-title">{{ props.title }}</RouterLink>
-    <div class="popup-rating">{{ props.rating }}</div>
+    <RouterLink to="/place" class="popup-title" @click="handlePopupClick">{{
+      props.place.title
+    }}</RouterLink>
+    <div class="popup-rating">{{ props.place.rating }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
+import { useMapStore } from '@/stores/store'
+import { Place } from '@/types/interfaces'
 
 const props = defineProps<{
-  title: string
-  rating: number
+  place: Place
 }>()
+
+const store = useMapStore()
+
+const handlePopupClick = () => {
+  store.setCurrentPlace(props.place)
+}
 </script>
 
 <style scoped>

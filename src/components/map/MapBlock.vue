@@ -15,9 +15,9 @@ const store = useMapStore()
 const mapContainer = ref<HTMLDivElement | null>(null)
 const map = ref<L.Map>()
 
-const createPopUp = (title: string, rating: number) => {
+const createPopUp = (place: Place) => {
   const popupContainer = document.createElement('div')
-  const app = createApp(PopUp, { title, rating })
+  const app = createApp(PopUp, { place })
   app.use(router)
   app.mount(popupContainer)
 
@@ -29,7 +29,7 @@ const addMarkers = (places: Place[]) => {
     places.forEach((place) => {
       L.marker(place.location)
         .addTo(map.value!)
-        .bindPopup(createPopUp(place.title, place.rating))
+        .bindPopup(createPopUp(place))
     })
   }
 }

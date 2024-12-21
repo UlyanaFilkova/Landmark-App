@@ -1,10 +1,9 @@
 <template>
     <div class="place-details">
-      <h2>{{ place.title }}</h2>
   
       <div class="description">{{ place.description }}</div>
   
-      <div class="ratings">
+      <!-- <div class="ratings">
         <div class="average-rating">
           <h3>Average Rating</h3>
           <StarRating :rating="averageRating" :readOnly="true" />
@@ -15,7 +14,7 @@
           <StarRating v-model="userRating" @rate="handleRating" />
         </div>
       </div>
-  
+   -->
       <div class="location">
         <h3>Location</h3>
         <div class="map-container">
@@ -48,7 +47,7 @@
   <script setup lang="ts">
   import { ref, computed } from 'vue'
   import { Place } from '@/types/interfaces'
-  import StarRating from '@/components/base/StarRating.vue'
+  // import StarRating from '@/components/base/StarRating.vue'
   import LocationMap from '@/components/place/LocationMap.vue'
   import VueEasyLightbox from 'vue-easy-lightbox'
   

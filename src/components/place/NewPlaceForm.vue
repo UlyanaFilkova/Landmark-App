@@ -1,49 +1,45 @@
 <template>
-  <div class="new-place-form">
-    <h2>Add a New Place</h2>
+  <form @submit.prevent="handleSubmit" class="new-place-form">
+    <BaseInput
+      v-model:modelValue="formData.title"
+      type="text"
+      id="title"
+      label="Title"
+      :maxlength="100"
+      :required="true"
+    />
 
-    <form @submit.prevent="handleSubmit">
-      <BaseInput
-        v-model:modelValue="formData.title"
-        type="text"
-        id="title"
-        label="Title"
-        :maxlength="100"
-        :required="true"
-      />
+    <BaseInput
+      v-model:modelValue="formData.description"
+      type="text"
+      id="description"
+      label="Description"
+      :maxlength="1000"
+      :required="true"
+    />
 
-      <BaseInput
-        v-model:modelValue="formData.description"
-        type="text"
-        id="description"
-        label="Description"
-        :maxlength="1000"
-        :required="true"
-      />
+    <StarRatingInput v-model:modelValue="formData.rating" :errorMessage="ratingInvalidMessage" />
 
-      <StarRatingInput v-model:modelValue="formData.rating" :errorMessage="ratingInvalidMessage" />
+    <LocationInput
+      v-model:latitude="formData.latitude"
+      v-model:longitude="formData.longitude"
+      :locationInvalid="locationInvalid"
+    />
 
-      <LocationInput
-        v-model:latitude="formData.latitude"
-        v-model:longitude="formData.longitude"
-        :locationInvalid="locationInvalid"
-      />
+    <FileInput
+      v-model:modelValue="formData.photos"
+      id="photos"
+      label="Upload Photos"
+      :maxFiles="5"
+      :isFileLimitReached="isFileLimitReached"
+      :warningMessage="'Maximum 5 photos'"
+      :fileTypeInvalid="fileTypeInvalid"
+      :errorMessage="'One or more files are not valid images'"
+      :isDisabled="isFileLimitReached || fileTypeInvalid"
+    />
 
-      <FileInput
-        v-model:modelValue="formData.photos"
-        id="photos"
-        label="Upload Photos"
-        :maxFiles="5"
-        :isFileLimitReached="isFileLimitReached"
-        :warningMessage="'Maximum 5 photos'"
-        :fileTypeInvalid="fileTypeInvalid"
-        :errorMessage="'One or more files are not valid images'"
-        :isDisabled="isFileLimitReached || fileTypeInvalid"
-      />
-
-      <button type="submit">Add Place</button>
-    </form>
-  </div>
+    <button type="submit">Add Place</button>
+  </form>
 </template>
 
 <script setup lang="ts">
@@ -161,10 +157,6 @@ const clearForm = (): void => {
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-}
-
-.new-place-form h2 {
-  text-align: center;
 }
 
 .form-group {

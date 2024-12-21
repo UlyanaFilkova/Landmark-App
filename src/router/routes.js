@@ -2,7 +2,7 @@ import LoginView from '@/views/LoginView.vue'
 import RegistrationView from '@/views/RegistrationView.vue'
 import GeneralMapView from '@/views/GeneralMapView.vue'
 import AddPlaceView from '@/views/AddPlaceView.vue'
-import PlaceView from '@/views/AddPlaceView.vue'
+import PlaceView from '@/views/PlaceView.vue'
 
 export const routes = [
   {

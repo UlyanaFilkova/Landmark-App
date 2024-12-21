@@ -16,6 +16,7 @@ export const useMapStore = defineStore('map', () => {
     const places = ref([]);
     const ratings = ref([]);
     const user = ref();
+    const currentPlace = ref();
     const userId = computed(() => localStorage.getItem('userId'));
     const getPlaces = computed(() => places.value);
     const getRatings = computed(() => ratings.value);
@@ -71,6 +72,10 @@ export const useMapStore = defineStore('map', () => {
             console.error('Error adding new place:', error);
         }
     });
+    const setCurrentPlace = (place) => {
+        currentPlace.value = place;
+        console.log('currentPlace:', place);
+    };
     return {
         getPlaces,
         getRatings,
@@ -79,5 +84,6 @@ export const useMapStore = defineStore('map', () => {
         fetchRatings,
         loadInitialData,
         addNewPlace,
+        setCurrentPlace,
     };
 });
