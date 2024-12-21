@@ -11,6 +11,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { getPlacesData, getRatingsData } from '@/services/map';
 import { getUserById } from '@/services/user';
+import { addPlace } from '@/services/place';
 export const useMapStore = defineStore('map', () => {
     const places = ref([]);
     const ratings = ref([]);
@@ -53,6 +54,23 @@ export const useMapStore = defineStore('map', () => {
         yield fetchPlaces();
         yield fetchRatings();
     });
+    const addNewPlace = (placeData) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const authorId = userId.value;
+            if (!authorId) {
+                throw new Error('User ID is missing');
+            }
+            const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId }));
+            if (response && response.id) {
+                places.value.push(Object.assign(Object.assign({}, placeData), { authorId, id: response.id }));
+                return 'success';
+            }
+            return 'Error adding new place';
+        }
+        catch (error) {
+            console.error('Error adding new place:', error);
+        }
+    });
     return {
         getPlaces,
         getRatings,
@@ -60,5 +78,6 @@ export const useMapStore = defineStore('map', () => {
         fetchPlaces,
         fetchRatings,
         loadInitialData,
+        addNewPlace,
     };
 });

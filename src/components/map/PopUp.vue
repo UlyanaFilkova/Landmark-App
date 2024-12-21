@@ -2,26 +2,12 @@
   <div class="popup-content">
     <a :href="props.link" class="popup-title">{{ props.title }}</a>
     <div class="popup-rating">
-      <StarRating :rating="props.rating" />
-      <!-- <div class="star-rating">
-        <star-rating
-          :rating="props.rating"
-          :read-only="true"
-          :increment="0.01"
-          inactive-color="#ccc"
-          active-color="gold"
-        ></star-rating>
-
-        <span>{{ props.rating }}</span>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import StarRating from '@/components/base/StarRating.vue'
-// import StarRating from 'vue-star-rating'
 
 const props = defineProps<{
   title: string

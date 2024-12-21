@@ -7,7 +7,7 @@
         v-model:modelValue="formData.title"
         type="text"
         id="title"
-        label="Place Title"
+        label="Title"
         :maxlength="100"
         :required="true"
       />
@@ -21,16 +21,7 @@
         :required="true"
       />
 
-      <BaseInput
-        v-model:modelValue="formData.rating"
-        type="number"
-        id="rating"
-        label="Your Rating"
-        :min="1"
-        :max="5"
-        :step="0.1"
-        placeholder="Rate the place (1.0-5.0)"
-      />
+      <StarRatingInput v-model:modelValue="formData.rating" :errorMessage="ratingInvalidMessage" />
 
       <LocationInput
         v-model:latitude="formData.latitude"
@@ -44,9 +35,9 @@
         label="Upload Photos"
         :maxFiles="5"
         :isFileLimitReached="isFileLimitReached"
-        :warningMessage="warningMessage"
+        :warningMessage="'Maximum 5 photos'"
         :fileTypeInvalid="fileTypeInvalid"
-        :errorMessage="errorMessage"
+        :errorMessage="'One or more files are not valid images'"
         :isDisabled="isFileLimitReached || fileTypeInvalid"
       />
 
@@ -59,18 +50,22 @@
 import { ref, computed } from 'vue'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
+import StarRatingInput from '@/components/base/StarRatingInput.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import FileInput from '@/components/base/FileInput.vue'
+import { useMapStore } from '@/stores/store'
+import { useRouter } from 'vue-router'
 
-const formData = ref({
+const initialFormData = {
   title: '',
   description: '',
   latitude: 53.9,
   longitude: 27.5667,
   photos: [] as File[],
-  rating: 1,
-  authorId: '',
-})
+  rating: 5,
+}
+
+const formData = ref({ ...initialFormData })
 
 const locationInvalid = computed(
   () =>
@@ -83,8 +78,12 @@ const locationInvalid = computed(
 const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
-const warningMessage = 'Maximum 5 photos'
-const errorMessage = 'One or more files are not valid images.'
+const ratingInvalidMessage = computed(() =>
+  formData.value.rating >= 1 && formData.value.rating <= 5 ? '' : 'Rating must be from 1 to 5',
+)
+
+const store = useMapStore()
+const router = useRouter()
 
 const handleSubmit = async () => {
   if (
@@ -107,7 +106,11 @@ const handleSubmit = async () => {
         location: [formData.value.latitude, formData.value.longitude],
       }
 
-      console.log('New Place Data:', place)
+      const result = await store.addNewPlace(place)
+      if (result === 'success') {
+        router.push({ name: 'generalMap' })
+        clearForm()
+      }
     } catch (error) {
       console.error('Error converting files to Base64:', error)
     }
@@ -143,6 +146,10 @@ const convertFilesToBase64 = (files: File[]): Promise<string[]> => {
       reader.readAsDataURL(file)
     })
   })
+}
+
+const clearForm = (): void => {
+  formData.value = { ...initialFormData }
 }
 </script>
 

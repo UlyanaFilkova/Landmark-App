@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import L from 'leaflet'
 
 const props = defineProps({
