@@ -20,13 +20,13 @@ const props = defineProps<{
   align-items: center;
   gap: 12px;
   font-size: 18px;
-  color: var(--color-twelve);
+  color: var(--color-text-second);
 }
 
 .back-button__icon svg {
   height: 24px;
   width: 24px;
-  fill: var(--color-twelve);
+  fill: var(--color-text-second);
 }
 .back-button:hover {
   color: var(--color-card-third);

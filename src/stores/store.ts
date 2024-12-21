@@ -9,7 +9,7 @@ export const useMapStore = defineStore('map', () => {
   const places = ref<Place[]>([])
   const ratings = ref<Rating[]>([])
   const user = ref<User>()
-  const currentPlace = ref<Place>()
+  const currentPlace = ref<Place | undefined>()
 
   const userId = computed(() => localStorage.getItem('userId'))
   const getPlaces = computed(() => places.value)
@@ -73,6 +73,11 @@ export const useMapStore = defineStore('map', () => {
 
   const setCurrentPlace = (place: Place) => {
     currentPlace.value = place
+    localStorage.setItem('currentPlaceId', place.id)
+  }
+  const removeCurrentPlace = () => {
+    currentPlace.value = undefined
+    localStorage.removeItem('currentPlaceId')
   }
   return {
     getPlaces,
@@ -84,5 +89,6 @@ export const useMapStore = defineStore('map', () => {
     loadInitialData,
     addNewPlace,
     setCurrentPlace,
+    removeCurrentPlace,
   }
 })

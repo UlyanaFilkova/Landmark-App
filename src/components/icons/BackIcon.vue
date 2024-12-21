@@ -40,7 +40,7 @@
 svg {
   height: 24px;
   width: 24px;
-  fill: var(--color-twelve);
+  fill: var(--color-text-second);
 }
 
 .back-button:hover svg {

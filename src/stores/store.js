@@ -75,6 +75,11 @@ export const useMapStore = defineStore('map', () => {
     });
     const setCurrentPlace = (place) => {
         currentPlace.value = place;
+        localStorage.setItem('currentPlaceId', place.id);
+    };
+    const removeCurrentPlace = () => {
+        currentPlace.value = undefined;
+        localStorage.removeItem('currentPlaceId');
     };
     return {
         getPlaces,
@@ -86,5 +91,6 @@ export const useMapStore = defineStore('map', () => {
         loadInitialData,
         addNewPlace,
         setCurrentPlace,
+        removeCurrentPlace,
     };
 });
