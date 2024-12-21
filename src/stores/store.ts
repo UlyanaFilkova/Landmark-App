@@ -15,6 +15,7 @@ export const useMapStore = defineStore('map', () => {
   const getPlaces = computed(() => places.value)
   const getRatings = computed(() => ratings.value)
   const getUser = computed(() => user.value)
+  const getCurrentPlace = computed(() => currentPlace.value)
 
   const fetchPlaces = async () => {
     try {
@@ -72,12 +73,12 @@ export const useMapStore = defineStore('map', () => {
 
   const setCurrentPlace = (place: Place) => {
     currentPlace.value = place
-    console.log('currentPlace:', place)
   }
   return {
     getPlaces,
     getRatings,
     getUser,
+    getCurrentPlace,
     fetchPlaces,
     fetchRatings,
     loadInitialData,

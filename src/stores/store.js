@@ -21,6 +21,7 @@ export const useMapStore = defineStore('map', () => {
     const getPlaces = computed(() => places.value);
     const getRatings = computed(() => ratings.value);
     const getUser = computed(() => user.value);
+    const getCurrentPlace = computed(() => currentPlace.value);
     const fetchPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const fetchedPlaces = yield getPlacesData();
@@ -74,12 +75,12 @@ export const useMapStore = defineStore('map', () => {
     });
     const setCurrentPlace = (place) => {
         currentPlace.value = place;
-        console.log('currentPlace:', place);
     };
     return {
         getPlaces,
         getRatings,
         getUser,
+        getCurrentPlace,
         fetchPlaces,
         fetchRatings,
         loadInitialData,

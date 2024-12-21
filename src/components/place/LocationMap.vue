@@ -68,7 +68,7 @@
   
   onMounted(() => {
     if (mapContainer.value) {
-      map.value = L.map(mapContainer.value).setView([props.latitude, props.longitude], 16)
+      map.value = L.map(mapContainer.value).setView([props.latitude, props.longitude], 11)
   
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
       updateMapCenter(props.latitude, props.longitude)
