@@ -12,7 +12,7 @@ const props = defineProps<{
 .small-button {
   padding: 7px 10px;
   border-radius: 5px;
-  background: var(--color-second);
+  background: var(--color-first);
 }
 .small-button:hover {
   background: var(--color-second-hover);

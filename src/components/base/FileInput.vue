@@ -11,7 +11,7 @@
         :multiple="multiple"
         :disabled="isDisabled"
       />
-      <BaseButton type="button" @click="triggerFileInput" :disabled="isDisabled" :text="buttonText" class="small-button">
+      <BaseButton type="button" @click="triggerFileInput" :disabled="isDisabled" :text="buttonText" class="small-button grey">
         
       </BaseButton>
       <p v-if="isFileLimitReached" class="warning-message">{{ warningMessage }}</p>
@@ -156,5 +156,11 @@ li button {
 .warning-message {
   color: #555;
   font-size: 12px;
+}
+
+label{
+  font-weight: 600;
+  display: block;
+  margin-bottom: 10px;
 }
 </style>

@@ -10,7 +10,7 @@
       :required="true"
     />
 
-    <BaseInput
+    <BaseTextarea
       v-model:modelValue="formData.description"
       type="text"
       id="description"
@@ -19,18 +19,19 @@
       :required="true"
     />
 
-    <StarRating :rating="formData.rating" :readonly="false" @update:rating="updateRating" />
-
     <LocationInput
       v-model:latitude="formData.latitude"
       v-model:longitude="formData.longitude"
       :locationInvalid="locationInvalid"
     />
 
+    <label>Rating:</label>
+    <StarRating :rating="formData.rating" :readonly="false" @update:rating="updateRating" class="star-rating"/>
+
     <FileInput
       v-model:modelValue="formData.photos"
       id="photos"
-      label="Upload Photos"
+      label="Upload Photos:"
       :maxFiles="5"
       :isFileLimitReached="isFileLimitReached"
       :warningMessage="'Maximum 5 photos'"
@@ -52,6 +53,7 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import FileInput from '@/components/base/FileInput.vue'
 import { useMapStore } from '@/stores/store'
 import { useRouter } from 'vue-router'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
 
 const initialFormData = {
   title: '',
@@ -205,14 +207,6 @@ button:hover {
   background-color: #45a049;
 }
 
-.map-container {
-  height: 300px;
-  width: 100%;
-  border: 3px solid #aaa;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-
 .custom-file-upload {
   position: relative;
   overflow: hidden;
@@ -248,5 +242,9 @@ li button {
 .error-message {
   color: red;
   font-size: 12px;
+}
+
+.star-rating{
+  margin-bottom: 10px;
 }
 </style>
