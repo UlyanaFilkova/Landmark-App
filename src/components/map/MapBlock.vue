@@ -8,15 +8,17 @@ import PopUp from '@/components/map/PopUp.vue'
 import { useMapStore } from '@/stores/store'
 import L from 'leaflet'
 import { Place } from '@/types/interfaces'
+import router from '@/router'
 
 const store = useMapStore()
 
 const mapContainer = ref<HTMLDivElement | null>(null)
 const map = ref<L.Map>()
 
-const createPopUp = (title: string, link: string, rating: number) => {
+const createPopUp = (title: string, rating: number) => {
   const popupContainer = document.createElement('div')
-  const app = createApp(PopUp, { title, link, rating })
+  const app = createApp(PopUp, { title, rating })
+  app.use(router)
   app.mount(popupContainer)
 
   return popupContainer
@@ -27,7 +29,7 @@ const addMarkers = (places: Place[]) => {
     places.forEach((place) => {
       L.marker(place.location)
         .addTo(map.value!)
-        .bindPopup(createPopUp(place.title, 'https://example.com', place.rating))
+        .bindPopup(createPopUp(place.title, place.rating))
     })
   }
 }

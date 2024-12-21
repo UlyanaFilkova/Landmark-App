@@ -1,8 +1,7 @@
 <template>
   <div class="popup-content">
-    <a :href="props.link" class="popup-title">{{ props.title }}</a>
-    <div class="popup-rating">
-    </div>
+    <RouterLink to="/place" class="popup-title">{{ props.title }}</RouterLink>
+    <div class="popup-rating">{{ props.rating }}</div>
   </div>
 </template>
 
@@ -11,7 +10,6 @@ import { defineProps } from 'vue'
 
 const props = defineProps<{
   title: string
-  link: string
   rating: number
 }>()
 </script>
@@ -30,6 +28,7 @@ const props = defineProps<{
 
 .popup-title:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .popup-rating {

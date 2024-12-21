@@ -6,7 +6,6 @@ const router = createRouter({
   routes,
 })
 
-// Global Navigation Guard
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('userId') !== null
 

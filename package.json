@@ -18,6 +18,7 @@
     "leaflet": "^1.9.4",
     "pinia": "^2.3.0",
     "vue": "^3.5.12",
+    "vue-easy-lightbox": "^1.19.0",
     "vue-router": "^4.4.5",
     "vue-star-rating": "^2.1.0",
     "vuex": "^4.0.2"
