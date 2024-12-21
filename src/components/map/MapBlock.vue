@@ -31,11 +31,7 @@ const createPopUp = (place: Place) => {
 }
 
 const addMarkers = (places: Place[]) => {
-  // if (map.value && places.length > 0) {
-  //   places.forEach((place) => {
-  //     L.marker(place.location).addTo(map.value!).bindPopup(createPopUp(place))
-  //   })
-  // }
+
   if (map.value && places.length > 0) {
     markers.value?.clearLayers()
     places.forEach((place) => {
