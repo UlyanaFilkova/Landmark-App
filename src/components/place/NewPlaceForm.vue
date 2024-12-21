@@ -31,7 +31,7 @@
     <FileInput
       v-model:modelValue="formData.photos"
       id="photos"
-      label="Upload Photos:"
+      label="Photos:"
       :maxFiles="5"
       :isFileLimitReached="isFileLimitReached"
       :warningMessage="'Maximum 5 photos'"
