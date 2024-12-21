@@ -1,10 +1,13 @@
 <template>
+  <div class="only-my-places" @click="handleCheckboxChange">
+    <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+  </div>
   <div ref="mapContainer" id="map" class="map-container"></div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, createApp, watch, computed } from 'vue'
-import * as L from 'leaflet' 
+import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
@@ -12,6 +15,7 @@ import 'leaflet.markercluster'
 
 import { Place } from '@/types/interfaces'
 import PopUp from '@/components/map/PopUp.vue'
+import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 import { useMapStore } from '@/stores/store'
 import router from '@/router'
 
@@ -31,8 +35,7 @@ const createPopUp = (place: Place) => {
 }
 
 const addMarkers = (places: Place[]) => {
-
-  if (map.value && places.length > 0) {
+  if (map.value) {
     markers.value?.clearLayers()
     places.forEach((place) => {
       const marker = L.marker(place.location).bindPopup(createPopUp(place))
@@ -57,12 +60,19 @@ onMounted(async () => {
 })
 
 watch(
-  places,
+  () => store.getPlaces,
   (newPlaces) => {
     addMarkers(newPlaces)
   },
   { immediate: true },
 )
+
+const checkboxChecked = ref<Boolean>(false)
+
+const handleCheckboxChange = () => {
+  checkboxChecked.value = !checkboxChecked.value
+  store.setOnlyUserPlaces(checkboxChecked.value)
+}
 </script>
 
 <style scoped>
@@ -71,5 +81,13 @@ watch(
   width: 100%;
   border: 3px solid #aaa;
   border-radius: 5px;
+}
+
+.only-my-places {
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 15px 0;
+  align-items: center;
 }
 </style>

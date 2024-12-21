@@ -8,22 +8,34 @@ import router from '@/router'
 
 export const useMapStore = defineStore('map', () => {
   const places = ref<Place[]>([])
+  const filteredPlaces = ref<Place[]>([])
   const ratings = ref<Rating[]>([])
   const user = ref<User>()
   const currentPlace = ref<Place | undefined>()
+  const onlyUserPlaces = ref<Boolean>(false)
 
   const userId = computed(() => localStorage.getItem('userId'))
-  const getPlaces = computed(() => places.value)
+  const getPlaces = computed(() => filteredPlaces.value)
   const getRatings = computed(() => ratings.value)
   const getUser = computed(() => user.value)
   const getCurrentPlace = computed(() => currentPlace.value)
+  const getOnlyUserPlaces = computed(() => onlyUserPlaces.value)
 
   const fetchPlaces = async () => {
     try {
       const fetchedPlaces = await getPlacesData()
       places.value = fetchedPlaces
+      filterPlaces()
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const filterPlaces = () => {
+    if (onlyUserPlaces.value) {
+      filteredPlaces.value = places.value.filter((place) => place.authorId !== userId.value)
+    } else {
+      filteredPlaces.value = places.value
     }
   }
 
@@ -91,11 +103,17 @@ export const useMapStore = defineStore('map', () => {
     user.value = undefined
     currentPlace.value = undefined
   }
+  const setOnlyUserPlaces = (value: Boolean) => {
+    onlyUserPlaces.value = value
+    filterPlaces()
+  }
+
   return {
     getPlaces,
     getRatings,
     getUser,
     getCurrentPlace,
+    getOnlyUserPlaces,
     fetchPlaces,
     fetchRatings,
     loadInitialData,
@@ -103,5 +121,6 @@ export const useMapStore = defineStore('map', () => {
     setCurrentPlace,
     removeCurrentPlace,
     logout,
+    setOnlyUserPlaces,
   }
 })

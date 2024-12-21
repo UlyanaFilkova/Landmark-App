@@ -24,7 +24,7 @@ const handleLogoutClick = () => {
 
 <style scoped>
 .map-header {
-  padding: 25px 0 20px 0;
+  padding: 20px 0 0 0;
   display: flex;
   justify-content: space-between;
   gap: 30px;
