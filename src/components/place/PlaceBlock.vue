@@ -3,17 +3,17 @@
     <div class="description">{{ place.description }}</div>
 
     <div class="ratings">
-        <div class="average-rating">
-          <h3>Average Rating</h3>
-          <StarRating :rating="place.rating"/>
-        </div>
-  
-        <!-- <div class="user-rating">
+      <div class="average-rating">
+        <h3>Average Rating</h3>
+        <StarRating :rating="place.rating" readonly />
+      </div>
+
+      <!-- <div class="user-rating">
           <h3>Your Rating</h3>
           <StarRating v-model="userRating" @rate="handleRating" />
         </div> -->
-      </div>
-  
+    </div>
+
     <div class="location">
       <h3>Location</h3>
       <div class="map-container">
@@ -60,15 +60,14 @@ const photoViewerIndex = ref(0)
 watch(
   () => store.getCurrentPlace,
   (newPlace) => {
-
     if (newPlace) {
       place.value = newPlace
-      photoViewerVisible.value = false 
+      photoViewerVisible.value = false
     } else {
       place.value = null
     }
   },
-  { immediate: true } 
+  { immediate: true },
 )
 
 const openPhotoViewer = (index: number) => {

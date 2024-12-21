@@ -1,4 +1,5 @@
 <template>
+  <h2>Add a new place</h2>
   <form @submit.prevent="handleSubmit" class="new-place-form">
     <BaseInput
       v-model:modelValue="formData.title"
@@ -18,7 +19,7 @@
       :required="true"
     />
 
-    <StarRatingInput v-model:modelValue="formData.rating" :errorMessage="ratingInvalidMessage" />
+    <StarRating :rating="formData.rating" :readonly="false" @update:rating="updateRating" />
 
     <LocationInput
       v-model:latitude="formData.latitude"
@@ -46,7 +47,7 @@
 import { ref, computed } from 'vue'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
-import StarRatingInput from '@/components/base/StarRatingInput.vue'
+import StarRating from '@/components/base/StarRating.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import FileInput from '@/components/base/FileInput.vue'
 import { useMapStore } from '@/stores/store'
@@ -74,9 +75,9 @@ const locationInvalid = computed(
 const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
-const ratingInvalidMessage = computed(() =>
-  formData.value.rating >= 1 && formData.value.rating <= 5 ? '' : 'Rating must be from 1 to 5',
-)
+const updateRating = (value: number) => {
+  formData.value.rating = value
+}
 
 const store = useMapStore()
 const router = useRouter()
@@ -150,6 +151,11 @@ const clearForm = (): void => {
 </script>
 
 <style scoped>
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin: -10px 0 20px 0;
+}
 .new-place-form {
   max-width: 600px;
   margin: 0 auto;

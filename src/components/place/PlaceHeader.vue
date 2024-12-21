@@ -1,6 +1,8 @@
 <template>
-  <BackButton path="general-map" />
-  <h2>{{ title }}</h2>
+  <div class="place-header">
+    <BackButton path="general-map" />
+   
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -13,8 +15,12 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-h2 {
-  text-align: center;
-  font-size: 24px;
+
+.place-header{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 15px 0;
 }
+
 </style>
