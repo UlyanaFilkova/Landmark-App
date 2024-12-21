@@ -15,11 +15,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 9999;
+  pointer-events: all;
 }
 
 .loader {
   width: 100px;
   height: 100px;
+}
+
+.map-container {
+  pointer-events: none;
 }
 </style>

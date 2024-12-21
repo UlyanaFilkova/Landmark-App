@@ -1,19 +1,26 @@
 <template>
   <div class="popup-content">
-    <a :href="props.link" class="popup-title">{{ props.title }}</a>
-    <div class="popup-rating">
-    </div>
+    <RouterLink to="/place" class="popup-title" @click="handlePopupClick">{{
+      props.place.title
+    }}</RouterLink>
+    <div class="popup-rating">{{ props.place.rating }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
+import { useMapStore } from '@/stores/store'
+import { Place } from '@/types/interfaces'
 
 const props = defineProps<{
-  title: string
-  link: string
-  rating: number
+  place: Place
 }>()
+
+const store = useMapStore()
+
+const handlePopupClick = () => {
+  store.setCurrentPlace(props.place)
+}
 </script>
 
 <style scoped>
@@ -30,6 +37,7 @@ const props = defineProps<{
 
 .popup-title:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .popup-rating {

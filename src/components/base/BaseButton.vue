@@ -12,15 +12,17 @@ const props = defineProps<{
 .small-button {
   padding: 7px 10px;
   border-radius: 5px;
-  background: var(--color-second);
+  background: var(--color-first);
 }
 .small-button:hover {
   background: var(--color-second-hover);
 }
-.small-button.grey {
+.small-button.grey,
+.medium-button.grey {
   background: var(--color-third);
 }
-.small-button.grey:hover {
+.small-button.grey:hover,
+.medium-button.grey:hover {
   background: var(--color-third-hover);
 }
 .big-button {

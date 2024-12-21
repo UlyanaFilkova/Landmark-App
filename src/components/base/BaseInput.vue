@@ -1,18 +1,20 @@
 <template>
   <div class="input-wrapper">
-    <label :for="id">{{ label }}</label>
-    <input
-      :id="id"
-      :value="modelValue"
-      @input="handleInput"
-      :type="type"
-      :placeholder="placeholder"
-      :step="step"
-      :min="min"
-      :max="max"
-      :maxlength="maxlength"
-      :required="required"
-    />
+    <div class="input-container">
+      <label :for="id">{{ label }}</label>
+      <input
+        :id="id"
+        :value="modelValue"
+        @input="handleInput"
+        :type="type"
+        :placeholder="placeholder"
+        :step="step"
+        :min="min"
+        :max="max"
+        :maxlength="maxlength"
+        :required="required"
+      />
+    </div>
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
@@ -24,19 +26,19 @@ const props = defineProps({
   modelValue: [String, Number],
   type: {
     type: String,
-    default: 'text'
+    default: 'text',
   },
   id: {
     type: String,
-    required: true
+    required: true,
   },
   label: {
     type: String,
-    required: true
+    required: true,
   },
   placeholder: {
     type: String,
-    default: ''
+    default: '',
   },
   step: Number,
   min: Number,
@@ -44,12 +46,12 @@ const props = defineProps({
   maxlength: Number,
   required: {
     type: Boolean,
-    default: false
+    default: false,
   },
   errorMessage: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -62,6 +64,23 @@ const handleInput = (event: Event) => {
 <style scoped>
 .input-wrapper {
   margin-bottom: 15px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input {
+  padding: 10px;
+  border: none;
+  outline: 1px solid #555;
+  border-radius: 5px;
+}
+
+input:focus {
+  outline: 1.5px solid #333;
 }
 
 .error-message {

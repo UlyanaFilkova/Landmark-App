@@ -6,7 +6,7 @@
 
 <style scoped>
 svg {
-  margin: 3px 0 0 3px;
+  margin: 1px 0 0 1px;
   width: 16px;
   height: 16px;
   fill: var(--color-text-main);

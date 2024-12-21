@@ -1,60 +1,59 @@
 <template>
-  <div class="new-place-form">
-    <h2>Add a New Place</h2>
+  <h2>Add a new place</h2>
+  <form @submit.prevent="handleSubmit" class="new-place-form">
+    <BaseInput
+      v-model:modelValue="formData.title"
+      type="text"
+      id="title"
+      label="Title"
+      :maxlength="100"
+      :required="true"
+    />
 
-    <form @submit.prevent="handleSubmit">
-      <BaseInput
-        v-model:modelValue="formData.title"
-        type="text"
-        id="title"
-        label="Title"
-        :maxlength="100"
-        :required="true"
-      />
+    <BaseTextarea
+      v-model:modelValue="formData.description"
+      type="text"
+      id="description"
+      label="Description"
+      :maxlength="1000"
+      :required="true"
+    />
 
-      <BaseInput
-        v-model:modelValue="formData.description"
-        type="text"
-        id="description"
-        label="Description"
-        :maxlength="1000"
-        :required="true"
-      />
+    <LocationInput
+      v-model:latitude="formData.latitude"
+      v-model:longitude="formData.longitude"
+      :locationInvalid="locationInvalid"
+    />
 
-      <StarRatingInput v-model:modelValue="formData.rating" :errorMessage="ratingInvalidMessage" />
+    <label>Rating:</label>
+    <StarRating :rating="formData.rating" :readonly="false" @update:rating="updateRating" class="star-rating"/>
 
-      <LocationInput
-        v-model:latitude="formData.latitude"
-        v-model:longitude="formData.longitude"
-        :locationInvalid="locationInvalid"
-      />
+    <FileInput
+      v-model:modelValue="formData.photos"
+      id="photos"
+      label="Photos:"
+      :maxFiles="5"
+      :isFileLimitReached="isFileLimitReached"
+      :warningMessage="'Maximum 5 photos'"
+      :fileTypeInvalid="fileTypeInvalid"
+      :errorMessage="'One or more files are not valid images'"
+      :isDisabled="isFileLimitReached || fileTypeInvalid"
+    />
 
-      <FileInput
-        v-model:modelValue="formData.photos"
-        id="photos"
-        label="Upload Photos"
-        :maxFiles="5"
-        :isFileLimitReached="isFileLimitReached"
-        :warningMessage="'Maximum 5 photos'"
-        :fileTypeInvalid="fileTypeInvalid"
-        :errorMessage="'One or more files are not valid images'"
-        :isDisabled="isFileLimitReached || fileTypeInvalid"
-      />
-
-      <button type="submit">Add Place</button>
-    </form>
-  </div>
+    <button type="submit">Add Place</button>
+  </form>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
-import StarRatingInput from '@/components/base/StarRatingInput.vue'
+import StarRating from '@/components/base/StarRating.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import FileInput from '@/components/base/FileInput.vue'
 import { useMapStore } from '@/stores/store'
 import { useRouter } from 'vue-router'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
 
 const initialFormData = {
   title: '',
@@ -78,9 +77,9 @@ const locationInvalid = computed(
 const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
-const ratingInvalidMessage = computed(() =>
-  formData.value.rating >= 1 && formData.value.rating <= 5 ? '' : 'Rating must be from 1 to 5',
-)
+const updateRating = (value: number) => {
+  formData.value.rating = value
+}
 
 const store = useMapStore()
 const router = useRouter()
@@ -154,17 +153,18 @@ const clearForm = (): void => {
 </script>
 
 <style scoped>
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin: -10px 0 20px 0;
+}
 .new-place-form {
-  max-width: 600px;
+
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
-}
-
-.new-place-form h2 {
-  text-align: center;
 }
 
 .form-group {
@@ -207,14 +207,6 @@ button:hover {
   background-color: #45a049;
 }
 
-.map-container {
-  height: 300px;
-  width: 100%;
-  border: 3px solid #aaa;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-
 .custom-file-upload {
   position: relative;
   overflow: hidden;
@@ -250,5 +242,9 @@ li button {
 .error-message {
   color: red;
   font-size: 12px;
+}
+
+.star-rating{
+  margin-bottom: 10px;
 }
 </style>

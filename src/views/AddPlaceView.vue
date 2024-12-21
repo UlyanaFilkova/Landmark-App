@@ -1,17 +1,18 @@
 <template>
   <div class="place-view">
-    <h2>Add a New Place</h2>
+    <PlaceHeader title="Add a New Place" />
     <NewPlaceForm />
   </div>
 </template>
 
 <script setup lang="ts">
 import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
+import PlaceHeader from '@/components/place/PlaceHeader.vue'
 </script>
 
 <style scoped>
-.place-view h2 {
-  margin: 20px;
-  text-align: center;
+.place-view {
+  width: 90%;
+  max-width: 600px;
 }
 </style>
