@@ -13,6 +13,7 @@ const store = useMapStore()
 
 const handleBackClick = () => {
   store.removeCurrentPlace()
+  
 }
 </script>
 

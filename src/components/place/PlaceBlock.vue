@@ -10,6 +10,7 @@
       <div class="average-rating">
         <h3>Rating</h3>
         <StarRating :rating="place.rating" readonly />
+        <span class="rating-voices">{{ place.voices }} voices</span>
       </div>
 
       <div class="user-rating">
@@ -68,6 +69,14 @@ const photoViewerIndex = ref(0)
 const userRating = ref<number>(0)
 
 watch(
+  () => store.getCurrentPlaceUserRating,
+  (newValue) => {
+    userRating.value = newValue || 0
+  },
+  { immediate: true },
+)
+
+watch(
   () => store.getCurrentPlace,
   (newPlace) => {
     if (newPlace) {
@@ -111,7 +120,10 @@ const updateUserRating = (value: number) => {
   display: flex;
   gap: 20%;
 }
-
+.rating-voices {
+  font-size: 14px;
+  margin: 5px 0 0 0;
+}
 h3 {
   font-weight: 500;
   margin-bottom: 10px;

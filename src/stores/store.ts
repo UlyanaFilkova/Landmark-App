@@ -80,6 +80,7 @@ export const useMapStore = defineStore('map', () => {
       const userRating = ratings.value.find(
         (rating) => rating.placeId === currentPlace.value!.id && rating.userId === user.value!.id,
       )
+      console.log(userRating)
       if (userRating) {
         setNewCurrentPlaceUserRating(userRating.rating)
       }
@@ -127,6 +128,7 @@ export const useMapStore = defineStore('map', () => {
   const removeCurrentPlace = () => {
     currentPlace.value = undefined
     localStorage.removeItem('currentPlaceId')
+    currentPlaceUserRating.value = 0
   }
   const logout = () => {
     localStorage.removeItem('userId')

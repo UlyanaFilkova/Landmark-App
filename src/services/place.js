@@ -41,7 +41,6 @@ export const addRating = (rating) => __awaiter(void 0, void 0, void 0, function*
             ratingDocRef = yield addDoc(ratingsCollection, rating);
             isNewRating = true;
         }
-        console.log(isNewRating);
         yield updatePlaceRating(rating.placeId, isNewRating);
         return { id: ratingDocRef.id };
     }

@@ -50,7 +50,7 @@ export const addRating = async (rating: Omit<Rating, 'id'>): Promise<{ id: strin
       ratingDocRef = await addDoc(ratingsCollection, rating)
       isNewRating = true
     }
-    console.log(isNewRating)
+
     await updatePlaceRating(rating.placeId, isNewRating)
     return { id: ratingDocRef.id }
   } catch (error) {
