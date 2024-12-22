@@ -58,36 +58,33 @@ const initializeMap = async () => {
     map.value = L.map(mapContainer.value).setView([53.9, 27.5667], 11)
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
+    
 
     markers.value = L.markerClusterGroup()
     map.value.addLayer(markers.value)
 
     addMarkers(places.value)
 
-    await nextTick()
+    // await nextTick()
 
-    requestAnimationFrame(() => {
-      map.value?.invalidateSize()
-    })
+    // requestAnimationFrame(() => {
+    //   if (map.value) {
+    //     map.value.invalidateSize()
+    //   }
+    // })
 
-    map.value.invalidateSize()
   }
 }
-
-watchEffect(() => {
-  if (map.value) {
-    addMarkers(places.value)
-    requestAnimationFrame(() => {
-      map.value?.invalidateSize()
-    })
-  }
-})
 
 watch(
   () => store.getFilteredPlaces,
   (newPlaces) => {
     addMarkers(newPlaces)
-    map.value?.invalidateSize()
+    setTimeout(() => {
+      if (map.value) {
+        map.value.invalidateSize()
+      }
+    }, 200) 
   },
   { immediate: true },
 )
