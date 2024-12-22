@@ -95,7 +95,7 @@ onMounted(() => {
     formData.value.latitude = place.location[0]
     formData.value.longitude = place.location[1]
     formData.value.rating = store.getCurrentPlaceUserRating || 0
-    formData.value.photos = []
+    formData.value.photos = convertBase64ToFiles(place.photos || [])
     headerText.value = 'Edit place'
     buttonText.value = 'Save place'
   }
@@ -167,6 +167,20 @@ const convertFilesToBase64 = (files: File[]): Promise<string[]> => {
 
       reader.readAsDataURL(file)
     })
+  })
+}
+
+const convertBase64ToFiles = (base64Strings: string[]): File[] => {
+  return base64Strings.map((base64, index) => {
+    const byteString = atob(base64.split(',')[1])
+    const mimeString = base64.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    const blob = new Blob([ab], { type: mimeString })
+    return new File([blob], `photo_${index + 1}.${mimeString.split('/')[1]}`, { type: mimeString })
   })
 }
 
