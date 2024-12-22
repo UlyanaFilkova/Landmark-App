@@ -45,7 +45,11 @@
       :isDisabled="isFileLimitReached || fileTypeInvalid"
     />
 
-    <button type="submit">{{ buttonText }}</button>
+    <BaseButton
+      :text="buttonText"
+      class="medium-button"
+      :disabled="isSubmitButtonDisabled"
+    ></BaseButton>
   </form>
 </template>
 
@@ -55,6 +59,7 @@ import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
 import StarRating from '@/components/base/StarRating.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import FileInput from '@/components/base/FileInput.vue'
 import { useMapStore } from '@/stores/store'
 import { useRouter } from 'vue-router'
@@ -75,6 +80,7 @@ const headerText = ref('Add a new place')
 const buttonText = ref('Add place')
 
 const formData = ref({ ...initialFormData })
+const originalFormData = ref({ ...initialFormData })
 
 const locationInvalid = computed(
   () =>
@@ -87,6 +93,8 @@ const locationInvalid = computed(
 const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
+const isEditing = computed(() => store.getCurrentPlace !== undefined)
+
 onMounted(() => {
   if (store.getCurrentPlace !== undefined) {
     const place = store.getCurrentPlace
@@ -96,6 +104,8 @@ onMounted(() => {
     formData.value.longitude = place.location[1]
     formData.value.rating = store.getCurrentPlaceUserRating || 0
     formData.value.photos = convertBase64ToFiles(place.photos || [])
+
+    originalFormData.value = { ...formData.value }
     headerText.value = 'Edit place'
     buttonText.value = 'Save place'
   }
@@ -107,16 +117,47 @@ const updateRating = (value: number) => {
 
 const router = useRouter()
 
-const handleSubmit = async () => {
-  if (
+const isSubmitButtonDisabled = computed(() => {
+  if (isEditing.value) {
+    return !isFormDataChanged.value || !isFormValid.value
+  } else {
+    return !isFormValid.value
+  }
+})
+
+const isFormDataChanged = computed(() => {
+  const isFilesEqual = (files1: File[], files2: File[]) => {
+    if (files1.length !== files2.length) return false
+    for (let i = 0; i < files1.length; i++) {
+      if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false
+    }
+    return true
+  }
+
+  return (
+    formData.value.title !== originalFormData.value.title ||
+    formData.value.description !== originalFormData.value.description ||
+    formData.value.latitude !== originalFormData.value.latitude ||
+    formData.value.longitude !== originalFormData.value.longitude ||
+    formData.value.rating !== originalFormData.value.rating ||
+    !isFilesEqual(formData.value.photos, originalFormData.value.photos)
+  )
+})
+
+const isFormValid = computed(() => {
+  return (
     formData.value.title &&
     formData.value.description &&
     !locationInvalid.value &&
-    formData.value.rating >= 1 &&
+    formData.value.rating >= 0 &&
     formData.value.rating <= 5 &&
     formData.value.photos.length <= 5 &&
     !fileTypeInvalid.value
   )
+})
+
+const handleSubmit = async () => {
+  if (isFormValid.value) {
     try {
       const base64Photos = await convertFilesToBase64(formData.value.photos)
 
@@ -136,7 +177,7 @@ const handleSubmit = async () => {
     } catch (error) {
       console.error('Error converting files to Base64:', error)
     }
-  else {
+  } else {
     alert('Please fill out all fields correctly.')
   }
 }

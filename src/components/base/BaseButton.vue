@@ -45,7 +45,8 @@ const props = defineProps<{
 .big-button:hover {
   background-color: var(--color-main-hover);
 }
-.big-button:disabled {
+.big-button:disabled,
+.medium-button:disabled {
   background-color: var(--color-main-disabled);
   cursor: auto;
 }
