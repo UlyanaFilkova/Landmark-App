@@ -1,7 +1,7 @@
 <template>
   <div class="top-places_container">
     <h1 class="top-places_h1">Top Places</h1>
-    <div v-for="(place, index) in displayedPlaces" :key="place.id" class="place-card-container">
+    <div v-for="(place, index) in displayedPlaces" :key="place.id" class="place-card-container" click>
       <span class="place-number">{{ index + 1 }}</span>
       <PlaceCard :place="place" />
     </div>
