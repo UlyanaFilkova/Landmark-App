@@ -80,8 +80,6 @@ const updatePlaceRating = async (placeId: string, isNewRating: boolean) => {
 
     const averageRating = ratingCount ? totalRating / ratingCount : 0
 
-    const metricRating = calculateMetricRating(averageRating, ratingCount)
-
     const placeDocRef = doc(firestore, `places/${placeId}`)
     const placeDoc = await getDoc(placeDocRef)
 
@@ -100,10 +98,8 @@ const updatePlaceRating = async (placeId: string, isNewRating: boolean) => {
   }
 }
 
-const calculateMetricRating = (averageRating: number, ratingCount: number): number => {
+export const calculateMetricRating = (averageRating: number, ratingCount: number): number => {
   const k = 0.1
-
   const metricRating = averageRating * (1 - Math.exp(-k * ratingCount))
-
   return metricRating
 }

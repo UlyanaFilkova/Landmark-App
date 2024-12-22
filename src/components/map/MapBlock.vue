@@ -89,6 +89,7 @@ const handleCheckboxChange = () => {
 <style scoped>
 .map-container {
   height: 70vh;
+  max-height: 600px;
   width: 100%;
   border: 3px solid #aaa;
   border-radius: 5px;

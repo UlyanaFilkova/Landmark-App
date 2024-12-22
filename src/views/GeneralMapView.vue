@@ -34,6 +34,7 @@ onBeforeMount(async () => {
   min-height: 100vh;
   margin: 0 20px;
   padding-bottom: 70px;
+  width: min(722px, 90%);
 }
 @media (max-width: 576px) {
   .container {

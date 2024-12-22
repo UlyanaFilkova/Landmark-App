@@ -65,7 +65,6 @@ const updatePlaceRating = (placeId, isNewRating) => __awaiter(void 0, void 0, vo
             ratingCount++;
         });
         const averageRating = ratingCount ? totalRating / ratingCount : 0;
-        const metricRating = calculateMetricRating(averageRating, ratingCount);
         const placeDocRef = doc(firestore, `places/${placeId}`);
         const placeDoc = yield getDoc(placeDocRef);
         if (placeDoc.exists()) {
@@ -82,7 +81,7 @@ const updatePlaceRating = (placeId, isNewRating) => __awaiter(void 0, void 0, vo
         throw new Error('Error updating place rating in Firestore');
     }
 });
-const calculateMetricRating = (averageRating, ratingCount) => {
+export const calculateMetricRating = (averageRating, ratingCount) => {
     const k = 0.1;
     const metricRating = averageRating * (1 - Math.exp(-k * ratingCount));
     return metricRating;
