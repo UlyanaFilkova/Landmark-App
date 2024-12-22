@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, createApp, watch, computed } from 'vue'
+import { onMounted, ref, createApp, watch, computed, nextTick, watchEffect } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -48,8 +48,7 @@ const places = computed(() => store.getFilteredPlaces)
 
 const checkboxChecked = ref<Boolean>(false)
 
-onMounted(async () => {
-  checkboxChecked.value = store.getOnlyUserPlaces
+const initializeMap = async () => {
   if (mapContainer.value) {
     map.value = L.map(mapContainer.value).setView([53.9, 27.5667], 11)
 
@@ -59,13 +58,39 @@ onMounted(async () => {
     map.value.addLayer(markers.value)
 
     addMarkers(places.value)
+
+    await nextTick()
+    // map.value.addLayer(markers.value)
+    requestAnimationFrame(() => {
+      map.value.invalidateSize()
+    })
+    // addMarkers(places.value)
+    map.value.invalidateSize()
+    // setTimeout(() => map.value.invalidateSize(), 200)
+    // setTimeout(() => map.value.invalidateSize(), 500)
+    // setTimeout(() => map.value.invalidateSize(), 1000)
   }
+}
+
+watchEffect(() => {
+  if (map.value) {
+    addMarkers(places.value)
+    requestAnimationFrame(() => {
+      map.value.invalidateSize()
+    })
+  }
+})
+
+onMounted(async () => {
+  checkboxChecked.value = store.getOnlyUserPlaces
+  await initializeMap()
 })
 
 watch(
   () => store.getFilteredPlaces,
   (newPlaces) => {
     addMarkers(newPlaces)
+    map.value?.invalidateSize()
   },
   { immediate: true },
 )
