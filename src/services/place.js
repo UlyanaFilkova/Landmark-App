@@ -12,8 +12,15 @@ const placesCollection = collection(firestore, 'places');
 const ratingsCollection = collection(firestore, 'ratings');
 export const addPlace = (place) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const docRef = yield addDoc(placesCollection, place);
-        return { id: docRef.id };
+        const placeDocRef = yield addDoc(placesCollection, place);
+        const rating = {
+            rating: place.rating,
+            userId: place.authorId,
+            placeId: placeDocRef.id,
+        };
+        const ratingDocRef = yield addDoc(ratingsCollection, rating);
+        console.log(ratingDocRef.id);
+        return { id: placeDocRef.id };
     }
     catch (error) {
         console.error('Error adding place:', error);
