@@ -19,7 +19,8 @@ onBeforeMount(async () => {
   if (store.getPlaces.length === 0) {
     await store.loadInitialData()
   }
-  else if (store.getCurrentPlace === undefined) {
+  // else if (store.getCurrentPlace === undefined) {
+  else{
     store.loadCurrentPlace()
   }
   isLoading.value = false

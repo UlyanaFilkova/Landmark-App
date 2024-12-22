@@ -1,5 +1,5 @@
 <template>
-  <div to="/place" class="place-container">
+  <RouterLink to="/place" class="place-container" @click="handlePlaceClick">
     <div class="place_img">
       <img :src="imageSrc" alt="Place Image" />
     </div>
@@ -10,13 +10,14 @@
       </div>
       <div class="place_rating">{{ place.rating }}</div>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, onMounted, ref } from 'vue'
+import { defineProps, computed, onMounted, ref } from 'vue'
 import { Place } from '@/types/interfaces'
 import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
+import { useMapStore } from '@/stores/store'
 
 const props = defineProps<{
   place: Place
@@ -44,13 +45,10 @@ onMounted(() => {
   }
 })
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
+const store = useMapStore()
 
-const handleInput = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  emit('update:modelValue', target.value)
+const handlePlaceClick = () => {
+  store.setCurrentPlace(props.place)
 }
 </script>
 
@@ -63,7 +61,7 @@ const handleInput = (event: Event) => {
   border-radius: 8px;
 }
 
-.place-container:hover{
+.place-container:hover {
   background-color: var(--color-card-second);
   cursor: pointer;
 }

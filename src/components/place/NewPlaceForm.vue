@@ -6,7 +6,7 @@
       type="text"
       id="title"
       label="Title"
-      :maxlength="100"
+      :maxlength="70"
       :required="true"
     />
 

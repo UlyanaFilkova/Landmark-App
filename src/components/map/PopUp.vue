@@ -3,7 +3,7 @@
     <RouterLink to="/place" class="popup-title" @click="handlePopupClick">{{
       props.place.title
     }}</RouterLink>
-    <div class="popup-rating">{{ props.place.rating }}</div>
+    <StarRating :rating="place.rating" readonly />
   </div>
 </template>
 
@@ -11,6 +11,7 @@
 import { defineProps } from 'vue'
 import { useMapStore } from '@/stores/store'
 import { Place } from '@/types/interfaces'
+import StarRating from '@/components/base/StarRating.vue'
 
 const props = defineProps<{
   place: Place
@@ -30,19 +31,15 @@ const handlePopupClick = () => {
 
 .popup-title {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px;
   text-decoration: none;
-  color: #004085;
+  color: #004085; 
+  margin-bottom: 7px;
+  display: block;
 }
 
 .popup-title:hover {
   text-decoration: underline;
   cursor: pointer;
-}
-
-.popup-rating {
-  margin-top: 5px;
-  font-size: 14px;
-  color: #555;
 }
 </style>
