@@ -8,7 +8,7 @@
 
     <div class="ratings place-details-group">
       <div class="average-rating">
-        <h3>Average Rating</h3>
+        <h3>Rating</h3>
         <StarRating :rating="place.rating" readonly />
       </div>
 
@@ -87,6 +87,7 @@ const openPhotoViewer = (index: number) => {
 
 const updateUserRating = (value: number) => {
   userRating.value = value
+  store.setNewCurrentPlaceUserRating(value)
 }
 </script>
 

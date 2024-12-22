@@ -43,6 +43,10 @@ declare module '@/services/firebase.config.js' {
 
   function doc<T = DocumentData>(firestore: Firestore, path: string): DocumentReference<T>
   function getDoc<T = DocumentData>(docRef: DocumentReference<T>): Promise<DocumentSnapshot<T>>
+  function updateDoc<T = DocumentData>(
+    docRef: DocumentReference<T>,
+    data: Partial<T>,
+  ): Promise<void>
 
   function uploadBytes(
     ref: StorageReference,
@@ -58,6 +62,7 @@ declare module '@/services/firebase.config.js' {
     query,
     where,
     getDocs,
+    updateDoc,
     getDoc,
     doc,
     firestore,

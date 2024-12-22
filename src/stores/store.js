@@ -11,7 +11,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { getPlacesData, getRatingsData } from '@/services/map';
 import { getUserById } from '@/services/user';
-import { addPlace } from '@/services/place';
+import { addPlace, addRating } from '@/services/place';
 import router from '@/router';
 export const useMapStore = defineStore('map', () => {
     const places = ref([]);
@@ -19,6 +19,7 @@ export const useMapStore = defineStore('map', () => {
     const ratings = ref([]);
     const user = ref();
     const currentPlace = ref();
+    const currentPlaceUserRating = ref();
     const onlyUserPlaces = ref(false);
     const userId = computed(() => localStorage.getItem('userId'));
     const getPlaces = computed(() => places.value);
@@ -27,10 +28,12 @@ export const useMapStore = defineStore('map', () => {
     const getUser = computed(() => user.value);
     const getCurrentPlace = computed(() => currentPlace.value);
     const getOnlyUserPlaces = computed(() => onlyUserPlaces.value);
+    const getCurrentPlaceUserRating = computed(() => currentPlaceUserRating.value);
     const fetchPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const fetchedPlaces = yield getPlacesData();
             places.value = fetchedPlaces;
+            places.value.forEach((places) => (places.rating = parseFloat(places.rating.toFixed(1))));
             filterPlaces();
         }
         catch (error) {
@@ -49,6 +52,7 @@ export const useMapStore = defineStore('map', () => {
         try {
             const fetchedRatings = yield getRatingsData();
             ratings.value = fetchedRatings;
+            // ratings.value.forEach((rating) => (rating.rating = parseFloat(rating.rating.toFixed(1))))
         }
         catch (error) {
             console.error(error);
@@ -65,6 +69,24 @@ export const useMapStore = defineStore('map', () => {
             console.error('Error fetching user:', error);
         }
     });
+    const setNewCurrentPlaceUserRating = (value) => __awaiter(void 0, void 0, void 0, function* () {
+        currentPlaceUserRating.value = value;
+        const rating = {
+            rating: value,
+            userId: userId.value,
+            placeId: currentPlace.value.id,
+        };
+        yield addRating(rating);
+        yield fetchRatings();
+    });
+    const loadCurrentPlaceUserRating = () => {
+        if (currentPlace.value) {
+            const userRating = ratings.value.find((rating) => rating.placeId === currentPlace.value.id && rating.userId === user.value.id);
+            if (userRating) {
+                setNewCurrentPlaceUserRating(userRating.rating);
+            }
+        }
+    };
     const loadInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
         yield fetchUser();
         yield fetchPlaces();
@@ -76,6 +98,7 @@ export const useMapStore = defineStore('map', () => {
         if (currentPlaceId) {
             currentPlace.value = places.value.find((place) => place.id === currentPlaceId);
         }
+        loadCurrentPlaceUserRating();
     };
     const addNewPlace = (placeData) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -124,6 +147,7 @@ export const useMapStore = defineStore('map', () => {
         getCurrentPlace,
         getOnlyUserPlaces,
         getFilteredPlaces,
+        getCurrentPlaceUserRating,
         fetchPlaces,
         fetchRatings,
         loadInitialData,
@@ -133,5 +157,6 @@ export const useMapStore = defineStore('map', () => {
         removeCurrentPlace,
         logout,
         setOnlyUserPlaces,
+        setNewCurrentPlaceUserRating,
     };
 });
