@@ -52,7 +52,6 @@ export const useMapStore = defineStore('map', () => {
         try {
             const fetchedRatings = yield getRatingsData();
             ratings.value = fetchedRatings;
-            // ratings.value.forEach((rating) => (rating.rating = parseFloat(rating.rating.toFixed(1))))
         }
         catch (error) {
             console.error(error);
@@ -78,6 +77,7 @@ export const useMapStore = defineStore('map', () => {
         };
         yield addRating(rating);
         yield fetchRatings();
+        yield fetchPlaces();
     });
     const loadCurrentPlaceUserRating = () => {
         if (currentPlace.value) {
@@ -106,7 +106,7 @@ export const useMapStore = defineStore('map', () => {
             if (!authorId) {
                 throw new Error('User ID is missing');
             }
-            const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId }));
+            const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId, voices: 1 }));
             if (response && response.id) {
                 places.value.push(Object.assign(Object.assign({}, placeData), { authorId, id: response.id }));
                 return 'success';

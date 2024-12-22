@@ -5,6 +5,7 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
   updateDoc,
   doc,
 } from '@/services/firebase.config.js'
@@ -31,29 +32,42 @@ export const addPlace = async (place: Omit<Place, 'id'>): Promise<{ id: string }
 
 export const addRating = async (rating: Omit<Rating, 'id'>): Promise<{ id: string }> => {
   try {
-    const ratingsQuery = query(ratingsCollection, where('placeId', '==', rating.placeId), where('userId', '==', rating.userId))
+    const ratingsQuery = query(
+      ratingsCollection,
+      where('placeId', '==', rating.placeId),
+      where('userId', '==', rating.userId),
+    )
     const ratingsSnapshot = await getDocs(ratingsQuery)
 
+    let isNewRating = false
+    let ratingDocRef
+
     if (!ratingsSnapshot.empty) {
-      const ratingDocRef = ratingsSnapshot.docs[0].ref
+      ratingDocRef = ratingsSnapshot.docs[0].ref
       await updateDoc(ratingDocRef, { rating: rating.rating })
-      await updatePlaceRating(rating.placeId)
-      return { id: ratingDocRef.id }
+      isNewRating = false
     } else {
-      const ratingDocRef = await addDoc(ratingsCollection, rating)
-      await updatePlaceRating(rating.placeId)
-      return { id: ratingDocRef.id }
+      ratingDocRef = await addDoc(ratingsCollection, rating)
+      isNewRating = true
     }
+    console.log(isNewRating)
+    await updatePlaceRating(rating.placeId, isNewRating)
+    return { id: ratingDocRef.id }
   } catch (error) {
     console.error('Error adding or updating rating:', error)
     throw new Error('Error adding or updating rating in Firestore')
   }
 }
 
-const updatePlaceRating = async (placeId: string) => {
+const updatePlaceRating = async (placeId: string, isNewRating: boolean) => {
   try {
     const ratingsQuery = query(ratingsCollection, where('placeId', '==', placeId))
     const ratingsSnapshot = await getDocs(ratingsQuery)
+
+    if (ratingsSnapshot.empty) {
+      console.warn(`No ratings found for place ${placeId}`)
+      return
+    }
 
     let totalRating = 0
     let ratingCount = 0
@@ -64,21 +78,31 @@ const updatePlaceRating = async (placeId: string) => {
       ratingCount++
     })
 
-    const metricRating = calculateMetricRating(totalRating, ratingCount)
+    const averageRating = ratingCount ? totalRating / ratingCount : 0
+
+    const metricRating = calculateMetricRating(averageRating, ratingCount)
 
     const placeDocRef = doc(firestore, `places/${placeId}`)
-    await updateDoc(placeDocRef, {
-      rating: metricRating
-    })
+    const placeDoc = await getDoc(placeDocRef)
+
+    if (placeDoc.exists()) {
+      const placeData = placeDoc.data() as Place
+      const newRatingCount = isNewRating ? placeData.voices + 1 : placeData.voices
+
+      await updateDoc(placeDocRef, {
+        rating: averageRating,
+        voices: newRatingCount,
+      })
+    }
   } catch (error) {
     console.error('Error updating place rating:', error)
     throw new Error('Error updating place rating in Firestore')
   }
 }
 
-const calculateMetricRating = (totalRating: number, ratingCount: number): number => {
+const calculateMetricRating = (averageRating: number, ratingCount: number): number => {
   const k = 0.1
-  const averageRating = ratingCount ? totalRating / ratingCount : 0
+
   const metricRating = averageRating * (1 - Math.exp(-k * ratingCount))
 
   return metricRating

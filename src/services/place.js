@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { firestore, collection, addDoc, query, where, getDocs, updateDoc, doc, } from '@/services/firebase.config.js';
+import { firestore, collection, addDoc, query, where, getDocs, getDoc, updateDoc, doc, } from '@/services/firebase.config.js';
 const placesCollection = collection(firestore, 'places');
 const ratingsCollection = collection(firestore, 'ratings');
 export const addPlace = (place) => __awaiter(void 0, void 0, void 0, function* () {
@@ -30,27 +30,34 @@ export const addRating = (rating) => __awaiter(void 0, void 0, void 0, function*
     try {
         const ratingsQuery = query(ratingsCollection, where('placeId', '==', rating.placeId), where('userId', '==', rating.userId));
         const ratingsSnapshot = yield getDocs(ratingsQuery);
+        let isNewRating = false;
+        let ratingDocRef;
         if (!ratingsSnapshot.empty) {
-            const ratingDocRef = ratingsSnapshot.docs[0].ref;
+            ratingDocRef = ratingsSnapshot.docs[0].ref;
             yield updateDoc(ratingDocRef, { rating: rating.rating });
-            yield updatePlaceRating(rating.placeId);
-            return { id: ratingDocRef.id };
+            isNewRating = false;
         }
         else {
-            const ratingDocRef = yield addDoc(ratingsCollection, rating);
-            yield updatePlaceRating(rating.placeId);
-            return { id: ratingDocRef.id };
+            ratingDocRef = yield addDoc(ratingsCollection, rating);
+            isNewRating = true;
         }
+        console.log(isNewRating);
+        yield updatePlaceRating(rating.placeId, isNewRating);
+        return { id: ratingDocRef.id };
     }
     catch (error) {
         console.error('Error adding or updating rating:', error);
         throw new Error('Error adding or updating rating in Firestore');
     }
 });
-const updatePlaceRating = (placeId) => __awaiter(void 0, void 0, void 0, function* () {
+const updatePlaceRating = (placeId, isNewRating) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ratingsQuery = query(ratingsCollection, where('placeId', '==', placeId));
         const ratingsSnapshot = yield getDocs(ratingsQuery);
+        if (ratingsSnapshot.empty) {
+            console.warn(`No ratings found for place ${placeId}`);
+            return;
+        }
         let totalRating = 0;
         let ratingCount = 0;
         ratingsSnapshot.forEach((doc) => {
@@ -58,20 +65,26 @@ const updatePlaceRating = (placeId) => __awaiter(void 0, void 0, void 0, functio
             totalRating += ratingData.rating;
             ratingCount++;
         });
-        const metricRating = calculateMetricRating(totalRating, ratingCount);
+        const averageRating = ratingCount ? totalRating / ratingCount : 0;
+        const metricRating = calculateMetricRating(averageRating, ratingCount);
         const placeDocRef = doc(firestore, `places/${placeId}`);
-        yield updateDoc(placeDocRef, {
-            rating: metricRating
-        });
+        const placeDoc = yield getDoc(placeDocRef);
+        if (placeDoc.exists()) {
+            const placeData = placeDoc.data();
+            const newRatingCount = isNewRating ? placeData.voices + 1 : placeData.voices;
+            yield updateDoc(placeDocRef, {
+                rating: averageRating,
+                voices: newRatingCount,
+            });
+        }
     }
     catch (error) {
         console.error('Error updating place rating:', error);
         throw new Error('Error updating place rating in Firestore');
     }
 });
-const calculateMetricRating = (totalRating, ratingCount) => {
+const calculateMetricRating = (averageRating, ratingCount) => {
     const k = 0.1;
-    const averageRating = ratingCount ? totalRating / ratingCount : 0;
     const metricRating = averageRating * (1 - Math.exp(-k * ratingCount));
     return metricRating;
 };

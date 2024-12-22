@@ -5,6 +5,7 @@ export interface Place {
   location: [number, number]
   photos: string[]
   rating: number
+  voices: number
   authorId: string
 }
 

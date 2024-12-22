@@ -47,7 +47,6 @@ export const useMapStore = defineStore('map', () => {
     try {
       const fetchedRatings = await getRatingsData()
       ratings.value = fetchedRatings
-      // ratings.value.forEach((rating) => (rating.rating = parseFloat(rating.rating.toFixed(1))))
     } catch (error) {
       console.error(error)
     }
@@ -73,6 +72,7 @@ export const useMapStore = defineStore('map', () => {
     }
     await addRating(rating)
     await fetchRatings()
+    await fetchPlaces()
   }
 
   const loadCurrentPlaceUserRating = () => {
@@ -108,7 +108,7 @@ export const useMapStore = defineStore('map', () => {
         throw new Error('User ID is missing')
       }
 
-      const response = await addPlace({ ...placeData, authorId })
+      const response = await addPlace({ ...placeData, authorId, voices: 1 })
 
       if (response && response.id) {
         places.value.push({ ...placeData, authorId, id: response.id })
