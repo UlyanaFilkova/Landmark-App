@@ -1,12 +1,12 @@
 <template>
   <BaseLoader v-if="isLoading" />
-  <PlaceHeader/>
+  <PlaceViewHeader/>
   <PlaceBlock />
 </template>
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
-import PlaceHeader from '@/components/place/PlaceHeader.vue'
+import PlaceViewHeader from '@/components/place/PlaceViewHeader.vue'
 import PlaceBlock from '@/components/place/PlaceBlock.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
 import { useMapStore } from '@/stores/store'

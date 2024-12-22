@@ -1,13 +1,15 @@
 <template>
   <div class="place-view">
-    <PlaceHeader/>
+    <PlaceAddHeader/>
     <NewPlaceForm />
   </div>
 </template>
 
 <script setup lang="ts">
 import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
-import PlaceHeader from '@/components/place/PlaceHeader.vue'
+import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
+
+
 </script>
 
 <style scoped>

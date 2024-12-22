@@ -1,5 +1,5 @@
 <template>
-  <h2>Add a new place</h2>
+  <h2>{{ headerText }}</h2>
   <form @submit.prevent="handleSubmit" class="new-place-form">
     <BaseInput
       v-model:modelValue="formData.title"
@@ -26,7 +26,12 @@
     />
 
     <label>Rating:</label>
-    <StarRating :rating="formData.rating" :readonly="false" @update:rating="updateRating" class="star-rating"/>
+    <StarRating
+      :rating="formData.rating"
+      :readonly="false"
+      @update:rating="updateRating"
+      class="star-rating"
+    />
 
     <FileInput
       v-model:modelValue="formData.photos"
@@ -40,12 +45,12 @@
       :isDisabled="isFileLimitReached || fileTypeInvalid"
     />
 
-    <button type="submit">Add Place</button>
+    <button type="submit">{{ buttonText }}</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
 import StarRating from '@/components/base/StarRating.vue'
@@ -55,14 +60,19 @@ import { useMapStore } from '@/stores/store'
 import { useRouter } from 'vue-router'
 import BaseTextarea from '@/components/base/BaseTextarea.vue'
 
+const store = useMapStore()
+
 const initialFormData = {
   title: '',
   description: '',
   latitude: 53.9,
   longitude: 27.5667,
   photos: [] as File[],
-  rating: 5,
+  rating: store.getCurrentPlaceUserRating || 5,
 }
+
+const headerText = ref('Add a new place')
+const buttonText = ref('Add place')
 
 const formData = ref({ ...initialFormData })
 
@@ -77,11 +87,24 @@ const locationInvalid = computed(
 const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
+onMounted(() => {
+  if (store.getCurrentPlace !== undefined) {
+    const place = store.getCurrentPlace
+    formData.value.title = place.title
+    formData.value.description = place.description
+    formData.value.latitude = place.location[0]
+    formData.value.longitude = place.location[1]
+    formData.value.rating = store.getCurrentPlaceUserRating || 0
+    formData.value.photos = []
+    headerText.value = 'Edit place'
+    buttonText.value = 'Save place'
+  }
+})
+
 const updateRating = (value: number) => {
   formData.value.rating = value
 }
 
-const store = useMapStore()
 const router = useRouter()
 
 const handleSubmit = async () => {
@@ -156,10 +179,9 @@ const clearForm = (): void => {
 h2 {
   text-align: center;
   font-size: 24px;
-  margin: -10px 0 20px 0;
+  margin: -20px 0 20px 0;
 }
 .new-place-form {
-
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ddd;
@@ -244,7 +266,7 @@ li button {
   font-size: 12px;
 }
 
-.star-rating{
+.star-rating {
   margin-bottom: 10px;
 }
 </style>

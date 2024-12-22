@@ -25,6 +25,15 @@ const props = defineProps<{
 .medium-button.grey:hover {
   background: var(--color-third-hover);
 }
+
+.small-button.red,
+.medium-button.red {
+  background: var(--color13);
+}
+.small-button.red:hover,
+.medium-button.red:hover {
+  background: var(--color13-hover);
+}
 .big-button {
   width: 176px;
   padding: 14px 24px;
