@@ -64,15 +64,6 @@ const initializeMap = async () => {
     map.value.addLayer(markers.value)
 
     addMarkers(places.value)
-
-    // await nextTick()
-
-    // requestAnimationFrame(() => {
-    //   if (map.value) {
-    //     map.value.invalidateSize()
-    //   }
-    // })
-
   }
 }
 

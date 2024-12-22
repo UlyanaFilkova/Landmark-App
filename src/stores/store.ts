@@ -64,6 +64,14 @@ export const useMapStore = defineStore('map', () => {
     await fetchUser()
     await fetchPlaces()
     await fetchRatings()
+    loadCurrentPlace()
+  }
+
+  const loadCurrentPlace = () => {
+    const currentPlaceId = localStorage.getItem('currentPlaceId')
+    if (currentPlaceId) {
+      currentPlace.value = places.value.find((place) => place.id === currentPlaceId)
+    }
   }
 
   const addNewPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
@@ -119,6 +127,7 @@ export const useMapStore = defineStore('map', () => {
     fetchPlaces,
     fetchRatings,
     loadInitialData,
+    loadCurrentPlace,
     addNewPlace,
     setCurrentPlace,
     removeCurrentPlace,

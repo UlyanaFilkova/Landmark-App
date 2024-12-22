@@ -69,7 +69,14 @@ export const useMapStore = defineStore('map', () => {
         yield fetchUser();
         yield fetchPlaces();
         yield fetchRatings();
+        loadCurrentPlace();
     });
+    const loadCurrentPlace = () => {
+        const currentPlaceId = localStorage.getItem('currentPlaceId');
+        if (currentPlaceId) {
+            currentPlace.value = places.value.find((place) => place.id === currentPlaceId);
+        }
+    };
     const addNewPlace = (placeData) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const authorId = userId.value;
@@ -120,6 +127,7 @@ export const useMapStore = defineStore('map', () => {
         fetchPlaces,
         fetchRatings,
         loadInitialData,
+        loadCurrentPlace,
         addNewPlace,
         setCurrentPlace,
         removeCurrentPlace,

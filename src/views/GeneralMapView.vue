@@ -21,7 +21,9 @@ const isLoading = ref(true)
 onBeforeMount(async () => {
   isLoading.value = true
 
-  await store.loadInitialData()
+  if (store.getPlaces.length === 0) {
+    await store.loadInitialData()
+  }
   isLoading.value = false
 })
 </script>
