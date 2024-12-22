@@ -1,27 +1,36 @@
 <template>
   <div v-if="place" class="place-details">
-    <div class="description">{{ place.description }}</div>
+    <h1 class="place-title">{{ place.title }}</h1>
+    <div class="place-details-group">
+      <h3>Description</h3>
+      {{ place.description }}
+    </div>
 
-    <div class="ratings">
+    <div class="ratings place-details-group">
       <div class="average-rating">
         <h3>Average Rating</h3>
         <StarRating :rating="place.rating" readonly />
       </div>
 
-      <!-- <div class="user-rating">
-          <h3>Your Rating</h3>
-          <StarRating v-model="userRating" @rate="handleRating" />
-        </div> -->
+      <div class="user-rating">
+        <h3>Your Rating</h3>
+        <StarRating
+          :rating="userRating"
+          :readonly="false"
+          @update:rating="updateUserRating"
+          class="star-rating"
+        />
+      </div>
     </div>
 
-    <div class="location">
+    <div class="place-details-group">
       <h3>Location</h3>
       <div class="map-container">
         <LocationMap :latitude="place.location[0]" :longitude="place.location[1]" />
       </div>
     </div>
 
-    <div class="photos">
+    <div class="place-details-group">
       <h3>Photos</h3>
       <div class="photo-grid">
         <img
@@ -56,6 +65,7 @@ const store = useMapStore()
 const place = ref<Place | null>(null)
 const photoViewerVisible = ref(false)
 const photoViewerIndex = ref(0)
+const userRating = ref<number>(0)
 
 watch(
   () => store.getCurrentPlace,
@@ -74,47 +84,44 @@ const openPhotoViewer = (index: number) => {
   photoViewerIndex.value = index
   photoViewerVisible.value = true
 }
+
+const updateUserRating = (value: number) => {
+  userRating.value = value
+}
 </script>
 
 <style scoped>
 .place-details {
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
 }
 
-.place-details h2 {
+.place-title {
   text-align: center;
-  margin-bottom: 20px;
+  padding: 5px 40px 20px;
 }
 
 .description {
-  margin-bottom: 20px;
   font-size: 16px;
 }
 
 .ratings {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  gap: 20%;
 }
 
-.location {
-  margin-bottom: 20px;
+h3 {
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.place-details-group {
+  margin-bottom: 30px;
 }
 
 .map-container {
-  height: 300px;
   width: 100%;
-  border: 3px solid #aaa;
-  border-radius: 5px;
-}
-
-.photos {
-  margin-bottom: 20px;
 }
 
 .photo-grid {

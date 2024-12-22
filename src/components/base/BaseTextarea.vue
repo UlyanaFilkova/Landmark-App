@@ -1,7 +1,13 @@
 <template>
   <div class="input-group">
     <label v-if="label" :for="name">{{ label }}:</label>
-    <textarea :name="name" :value="modelValue" @input="handleInput" :required="required"></textarea>
+    <textarea
+      :name="name"
+      :value="modelValue"
+      @input="handleInput"
+      :required="required"
+      :maxlength="maxlength"
+    ></textarea>
   </div>
 </template>
 
@@ -21,6 +27,10 @@ export default {
     required: {
       type: Boolean,
       default: false,
+    },
+    maxlength: {
+      type: Number,
+      default: 1000,
     },
   },
   emits: ['update:modelValue'],

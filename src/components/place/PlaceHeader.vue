@@ -9,10 +9,6 @@ import { defineProps } from 'vue'
 import BackButton from '@/components/base/BackButton.vue'
 import { useMapStore } from '@/stores/store'
 
-const props = defineProps<{
-  title: string
-}>()
-
 const store = useMapStore()
 
 const handleBackClick = () => {
@@ -23,6 +19,7 @@ const handleBackClick = () => {
 <style scoped>
 .place-header {
   max-width: 762px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;

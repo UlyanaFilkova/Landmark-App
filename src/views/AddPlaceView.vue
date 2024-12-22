@@ -1,6 +1,6 @@
 <template>
   <div class="place-view">
-    <PlaceHeader title="Add a New Place" />
+    <PlaceHeader/>
     <NewPlaceForm />
   </div>
 </template>
@@ -15,4 +15,6 @@ import PlaceHeader from '@/components/place/PlaceHeader.vue'
   width: 90%;
   max-width: 600px;
 }
+
+
 </style>

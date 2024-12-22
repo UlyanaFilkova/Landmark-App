@@ -1,6 +1,6 @@
 <template>
   <BaseLoader v-if="isLoading" />
-  <PlaceHeader title="View Place" />
+  <PlaceHeader/>
   <PlaceBlock />
 </template>
 
@@ -25,3 +25,8 @@ onBeforeMount(async () => {
   isLoading.value = false
 })
 </script>
+
+<style scoped>
+.place-header{
+  padding: 15px 20px 0 20px;
+}</style>
