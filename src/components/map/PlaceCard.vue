@@ -36,6 +36,7 @@ const imageSrc = computed(() => {
 
 const description = ref<HTMLElement | null>(null)
 
+// TODO ???
 onMounted(() => {
   if (description.value !== null) {
     const lines = 2
@@ -45,6 +46,7 @@ onMounted(() => {
   }
 })
 
+// TODO
 const store = useMapStore()
 
 const handlePlaceClick = () => {

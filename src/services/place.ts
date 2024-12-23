@@ -14,6 +14,35 @@ import { Place, Rating } from '@/types/interfaces'
 const placesCollection = collection(firestore, 'places')
 const ratingsCollection = collection(firestore, 'ratings')
 
+export const updatePlace = async (placeId: string, updatedPlace: Omit<Place, 'id'>): Promise<string> => {
+  try {
+    const placeDocRef = doc(firestore, `places/${placeId}`)
+    const placeDoc = await getDoc(placeDocRef)
+
+    if (!placeDoc.exists()) {
+      throw new Error('Place does not exist')
+    }
+
+    const placeData = placeDoc.data() as Place
+
+    await updateDoc(placeDocRef, updatedPlace)
+
+    if (placeData.rating !== updatedPlace.rating) {
+      const rating: Omit<Rating, 'id'> = {
+        rating: updatedPlace.rating,
+        userId: placeData.authorId,
+        placeId: placeId,
+      }
+      await addRating(rating)
+    }
+
+    return 'success'
+  } catch (error) {
+    console.error('Error updating place:', error)
+    throw new Error('Error updating place in Firestore')
+  }
+}
+
 export const addPlace = async (place: Omit<Place, 'id'>): Promise<{ id: string }> => {
   try {
     const placeDocRef = await addDoc(placesCollection, place)

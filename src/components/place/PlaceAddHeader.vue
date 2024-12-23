@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import BackButton from '@/components/base/BackButton.vue'
 import { useMapStore } from '@/stores/store'
 

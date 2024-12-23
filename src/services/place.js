@@ -10,6 +10,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { firestore, collection, addDoc, query, where, getDocs, getDoc, updateDoc, doc, } from '@/services/firebase.config.js';
 const placesCollection = collection(firestore, 'places');
 const ratingsCollection = collection(firestore, 'ratings');
+export const updatePlace = (placeId, updatedPlace) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const placeDocRef = doc(firestore, `places/${placeId}`);
+        const placeDoc = yield getDoc(placeDocRef);
+        if (!placeDoc.exists()) {
+            throw new Error('Place does not exist');
+        }
+        const placeData = placeDoc.data();
+        yield updateDoc(placeDocRef, updatedPlace);
+        if (placeData.rating !== updatedPlace.rating) {
+            const rating = {
+                rating: updatedPlace.rating,
+                userId: placeData.authorId,
+                placeId: placeId,
+            };
+            yield addRating(rating);
+        }
+        return 'success';
+    }
+    catch (error) {
+        console.error('Error updating place:', error);
+        throw new Error('Error updating place in Firestore');
+    }
+});
 export const addPlace = (place) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const placeDocRef = yield addDoc(placesCollection, place);

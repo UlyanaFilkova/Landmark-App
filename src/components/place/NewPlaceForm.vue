@@ -167,9 +167,10 @@ const handleSubmit = async () => {
         rating: formData.value.rating,
         photos: base64Photos,
         location: [formData.value.latitude, formData.value.longitude],
+        voices: 1,
       }
 
-      const result = await store.addNewPlace(place)
+      const result =  (isEditing)? await store.editPlace(place) : await store.addNewPlace(place)
       if (result === 'success') {
         router.push({ name: 'generalMap' })
         clearForm()
@@ -237,7 +238,7 @@ h2 {
   margin: -20px 0 20px 0;
 }
 .new-place-form {
-  margin: 0 auto;
+  margin: 0 auto 30px;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;

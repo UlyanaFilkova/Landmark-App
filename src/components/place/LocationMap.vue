@@ -58,6 +58,8 @@ watch(
   },
 )
 
+
+// TODO useMap Composable
 onMounted(() => {
   if (mapContainer.value) {
     map.value = L.map(mapContainer.value).setView([props.latitude, props.longitude], 11)

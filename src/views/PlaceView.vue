@@ -14,6 +14,7 @@ import { useMapStore } from '@/stores/store'
 const store = useMapStore()
 const isLoading = ref(true)
 
+//  TODO
 onBeforeMount(async () => {
   isLoading.value = true
   if (store.getPlaces.length === 0) {

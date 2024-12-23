@@ -8,8 +8,6 @@
 <script setup lang="ts">
 import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
 import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
-
-
 </script>
 
 <style scoped>
@@ -17,6 +15,4 @@ import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
   width: 90%;
   max-width: 600px;
 }
-
-
 </style>

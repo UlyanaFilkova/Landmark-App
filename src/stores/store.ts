@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getPlacesData, getRatingsData } from '@/services/map'
 import { getUserById } from '@/services/user'
-import { addPlace, addRating } from '@/services/place'
+import { addPlace, addRating, updatePlace } from '@/services/place'
 import { Place, User, Rating } from '@/types/interfaces'
 import router from '@/router'
 
@@ -109,7 +109,7 @@ export const useMapStore = defineStore('map', () => {
         throw new Error('User ID is missing')
       }
 
-      const response = await addPlace({ ...placeData, authorId, voices: 1 })
+      const response = await addPlace({ ...placeData, authorId })
 
       if (response && response.id) {
         places.value.push({ ...placeData, authorId, id: response.id })
@@ -118,6 +118,34 @@ export const useMapStore = defineStore('map', () => {
       return 'Error adding new place'
     } catch (error) {
       console.error('Error adding new place:', error)
+    }
+  }
+
+  const editPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
+    try {
+      const authorId = userId.value
+      const placeId = currentPlace.value?.id
+      if (!authorId) {
+        throw new Error('User ID is missing')
+      }
+      if (!placeId) {
+        throw new Error('Place ID is missing')
+      }
+
+      const response = await updatePlace(placeId, { ...placeData, authorId })
+
+
+      if (response === 'success') {
+        const placeIndex = places.value.findIndex(place => place.id === placeId)
+        if (placeIndex !== -1) {
+          places.value[placeIndex] = { ...places.value[placeIndex], ...placeData }
+          return 'success'
+        }
+        return 'Error updating place locally'
+      }
+      return 'Error editing place'
+    } catch (error) {
+      console.error('Error editing place:', error)
     }
   }
 
@@ -159,6 +187,7 @@ export const useMapStore = defineStore('map', () => {
     loadInitialData,
     loadCurrentPlace,
     addNewPlace,
+    editPlace,
     setCurrentPlace,
     removeCurrentPlace,
     logout,
