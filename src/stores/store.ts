@@ -71,8 +71,7 @@ export const useMapStore = defineStore('map', () => {
       placeId: currentPlace.value!.id,
     }
     await addRating(rating)
-    await fetchRatings()
-    await fetchPlaces()
+    await Promise.all([fetchRatings(), fetchPlaces()]);
   }
 
   const loadCurrentPlaceUserRating = () => {
@@ -88,9 +87,7 @@ export const useMapStore = defineStore('map', () => {
   }
 
   const loadInitialData = async () => {
-    await fetchUser()
-    await fetchPlaces()
-    await fetchRatings()
+    await Promise.all([ fetchPlaces(), fetchUser(), fetchRatings()]);
     loadCurrentPlace()
   }
 

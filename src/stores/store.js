@@ -76,8 +76,7 @@ export const useMapStore = defineStore('map', () => {
             placeId: currentPlace.value.id,
         };
         yield addRating(rating);
-        yield fetchRatings();
-        yield fetchPlaces();
+        yield Promise.all([fetchRatings(), fetchPlaces()]);
     });
     const loadCurrentPlaceUserRating = () => {
         if (currentPlace.value) {
@@ -89,9 +88,7 @@ export const useMapStore = defineStore('map', () => {
         }
     };
     const loadInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
-        yield fetchUser();
-        yield fetchPlaces();
-        yield fetchRatings();
+        yield Promise.all([fetchPlaces(), fetchUser(), fetchRatings()]);
         loadCurrentPlace();
     });
     const loadCurrentPlace = () => {

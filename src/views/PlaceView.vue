@@ -1,6 +1,6 @@
 <template>
   <BaseLoader v-if="isLoading" />
-  <PlaceViewHeader/>
+  <PlaceViewHeader />
   <PlaceBlock />
 </template>
 
@@ -14,21 +14,23 @@ import { useMapStore } from '@/stores/store'
 const store = useMapStore()
 const isLoading = ref(true)
 
-//  TODO
-onBeforeMount(async () => {
+const loadData = async () => {
   isLoading.value = true
   if (store.getPlaces.length === 0) {
     await store.loadInitialData()
-  }
-  // else if (store.getCurrentPlace === undefined) {
-  else{
+  } else {
     store.loadCurrentPlace()
   }
   isLoading.value = false
+}
+
+onBeforeMount(() => {
+  loadData()
 })
 </script>
 
 <style scoped>
-.place-header{
+.place-header {
   padding: 15px 20px 0 20px;
-}</style>
+}
+</style>

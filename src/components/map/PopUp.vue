@@ -1,6 +1,6 @@
 <template>
   <div class="popup-content">
-    <RouterLink to="/place" class="popup-title" @click="handlePopupClick">{{
+    <RouterLink to="/place" target="_blank" class="popup-title" @click="handlePopupClick">{{
       props.place.title
     }}</RouterLink>
     <StarRating :rating="place.rating" readonly />

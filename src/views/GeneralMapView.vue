@@ -19,11 +19,11 @@ const store = useMapStore()
 const isLoading = ref(true)
 
 // TODO
-onBeforeMount(async () => {
+onBeforeMount(() => {
   isLoading.value = true
 
   if (store.getPlaces.length === 0) {
-    await store.loadInitialData()
+    store.loadInitialData()
   }
   isLoading.value = false
 })

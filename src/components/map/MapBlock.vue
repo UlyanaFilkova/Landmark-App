@@ -6,6 +6,62 @@
 </template>
 
 <script setup lang="ts">
+import { useMap } from '@/composables/useMap'
+import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
+
+const { mapContainer, checkboxChecked, handleCheckboxChange } = useMap()
+</script>
+
+<style scoped>
+.map-container {
+  height: 70vh;
+  max-height: 600px;
+  width: 100%;
+  border: 3px solid #aaa;
+  border-radius: 5px;
+}
+
+.only-my-places {
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 15px 0;
+  align-items: center;
+}
+
+.popup-content {
+  text-align: center;
+}
+
+.popup-title {
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: none;
+  color: #004085;
+  margin-bottom: 7px;
+  display: block;
+}
+
+.popup-title:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.star-rating {
+  font-size: 18px;
+  color: #FFD700;
+}
+</style>
+
+
+<!-- <template>
+  <div class="only-my-places" @click="handleCheckboxChange">
+    <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+  </div>
+  <div ref="mapContainer" id="map" class="map-container"></div>
+</template>
+
+<script setup lang="ts">
 import { onMounted, ref, createApp, watch, computed } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -102,4 +158,4 @@ onMounted(async () => {
   margin: 10px 0 15px 0;
   align-items: center;
 }
-</style>
+</style> -->
