@@ -29,30 +29,22 @@ const { mapContainer, checkboxChecked, handleCheckboxChange } = useMap()
   align-items: center;
 }
 
-.popup-content {
-  text-align: center;
-}
-
-.popup-title {
-  font-weight: bold;
-  font-size: 18px;
-  text-decoration: none;
-  color: #004085;
-  margin-bottom: 7px;
+::v-deep .leaflet-popup-close-button span {
   display: block;
+  font-size: 28px;
+  width: 12px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-color: transparent;
+  color: #004085;
 }
 
-.popup-title:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.star-rating {
-  font-size: 18px;
-  color: #FFD700;
+::v-deep .leaflet-popup-close-button:hover span {
+  display: block;
+  color: #e00000;
 }
 </style>
-
 
 <!-- <template>
   <div class="only-my-places" @click="handleCheckboxChange">
