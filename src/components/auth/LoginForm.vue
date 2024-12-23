@@ -26,14 +26,18 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import useVuelidate from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
+
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import { required, email, minLength } from '@vuelidate/validators'
-import useVuelidate from '@vuelidate/core'
+
 import { checkUser } from '@/services/user'
-import { useRouter } from 'vue-router'
+
 import { InputField } from '@/types/interfaces'
 
+const router = useRouter()
 
 const inputFields = reactive<InputField[]>([
   {
@@ -57,7 +61,6 @@ const inputFields = reactive<InputField[]>([
 ])
 const errorMessage = ref<string>('')
 const requestIsProcessing = ref<boolean>(false)
-const router = useRouter()
 
 const rules = {
   validationFields: {
@@ -77,6 +80,7 @@ const submitButtonDisabled = computed<boolean>(
   () => !validationFields.value.username || !validationFields.value.password,
 )
 
+// TODO
 const updateValue = (field: InputField, value: string): void => {
   errorMessage.value = ''
   field.model = value

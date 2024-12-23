@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import BackButton from '@/components/base/BackButton.vue'
 import { useMapStore } from '@/stores/store'
 
@@ -13,7 +12,6 @@ const store = useMapStore()
 
 const handleBackClick = () => {
   store.removeCurrentPlace()
-  
 }
 </script>
 
@@ -26,5 +24,11 @@ const handleBackClick = () => {
   align-items: center;
   justify-content: start;
   padding: 15px 0;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin: -10px 0 20px 0;
 }
 </style>

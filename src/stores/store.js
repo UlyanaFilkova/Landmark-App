@@ -11,7 +11,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { getPlacesData, getRatingsData } from '@/services/map';
 import { getUserById } from '@/services/user';
-import { addPlace, addRating } from '@/services/place';
+import { addPlace, addRating, updatePlace, deletePlace } from '@/services/place';
 import router from '@/router';
 export const useMapStore = defineStore('map', () => {
     const places = ref([]);
@@ -107,7 +107,7 @@ export const useMapStore = defineStore('map', () => {
             if (!authorId) {
                 throw new Error('User ID is missing');
             }
-            const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId, voices: 1 }));
+            const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId }));
             if (response && response.id) {
                 places.value.push(Object.assign(Object.assign({}, placeData), { authorId, id: response.id }));
                 return 'success';
@@ -116,6 +116,51 @@ export const useMapStore = defineStore('map', () => {
         }
         catch (error) {
             console.error('Error adding new place:', error);
+        }
+    });
+    const editPlace = (placeData) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            const authorId = userId.value;
+            const placeId = (_a = currentPlace.value) === null || _a === void 0 ? void 0 : _a.id;
+            if (!authorId) {
+                throw new Error('User ID is missing');
+            }
+            if (!placeId) {
+                throw new Error('Place ID is missing');
+            }
+            const response = yield updatePlace(placeId, Object.assign(Object.assign({}, placeData), { authorId }));
+            if (response === 'success') {
+                const placeIndex = places.value.findIndex(place => place.id === placeId);
+                if (placeIndex !== -1) {
+                    places.value[placeIndex] = Object.assign(Object.assign({}, places.value[placeIndex]), placeData);
+                    return 'success';
+                }
+                return 'Error updating place locally';
+            }
+            return 'Error editing place';
+        }
+        catch (error) {
+            console.error('Error editing place:', error);
+        }
+    });
+    const removePlace = (placeId) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            const response = yield deletePlace(placeId);
+            if (response === 'success') {
+                places.value = places.value.filter(place => place.id !== placeId);
+                ratings.value = ratings.value.filter(rating => rating.placeId !== placeId);
+                if (((_a = currentPlace.value) === null || _a === void 0 ? void 0 : _a.id) === placeId) {
+                    removeCurrentPlace();
+                }
+                return 'success';
+            }
+            return 'Error deleting place';
+        }
+        catch (error) {
+            console.error('Error deleting place:', error);
+            return 'Error deleting place';
         }
     });
     const setCurrentPlace = (place) => {
@@ -155,10 +200,12 @@ export const useMapStore = defineStore('map', () => {
         loadInitialData,
         loadCurrentPlace,
         addNewPlace,
+        editPlace,
         setCurrentPlace,
         removeCurrentPlace,
         logout,
         setOnlyUserPlaces,
         setNewCurrentPlaceUserRating,
+        removePlace,
     };
 });

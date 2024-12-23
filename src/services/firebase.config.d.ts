@@ -48,6 +48,8 @@ declare module '@/services/firebase.config.js' {
     data: Partial<T>,
   ): Promise<void>
 
+  function deleteDoc<T = DocumentData>(docRef: DocumentReference<T>): Promise<void>
+
   function uploadBytes(
     ref: StorageReference,
     data: Blob | Uint8Array | ArrayBuffer,
@@ -63,6 +65,7 @@ declare module '@/services/firebase.config.js' {
     where,
     getDocs,
     updateDoc,
+    deleteDoc,
     getDoc,
     doc,
     firestore,

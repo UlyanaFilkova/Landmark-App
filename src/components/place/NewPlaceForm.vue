@@ -1,5 +1,5 @@
 <template>
-  <h2>Add a new place</h2>
+  <h2>{{ headerText }}</h2>
   <form @submit.prevent="handleSubmit" class="new-place-form">
     <BaseInput
       v-model:modelValue="formData.title"
@@ -26,7 +26,12 @@
     />
 
     <label>Rating:</label>
-    <StarRating :rating="formData.rating" :readonly="false" @update:rating="updateRating" class="star-rating"/>
+    <StarRating
+      :rating="formData.rating"
+      :readonly="false"
+      @update:rating="updateRating"
+      class="star-rating"
+    />
 
     <FileInput
       v-model:modelValue="formData.photos"
@@ -40,20 +45,27 @@
       :isDisabled="isFileLimitReached || fileTypeInvalid"
     />
 
-    <button type="submit">Add Place</button>
+    <BaseButton
+      :text="buttonText"
+      class="medium-button"
+      :disabled="isSubmitButtonDisabled"
+    ></BaseButton>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Place } from '@/types/interfaces'
 import LocationInput from '@/components/place/LocationInput.vue'
 import StarRating from '@/components/base/StarRating.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import FileInput from '@/components/base/FileInput.vue'
 import { useMapStore } from '@/stores/store'
 import { useRouter } from 'vue-router'
 import BaseTextarea from '@/components/base/BaseTextarea.vue'
+
+const store = useMapStore()
 
 const initialFormData = {
   title: '',
@@ -61,10 +73,14 @@ const initialFormData = {
   latitude: 53.9,
   longitude: 27.5667,
   photos: [] as File[],
-  rating: 5,
+  rating: store.getCurrentPlaceUserRating || 5,
 }
 
+const headerText = ref('Add a new place')
+const buttonText = ref('Add place')
+
 const formData = ref({ ...initialFormData })
+const originalFormData = ref({ ...initialFormData })
 
 const locationInvalid = computed(
   () =>
@@ -77,23 +93,71 @@ const locationInvalid = computed(
 const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
+const isEditing = computed(() => store.getCurrentPlace !== undefined)
+
+onMounted(() => {
+  if (store.getCurrentPlace !== undefined) {
+    const place = store.getCurrentPlace
+    formData.value.title = place.title
+    formData.value.description = place.description
+    formData.value.latitude = place.location[0]
+    formData.value.longitude = place.location[1]
+    formData.value.rating = store.getCurrentPlaceUserRating || 0
+    formData.value.photos = convertBase64ToFiles(place.photos || [])
+
+    originalFormData.value = { ...formData.value }
+    headerText.value = 'Edit place'
+    buttonText.value = 'Save place'
+  }
+})
+
 const updateRating = (value: number) => {
   formData.value.rating = value
 }
 
-const store = useMapStore()
 const router = useRouter()
 
-const handleSubmit = async () => {
-  if (
+const isSubmitButtonDisabled = computed(() => {
+  if (isEditing.value) {
+    return !isFormDataChanged.value || !isFormValid.value
+  } else {
+    return !isFormValid.value
+  }
+})
+
+const isFormDataChanged = computed(() => {
+  const isFilesEqual = (files1: File[], files2: File[]) => {
+    if (files1.length !== files2.length) return false
+    for (let i = 0; i < files1.length; i++) {
+      if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false
+    }
+    return true
+  }
+
+  return (
+    formData.value.title !== originalFormData.value.title ||
+    formData.value.description !== originalFormData.value.description ||
+    formData.value.latitude !== originalFormData.value.latitude ||
+    formData.value.longitude !== originalFormData.value.longitude ||
+    formData.value.rating !== originalFormData.value.rating ||
+    !isFilesEqual(formData.value.photos, originalFormData.value.photos)
+  )
+})
+
+const isFormValid = computed(() => {
+  return (
     formData.value.title &&
     formData.value.description &&
     !locationInvalid.value &&
-    formData.value.rating >= 1 &&
+    formData.value.rating >= 0 &&
     formData.value.rating <= 5 &&
     formData.value.photos.length <= 5 &&
     !fileTypeInvalid.value
   )
+})
+
+const handleSubmit = async () => {
+  if (isFormValid.value) {
     try {
       const base64Photos = await convertFilesToBase64(formData.value.photos)
 
@@ -103,9 +167,10 @@ const handleSubmit = async () => {
         rating: formData.value.rating,
         photos: base64Photos,
         location: [formData.value.latitude, formData.value.longitude],
+        voices: 1,
       }
 
-      const result = await store.addNewPlace(place)
+      const result =  (store.getCurrentPlace !== undefined)? await store.editPlace(place) : await store.addNewPlace(place)
       if (result === 'success') {
         router.push({ name: 'generalMap' })
         clearForm()
@@ -113,7 +178,7 @@ const handleSubmit = async () => {
     } catch (error) {
       console.error('Error converting files to Base64:', error)
     }
-  else {
+  } else {
     alert('Please fill out all fields correctly.')
   }
 }
@@ -147,6 +212,20 @@ const convertFilesToBase64 = (files: File[]): Promise<string[]> => {
   })
 }
 
+const convertBase64ToFiles = (base64Strings: string[]): File[] => {
+  return base64Strings.map((base64, index) => {
+    const byteString = atob(base64.split(',')[1])
+    const mimeString = base64.split(',')[0].split(':')[1].split(';')[0]
+    const ab = new ArrayBuffer(byteString.length)
+    const ia = new Uint8Array(ab)
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i)
+    }
+    const blob = new Blob([ab], { type: mimeString })
+    return new File([blob], `photo_${index + 1}.${mimeString.split('/')[1]}`, { type: mimeString })
+  })
+}
+
 const clearForm = (): void => {
   formData.value = { ...initialFormData }
 }
@@ -156,11 +235,10 @@ const clearForm = (): void => {
 h2 {
   text-align: center;
   font-size: 24px;
-  margin: -10px 0 20px 0;
+  margin: -20px 0 20px 0;
 }
 .new-place-form {
-
-  margin: 0 auto;
+  margin: 0 auto 30px;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -244,7 +322,7 @@ li button {
   font-size: 12px;
 }
 
-.star-rating{
+.star-rating {
   margin-bottom: 10px;
 }
 </style>

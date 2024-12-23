@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, watch, computed, onBeforeUnmount } from 'vue'
+import { ref, watch, computed, onBeforeUnmount } from 'vue'
 import PlaceCard from '@/components/map/PlaceCard.vue'
 import { Place } from '@/types/interfaces'
 import { useMapStore } from '@/stores/store'
@@ -49,6 +49,8 @@ const loadMorePlaces = () => {
   loading.value = false
 }
 
+
+// vue-virtual-scroll
 const onScroll = () => {
   const scrollPosition = window.scrollY + window.innerHeight
   const pageHeight = document.documentElement.scrollHeight

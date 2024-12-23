@@ -13,7 +13,7 @@
         <span class="rating-voices">{{ place.voices }} voices</span>
       </div>
 
-      <div class="user-rating">
+      <div v-if="!isAdmin" class="user-rating">
         <h3>Your Rating</h3>
         <StarRating
           :rating="userRating"
@@ -67,6 +67,10 @@ const place = ref<Place | null>(null)
 const photoViewerVisible = ref(false)
 const photoViewerIndex = ref(0)
 const userRating = ref<number>(0)
+
+const isAdmin = computed(() => {
+  return store.getUser?.role === 1
+})
 
 watch(
   () => store.getCurrentPlaceUserRating,

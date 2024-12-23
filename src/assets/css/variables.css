@@ -3,12 +3,12 @@
   --color-invalid-input: red;
 
   --color-main: #fb6914;
-  --color-main-hover: #d74f00;
+  --color-main-hover: #e85500;
   --color-main-disabled: #808080;
   --color-second: #ffae80;
   --color-second-hover: #ff8a47;
-  --color-third: #bababa;
-  --color-third-hover: #9c9c9c;
+  --color-third: #a4a4a4;
+  --color-third-hover: #818181;
   --color-forth: #aaaaaa;
   --color-forth-hover: #888;
   --color-sixth: #ffa876;
@@ -20,6 +20,8 @@
   --color-tenth: #833700;
   --color-eleventh: #d7b7a0;
   --color-twelve: #652a00;
+  --color13: #ff4b4b;
+  --color13-hover: #e50c0c;
 
   --color-card-first: #d8d8d8;
   --color-card-second: #e2e2e2;

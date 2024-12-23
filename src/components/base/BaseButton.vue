@@ -20,10 +20,21 @@ const props = defineProps<{
 .small-button.grey,
 .medium-button.grey {
   background: var(--color-third);
+  color: white;
 }
 .small-button.grey:hover,
 .medium-button.grey:hover {
   background: var(--color-third-hover);
+}
+
+.small-button.red,
+.medium-button.red {
+  background: var(--color13);
+  color: white;
+}
+.small-button.red:hover,
+.medium-button.red:hover {
+  background: var(--color13-hover);
 }
 .big-button {
   width: 176px;
@@ -36,7 +47,8 @@ const props = defineProps<{
 .big-button:hover {
   background-color: var(--color-main-hover);
 }
-.big-button:disabled {
+.big-button:disabled,
+.medium-button:disabled {
   background-color: var(--color-main-disabled);
   cursor: auto;
 }
