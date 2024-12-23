@@ -1,7 +1,7 @@
 <template>
   <div class="place-header">
     <BackButton path="general-map" @click="handleBackClick" />
-    <div class="header-buttons">
+    <div v-if="userHasEditPermission" class="header-buttons">
       <RouterLink to="/add-place">
         <BaseButton class="medium-button grey" text="Edit" />
       </RouterLink>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
+import { ref, computed } from 'vue'
 import BackButton from '@/components/base/BackButton.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import ConfirmModal from '@/components/base/ConfirmModal.vue'
@@ -37,6 +37,9 @@ const handleDeleteClick = async () => {
   store.fetchPlaces()
   router.push({ name: 'generalMap' })
 }
+const userHasEditPermission = computed(() => {
+  return store.getUser?.role === 1 || store.getCurrentPlace?.authorId === store.getUser?.id
+})
 </script>
 
 <style scoped>

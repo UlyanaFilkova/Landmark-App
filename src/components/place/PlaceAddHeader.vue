@@ -2,7 +2,6 @@
   <div class="place-header">
     <BackButton path="general-map" @click="handleBackClick" />
   </div>
-  <h2></h2>
 </template>
 
 <script setup lang="ts">
