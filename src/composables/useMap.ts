@@ -57,8 +57,22 @@ export function useMap() {
         }
       }, 200)
     },
-    { immediate: true }
+    { immediate: true },
   )
+
+  const handleMapMove = () => {
+    if (map.value) {
+      const bounds = map.value.getBounds()
+      addMarkers(places.value)
+    }
+  }
+
+  onMounted(() => {
+    if (map.value) {
+      map.value.on('moveend', handleMapMove)
+      map.value.on('zoomend', handleMapMove)
+    }
+  })
 
   onMounted(async () => {
     checkboxChecked.value = store.getOnlyUserPlaces
@@ -71,4 +85,3 @@ export function useMap() {
     handleCheckboxChange,
   }
 }
-

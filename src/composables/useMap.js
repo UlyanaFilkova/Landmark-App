@@ -55,6 +55,18 @@ export function useMap() {
             }
         }, 200);
     }, { immediate: true });
+    const handleMapMove = () => {
+        if (map.value) {
+            const bounds = map.value.getBounds();
+            addMarkers(places.value);
+        }
+    };
+    onMounted(() => {
+        if (map.value) {
+            map.value.on('moveend', handleMapMove);
+            map.value.on('zoomend', handleMapMove);
+        }
+    });
     onMounted(() => __awaiter(this, void 0, void 0, function* () {
         checkboxChecked.value = store.getOnlyUserPlaces;
         initializeMap();
