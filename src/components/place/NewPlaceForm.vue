@@ -170,7 +170,7 @@ const handleSubmit = async () => {
         voices: 1,
       }
 
-      const result =  (isEditing)? await store.editPlace(place) : await store.addNewPlace(place)
+      const result =  (store.getCurrentPlace !== undefined)? await store.editPlace(place) : await store.addNewPlace(place)
       if (result === 'success') {
         router.push({ name: 'generalMap' })
         clearForm()

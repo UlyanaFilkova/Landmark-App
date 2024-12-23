@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { firestore, collection, addDoc, query, where, getDocs, getDoc, updateDoc, doc, } from '@/services/firebase.config.js';
+import { firestore, collection, addDoc, query, where, getDocs, getDoc, updateDoc, deleteDoc, doc, } from '@/services/firebase.config.js';
 const placesCollection = collection(firestore, 'places');
 const ratingsCollection = collection(firestore, 'ratings');
 export const updatePlace = (placeId, updatedPlace) => __awaiter(void 0, void 0, void 0, function* () {
@@ -48,6 +48,21 @@ export const addPlace = (place) => __awaiter(void 0, void 0, void 0, function* (
     catch (error) {
         console.error('Error adding place:', error);
         throw new Error('Error adding place to Firestore');
+    }
+});
+export const deletePlace = (placeId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ratingsQuery = query(collection(firestore, 'ratings'), where('placeId', '==', placeId));
+        const ratingsSnapshot = yield getDocs(ratingsQuery);
+        const deletePromises = ratingsSnapshot.docs.map((doc) => deleteDoc(doc.ref));
+        yield Promise.all(deletePromises);
+        const placeDocRef = doc(firestore, `places/${placeId}`);
+        yield deleteDoc(placeDocRef);
+        return 'success';
+    }
+    catch (error) {
+        console.error('Error deleting place:', error);
+        throw new Error('Error deleting place from Firestore');
     }
 });
 export const addRating = (rating) => __awaiter(void 0, void 0, void 0, function* () {

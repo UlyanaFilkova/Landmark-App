@@ -3,24 +3,39 @@
     <BackButton path="general-map" @click="handleBackClick" />
     <div class="header-buttons">
       <RouterLink to="/add-place">
-        <BaseButton class="medium-button grey" text="Edit"/>
+        <BaseButton class="medium-button grey" text="Edit" />
       </RouterLink>
-      <BaseButton class="medium-button red" text="Delete" @click="handleDeleteClick" />
+      <BaseButton class="medium-button red" text="Delete" @click="showModal = true" />
+      <ConfirmModal
+        :isVisible="showModal"
+        @confirm="handleDeleteClick"
+        @cancel="showModal = false"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, ref } from 'vue'
 import BackButton from '@/components/base/BackButton.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import ConfirmModal from '@/components/base/ConfirmModal.vue'
 import { useMapStore } from '@/stores/store'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const store = useMapStore()
+
+const showModal = ref(false)
 
 const handleBackClick = () => {
   store.removeCurrentPlace()
-  
+}
+
+const handleDeleteClick = async () => {
+  showModal.value = false
+  await store.removePlace(store.getCurrentPlace!.id)
+  store.fetchPlaces()
+  router.push({ name: 'generalMap' })
 }
 </script>
 
@@ -35,7 +50,7 @@ const handleBackClick = () => {
   padding: 15px 0;
 }
 
-.header-buttons{
+.header-buttons {
   display: flex;
   gap: 20px;
 }

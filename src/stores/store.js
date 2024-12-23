@@ -11,7 +11,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { getPlacesData, getRatingsData } from '@/services/map';
 import { getUserById } from '@/services/user';
-import { addPlace, addRating, updatePlace } from '@/services/place';
+import { addPlace, addRating, updatePlace, deletePlace } from '@/services/place';
 import router from '@/router';
 export const useMapStore = defineStore('map', () => {
     const places = ref([]);
@@ -144,6 +144,25 @@ export const useMapStore = defineStore('map', () => {
             console.error('Error editing place:', error);
         }
     });
+    const removePlace = (placeId) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a;
+        try {
+            const response = yield deletePlace(placeId);
+            if (response === 'success') {
+                places.value = places.value.filter(place => place.id !== placeId);
+                ratings.value = ratings.value.filter(rating => rating.placeId !== placeId);
+                if (((_a = currentPlace.value) === null || _a === void 0 ? void 0 : _a.id) === placeId) {
+                    removeCurrentPlace();
+                }
+                return 'success';
+            }
+            return 'Error deleting place';
+        }
+        catch (error) {
+            console.error('Error deleting place:', error);
+            return 'Error deleting place';
+        }
+    });
     const setCurrentPlace = (place) => {
         currentPlace.value = place;
         localStorage.setItem('currentPlaceId', place.id);
@@ -187,5 +206,6 @@ export const useMapStore = defineStore('map', () => {
         logout,
         setOnlyUserPlaces,
         setNewCurrentPlaceUserRating,
+        removePlace,
     };
 });

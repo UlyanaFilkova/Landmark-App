@@ -20,6 +20,7 @@ const props = defineProps<{
 .small-button.grey,
 .medium-button.grey {
   background: var(--color-third);
+  color: white;
 }
 .small-button.grey:hover,
 .medium-button.grey:hover {
@@ -29,6 +30,7 @@ const props = defineProps<{
 .small-button.red,
 .medium-button.red {
   background: var(--color13);
+  color: white;
 }
 .small-button.red:hover,
 .medium-button.red:hover {
