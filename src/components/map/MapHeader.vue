@@ -13,9 +13,9 @@
 
 <script setup lang="ts">
 import BaseButton from '@/components/base/BaseButton.vue'
-import { useMapStore } from '@/stores/store'
+import { useUserStore } from '@/stores/userStore'
 
-const store = useMapStore()
+const store = useUserStore()
 
 const handleLogoutClick = () => {
   store.logout()

@@ -59,9 +59,11 @@ import { Place } from '@/types/interfaces'
 import StarRating from '@/components/base/StarRating.vue'
 import LocationMap from '@/components/place/LocationMap.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
-import { useMapStore } from '@/stores/store'
+import { useMapStore } from '@/stores/mapStore'
+import { useUserStore } from '@/stores/userStore'
 
-const store = useMapStore()
+const mapStore = useMapStore()
+const userStore = useUserStore()
 
 const place = ref<Place | null>(null)
 const photoViewerVisible = ref(false)
@@ -69,11 +71,11 @@ const photoViewerIndex = ref(0)
 const userRating = ref<number>(0)
 
 const isAdmin = computed(() => {
-  return store.getUser?.role === 1
+  return userStore.getUser?.role === 1
 })
 
 watch(
-  () => store.getCurrentPlaceUserRating,
+  () => mapStore.getCurrentPlaceUserRating,
   (newValue) => {
     userRating.value = newValue || 0
   },
@@ -81,7 +83,7 @@ watch(
 )
 
 watch(
-  () => store.getCurrentPlace,
+  () => mapStore.getCurrentPlace,
   (newPlace) => {
     if (newPlace) {
       place.value = newPlace
@@ -100,7 +102,7 @@ const openPhotoViewer = (index: number) => {
 
 const updateUserRating = (value: number) => {
   userRating.value = value
-  store.setNewCurrentPlaceUserRating(value)
+  mapStore.setNewCurrentPlaceUserRating(value)
 }
 </script>
 

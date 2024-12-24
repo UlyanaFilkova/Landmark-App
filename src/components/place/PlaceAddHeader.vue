@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import BackButton from '@/components/base/BackButton.vue'
-import { useMapStore } from '@/stores/store'
+import { useMapStore } from '@/stores/mapStore'
 
 const store = useMapStore()
 

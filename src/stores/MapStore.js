@@ -10,22 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { getPlacesData, getRatingsData } from '@/services/map';
-import { getUserById } from '@/services/user';
 import { addPlace, addRating, updatePlace, deletePlace } from '@/services/place';
-import router from '@/router';
-export const useMapStore = defineStore('map', () => {
+import { useUserStore } from './userStore';
+export const useMapStore = defineStore('place', () => {
     const places = ref([]);
     const filteredPlaces = ref([]);
     const ratings = ref([]);
-    const user = ref();
-    const currentPlace = ref();
-    const currentPlaceUserRating = ref();
+    const currentPlace = ref(undefined);
+    const currentPlaceUserRating = ref(undefined);
     const onlyUserPlaces = ref(false);
-    const userId = computed(() => localStorage.getItem('userId'));
+    const userStore = useUserStore();
+    const userId = computed(() => { var _a; return (_a = userStore.getUser) === null || _a === void 0 ? void 0 : _a.id; });
     const getPlaces = computed(() => places.value);
     const getFilteredPlaces = computed(() => filteredPlaces.value);
     const getRatings = computed(() => ratings.value);
-    const getUser = computed(() => user.value);
     const getCurrentPlace = computed(() => currentPlace.value);
     const getOnlyUserPlaces = computed(() => onlyUserPlaces.value);
     const getCurrentPlaceUserRating = computed(() => currentPlaceUserRating.value);
@@ -57,18 +55,9 @@ export const useMapStore = defineStore('map', () => {
             console.error(error);
         }
     });
-    const fetchUser = () => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            const userIdValue = userId.value;
-            if (userIdValue) {
-                user.value = (yield getUserById(userIdValue));
-            }
-        }
-        catch (error) {
-            console.error('Error fetching user:', error);
-        }
-    });
     const setNewCurrentPlaceUserRating = (value) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!userId.value || !currentPlace.value)
+            return;
         currentPlaceUserRating.value = value;
         const rating = {
             rating: value,
@@ -80,15 +69,14 @@ export const useMapStore = defineStore('map', () => {
     });
     const loadCurrentPlaceUserRating = () => {
         if (currentPlace.value) {
-            const userRating = ratings.value.find((rating) => rating.placeId === currentPlace.value.id && rating.userId === user.value.id);
-            console.log(userRating);
+            const userRating = ratings.value.find((rating) => rating.placeId === currentPlace.value.id && rating.userId === userId.value);
             if (userRating) {
-                setNewCurrentPlaceUserRating(userRating.rating);
+                currentPlaceUserRating.value = userRating.rating;
             }
         }
     };
     const loadInitialData = () => __awaiter(void 0, void 0, void 0, function* () {
-        yield Promise.all([fetchPlaces(), fetchUser(), fetchRatings()]);
+        yield Promise.all([fetchPlaces(), userStore.fetchUser(), fetchRatings()]);
         loadCurrentPlace();
     });
     const loadCurrentPlace = () => {
@@ -100,13 +88,12 @@ export const useMapStore = defineStore('map', () => {
     };
     const addNewPlace = (placeData) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const authorId = userId.value;
-            if (!authorId) {
+            if (!userId.value) {
                 throw new Error('User ID is missing');
             }
-            const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId }));
+            const response = yield addPlace(Object.assign(Object.assign({}, placeData), { authorId: userId.value }));
             if (response && response.id) {
-                places.value.push(Object.assign(Object.assign({}, placeData), { authorId, id: response.id }));
+                places.value.push(Object.assign(Object.assign({}, placeData), { authorId: userId.value, id: response.id }));
                 return 'success';
             }
             return 'Error adding new place';
@@ -116,19 +103,13 @@ export const useMapStore = defineStore('map', () => {
         }
     });
     const editPlace = (placeData) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a;
         try {
-            const authorId = userId.value;
-            const placeId = (_a = currentPlace.value) === null || _a === void 0 ? void 0 : _a.id;
-            if (!authorId) {
-                throw new Error('User ID is missing');
+            if (!userId.value || !currentPlace.value) {
+                throw new Error('User ID or Place ID is missing');
             }
-            if (!placeId) {
-                throw new Error('Place ID is missing');
-            }
-            const response = yield updatePlace(placeId, Object.assign(Object.assign({}, placeData), { authorId }));
+            const response = yield updatePlace(currentPlace.value.id, Object.assign(Object.assign({}, placeData), { authorId: userId.value }));
             if (response === 'success') {
-                const placeIndex = places.value.findIndex(place => place.id === placeId);
+                const placeIndex = places.value.findIndex((place) => place.id === currentPlace.value.id);
                 if (placeIndex !== -1) {
                     places.value[placeIndex] = Object.assign(Object.assign({}, places.value[placeIndex]), placeData);
                     return 'success';
@@ -146,8 +127,8 @@ export const useMapStore = defineStore('map', () => {
         try {
             const response = yield deletePlace(placeId);
             if (response === 'success') {
-                places.value = places.value.filter(place => place.id !== placeId);
-                ratings.value = ratings.value.filter(rating => rating.placeId !== placeId);
+                places.value = places.value.filter((place) => place.id !== placeId);
+                ratings.value = ratings.value.filter((rating) => rating.placeId !== placeId);
                 if (((_a = currentPlace.value) === null || _a === void 0 ? void 0 : _a.id) === placeId) {
                     removeCurrentPlace();
                 }
@@ -163,22 +144,12 @@ export const useMapStore = defineStore('map', () => {
     const setCurrentPlace = (place) => {
         currentPlace.value = place;
         localStorage.setItem('currentPlaceId', place.id);
+        loadCurrentPlaceUserRating();
     };
     const removeCurrentPlace = () => {
         currentPlace.value = undefined;
         localStorage.removeItem('currentPlaceId');
         currentPlaceUserRating.value = 0;
-    };
-    const logout = () => {
-        localStorage.removeItem('userId');
-        router.push({ name: 'login' });
-        resetStore();
-    };
-    const resetStore = () => {
-        places.value = [];
-        ratings.value = [];
-        user.value = undefined;
-        currentPlace.value = undefined;
     };
     const setOnlyUserPlaces = (value) => {
         onlyUserPlaces.value = value;
@@ -186,11 +157,10 @@ export const useMapStore = defineStore('map', () => {
     };
     return {
         getPlaces,
+        getFilteredPlaces,
         getRatings,
-        getUser,
         getCurrentPlace,
         getOnlyUserPlaces,
-        getFilteredPlaces,
         getCurrentPlaceUserRating,
         fetchPlaces,
         fetchRatings,
@@ -200,7 +170,6 @@ export const useMapStore = defineStore('map', () => {
         editPlace,
         setCurrentPlace,
         removeCurrentPlace,
-        logout,
         setOnlyUserPlaces,
         setNewCurrentPlaceUserRating,
         removePlace,

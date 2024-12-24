@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import { useMapStore } from '@/stores/store'
+import { useMapStore } from '@/stores/mapStore'
 import { Place } from '@/types/interfaces'
 import StarRating from '@/components/base/StarRating.vue'
 import { convertBase64ToFiles } from '@/utils/typeConversion.js'

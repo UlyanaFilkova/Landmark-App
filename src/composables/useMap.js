@@ -13,7 +13,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster';
-import { useMapStore } from '@/stores/store';
+import { useMapStore } from '@/stores/mapStore';
 import { usePopup } from '@/composables/usePopup';
 export function useMap() {
     const store = useMapStore();
@@ -57,7 +57,6 @@ export function useMap() {
     }, { immediate: true });
     const handleMapMove = () => {
         if (map.value) {
-            const bounds = map.value.getBounds();
             addMarkers(places.value);
         }
     };

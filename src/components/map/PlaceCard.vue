@@ -17,7 +17,7 @@
 import { defineProps, computed, onMounted, ref } from 'vue'
 import { Place } from '@/types/interfaces'
 import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
-import { useMapStore } from '@/stores/store'
+import { useMapStore } from '@/stores/mapStore'
 
 const props = defineProps<{
   place: Place

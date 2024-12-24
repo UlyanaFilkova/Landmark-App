@@ -1,25 +1,24 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { getPlacesData, getRatingsData } from '@/services/map'
-import { getUserById } from '@/services/user'
 import { addPlace, addRating, updatePlace, deletePlace } from '@/services/place'
-import { Place, User, Rating } from '@/types/interfaces'
-import router from '@/router'
+import { Place, Rating } from '@/types/interfaces'
+import { useUserStore } from './userStore'
 
-export const useMapStore = defineStore('map', () => {
+export const useMapStore = defineStore('place', () => {
   const places = ref<Place[]>([])
   const filteredPlaces = ref<Place[]>([])
   const ratings = ref<Rating[]>([])
-  const user = ref<User>()
-  const currentPlace = ref<Place | undefined>()
-  const currentPlaceUserRating = ref<number>()
-  const onlyUserPlaces = ref<Boolean>(false)
+  const currentPlace = ref<Place | undefined>(undefined)
+  const currentPlaceUserRating = ref<number | undefined>(undefined)
+  const onlyUserPlaces = ref<boolean>(false)
 
-  const userId = computed(() => localStorage.getItem('userId'))
+  const userStore = useUserStore()
+  const userId = computed(() => userStore.getUser?.id)
+
   const getPlaces = computed(() => places.value)
   const getFilteredPlaces = computed(() => filteredPlaces.value)
   const getRatings = computed(() => ratings.value)
-  const getUser = computed(() => user.value)
   const getCurrentPlace = computed(() => currentPlace.value)
   const getOnlyUserPlaces = computed(() => onlyUserPlaces.value)
   const getCurrentPlaceUserRating = computed(() => currentPlaceUserRating.value)
@@ -52,42 +51,32 @@ export const useMapStore = defineStore('map', () => {
     }
   }
 
-  const fetchUser = async () => {
-    try {
-      const userIdValue = userId.value
-      if (userIdValue) {
-        user.value = (await getUserById(userIdValue)) as User
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error)
-    }
-  }
-
   const setNewCurrentPlaceUserRating = async (value: number) => {
+    if (!userId.value || !currentPlace.value) return
+
     currentPlaceUserRating.value = value
     const rating: Omit<Rating, 'id'> = {
       rating: value,
-      userId: userId.value!,
-      placeId: currentPlace.value!.id,
+      userId: userId.value,
+      placeId: currentPlace.value.id,
     }
     await addRating(rating)
-    await Promise.all([fetchRatings(), fetchPlaces()]);
+    await Promise.all([fetchRatings(), fetchPlaces()])
   }
 
   const loadCurrentPlaceUserRating = () => {
     if (currentPlace.value) {
       const userRating = ratings.value.find(
-        (rating) => rating.placeId === currentPlace.value!.id && rating.userId === user.value!.id,
+        (rating) => rating.placeId === currentPlace.value!.id && rating.userId === userId.value,
       )
-      console.log(userRating)
       if (userRating) {
-        setNewCurrentPlaceUserRating(userRating.rating)
+        currentPlaceUserRating.value = userRating.rating
       }
     }
   }
 
   const loadInitialData = async () => {
-    await Promise.all([ fetchPlaces(), fetchUser(), fetchRatings()]);
+    await Promise.all([fetchPlaces(), userStore.fetchUser(), fetchRatings()])
     loadCurrentPlace()
   }
 
@@ -101,15 +90,14 @@ export const useMapStore = defineStore('map', () => {
 
   const addNewPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
     try {
-      const authorId = userId.value
-      if (!authorId) {
+      if (!userId.value) {
         throw new Error('User ID is missing')
       }
 
-      const response = await addPlace({ ...placeData, authorId })
+      const response = await addPlace({ ...placeData, authorId: userId.value })
 
       if (response && response.id) {
-        places.value.push({ ...placeData, authorId, id: response.id })
+        places.value.push({ ...placeData, authorId: userId.value, id: response.id })
         return 'success'
       }
       return 'Error adding new place'
@@ -120,20 +108,14 @@ export const useMapStore = defineStore('map', () => {
 
   const editPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
     try {
-      const authorId = userId.value
-      const placeId = currentPlace.value?.id
-      if (!authorId) {
-        throw new Error('User ID is missing')
-      }
-      if (!placeId) {
-        throw new Error('Place ID is missing')
+      if (!userId.value || !currentPlace.value) {
+        throw new Error('User ID or Place ID is missing')
       }
 
-      const response = await updatePlace(placeId, { ...placeData, authorId })
-
+      const response = await updatePlace(currentPlace.value.id, { ...placeData, authorId: userId.value })
 
       if (response === 'success') {
-        const placeIndex = places.value.findIndex(place => place.id === placeId)
+        const placeIndex = places.value.findIndex((place) => place.id === currentPlace.value!.id)
         if (placeIndex !== -1) {
           places.value[placeIndex] = { ...places.value[placeIndex], ...placeData }
           return 'success'
@@ -150,8 +132,8 @@ export const useMapStore = defineStore('map', () => {
     try {
       const response = await deletePlace(placeId)
       if (response === 'success') {
-        places.value = places.value.filter(place => place.id !== placeId)
-        ratings.value = ratings.value.filter(rating => rating.placeId !== placeId)
+        places.value = places.value.filter((place) => place.id !== placeId)
+        ratings.value = ratings.value.filter((rating) => rating.placeId !== placeId)
         if (currentPlace.value?.id === placeId) {
           removeCurrentPlace()
         }
@@ -167,35 +149,26 @@ export const useMapStore = defineStore('map', () => {
   const setCurrentPlace = (place: Place) => {
     currentPlace.value = place
     localStorage.setItem('currentPlaceId', place.id)
+    loadCurrentPlaceUserRating()
   }
+
   const removeCurrentPlace = () => {
     currentPlace.value = undefined
     localStorage.removeItem('currentPlaceId')
     currentPlaceUserRating.value = 0
   }
-  const logout = () => {
-    localStorage.removeItem('userId')
-    router.push({ name: 'login' })
-    resetStore()
-  }
-  const resetStore = () => {
-    places.value = []
-    ratings.value = []
-    user.value = undefined
-    currentPlace.value = undefined
-  }
-  const setOnlyUserPlaces = (value: Boolean) => {
+
+  const setOnlyUserPlaces = (value: boolean) => {
     onlyUserPlaces.value = value
     filterPlaces()
   }
 
   return {
     getPlaces,
+    getFilteredPlaces,
     getRatings,
-    getUser,
     getCurrentPlace,
     getOnlyUserPlaces,
-    getFilteredPlaces,
     getCurrentPlaceUserRating,
     fetchPlaces,
     fetchRatings,
@@ -205,7 +178,6 @@ export const useMapStore = defineStore('map', () => {
     editPlace,
     setCurrentPlace,
     removeCurrentPlace,
-    logout,
     setOnlyUserPlaces,
     setNewCurrentPlaceUserRating,
     removePlace,
