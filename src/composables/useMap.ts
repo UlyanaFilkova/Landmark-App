@@ -21,7 +21,7 @@ export function useMap() {
     if (map.value) {
       markers.value?.clearLayers()
       places.forEach((place) => {
-        const marker = L.marker(place.location).bindPopup(createPopUp(place))
+        const marker = L.marker(place.location).bindPopup((placecreatePopUp))
         markers.value?.addLayer(marker)
       })
     }

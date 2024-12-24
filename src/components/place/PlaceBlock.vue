@@ -74,6 +74,16 @@ const isAdmin = computed(() => {
   return userStore.getUser?.role === 1
 })
 
+const openPhotoViewer = (index: number) => {
+  photoViewerIndex.value = index
+  photoViewerVisible.value = true
+}
+
+const updateUserRating = (value: number) => {
+  userRating.value = value
+  mapStore.setNewCurrentPlaceUserRating(value)
+}
+
 watch(
   () => mapStore.getCurrentPlaceUserRating,
   (newValue) => {
@@ -94,16 +104,6 @@ watch(
   },
   { immediate: true },
 )
-
-const openPhotoViewer = (index: number) => {
-  photoViewerIndex.value = index
-  photoViewerVisible.value = true
-}
-
-const updateUserRating = (value: number) => {
-  userRating.value = value
-  mapStore.setNewCurrentPlaceUserRating(value)
-}
 </script>
 
 <style scoped>

@@ -64,9 +64,10 @@ import FileInput from '@/components/base/FileInput.vue'
 import { useMapStore } from '@/stores/mapStore'
 import { useRouter } from 'vue-router'
 import BaseTextarea from '@/components/base/BaseTextarea.vue'
-import { convertFilesToBase64, convertBase64ToFiles } from '@/utils/typeConversion.js'
+import { convertFilesToBase64, convertBase64ToFiles } from '@/utils/typeConversion.ts'
 
 const store = useMapStore()
+const router = useRouter()
 
 const initialFormData = {
   title: '',
@@ -95,28 +96,6 @@ const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
 const isEditing = computed(() => store.getCurrentPlace !== undefined)
-
-onMounted(() => {
-  if (store.getCurrentPlace !== undefined) {
-    const place = store.getCurrentPlace
-    formData.value.title = place.title
-    formData.value.description = place.description
-    formData.value.latitude = place.location[0]
-    formData.value.longitude = place.location[1]
-    formData.value.rating = store.getCurrentPlaceUserRating || 0
-    formData.value.photos = convertBase64ToFiles(place.photos || [])
-
-    originalFormData.value = { ...formData.value }
-    headerText.value = 'Edit place'
-    buttonText.value = 'Save place'
-  }
-})
-
-const updateRating = (value: number) => {
-  formData.value.rating = value
-}
-
-const router = useRouter()
 
 const isSubmitButtonDisabled = computed(() => {
   if (isEditing.value) {
@@ -157,6 +136,10 @@ const isFormValid = computed(() => {
   )
 })
 
+const updateRating = (value: number) => {
+  formData.value.rating = value
+}
+
 const handleSubmit = async () => {
   if (isFormValid.value) {
     try {
@@ -190,6 +173,22 @@ const handleSubmit = async () => {
 const clearForm = (): void => {
   formData.value = { ...initialFormData }
 }
+
+onMounted(() => {
+  if (store.getCurrentPlace !== undefined) {
+    const place = store.getCurrentPlace
+    formData.value.title = place.title
+    formData.value.description = place.description
+    formData.value.latitude = place.location[0]
+    formData.value.longitude = place.location[1]
+    formData.value.rating = store.getCurrentPlaceUserRating || 0
+    formData.value.photos = convertBase64ToFiles(place.photos || [])
+
+    originalFormData.value = { ...formData.value }
+    headerText.value = 'Edit place'
+    buttonText.value = 'Save place'
+  }
+})
 </script>
 
 <style scoped>

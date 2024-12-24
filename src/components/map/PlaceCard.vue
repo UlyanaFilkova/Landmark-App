@@ -18,6 +18,7 @@ import { defineProps, computed, onMounted, ref } from 'vue'
 import { Place } from '@/types/interfaces'
 import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
 import { useMapStore } from '@/stores/mapStore'
+const store = useMapStore()
 
 const props = defineProps<{
   place: Place
@@ -36,22 +37,22 @@ const imageSrc = computed(() => {
 
 const description = ref<HTMLElement | null>(null)
 
-// TODO ???
-onMounted(() => {
+const limitDescriptionLength = () => {
   if (description.value !== null) {
     const lines = 2
     const lineHeight = parseInt(window.getComputedStyle(description.value).lineHeight, 10)
     const maxHeight = lineHeight * lines
     description.value.style.maxHeight = `${maxHeight}px`
   }
-})
-
-// TODO
-const store = useMapStore()
+}
 
 const handlePlaceClick = () => {
   store.setCurrentPlace(props.place)
 }
+
+onMounted(() => {
+  limitDescriptionLength()
+})
 </script>
 
 <style scoped>

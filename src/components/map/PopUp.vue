@@ -16,6 +16,7 @@ import { useMapStore } from '@/stores/mapStore'
 import { Place } from '@/types/interfaces'
 import StarRating from '@/components/base/StarRating.vue'
 import { convertBase64ToFiles } from '@/utils/typeConversion.js'
+const store = useMapStore()
 
 const props = defineProps<{
   place: Place
@@ -25,8 +26,6 @@ const photos = convertBase64ToFiles(props.place.photos || [])
 
 const getFileUrl = (file: File) => URL.createObjectURL(file)
 
-const store = useMapStore()
-
 const handlePopupClick = () => {
   store.setCurrentPlace(props.place)
 }
@@ -34,6 +33,7 @@ const handlePopupClick = () => {
 
 <style>
 .popup-content {
+  min-width: 100px;
   text-align: center;
   display: flex;
   flex-direction: column;

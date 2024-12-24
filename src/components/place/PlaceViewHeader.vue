@@ -34,15 +34,17 @@ const handleBackClick = () => {
   mapStore.removeCurrentPlace()
 }
 
+const userHasEditPermission = computed(() => {
+  return userStore.getUser?.role === 1 || mapStore.getCurrentPlace?.authorId === userStore.getUser?.id
+})
+
 const handleDeleteClick = async () => {
   showModal.value = false
   await mapStore.removePlace(mapStore.getCurrentPlace!.id)
   mapStore.fetchPlaces()
   router.push({ name: 'generalMap' })
 }
-const userHasEditPermission = computed(() => {
-  return userStore.getUser?.role === 1 || mapStore.getCurrentPlace?.authorId === userStore.getUser?.id
-})
+
 </script>
 
 <style scoped>

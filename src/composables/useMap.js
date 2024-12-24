@@ -28,7 +28,7 @@ export function useMap() {
             (_a = markers.value) === null || _a === void 0 ? void 0 : _a.clearLayers();
             places.forEach((place) => {
                 var _a;
-                const marker = L.marker(place.location).bindPopup(createPopUp(place));
+                const marker = L.marker(place.location).bindPopup((placecreatePopUp));
                 (_a = markers.value) === null || _a === void 0 ? void 0 : _a.addLayer(marker);
             });
         }
