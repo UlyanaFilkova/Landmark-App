@@ -1,51 +1,73 @@
-import type { Place } from "@/types/interfaces";
-import { convertBase64ToFiles } from "@/utils/typeConversion.ts";
-import { useMapStore } from "@/stores/mapStore";
+import { createApp, h } from 'vue'
+import PopUp from '@/components/map/PopUp.vue'
+import type { Place } from '@/types/interfaces.ts'
 
-// если через конкатенацию строк - то событие onclick не срабатывает
-// если создавать компоненту PopUp, то ее внедрить получится только через CreateApp
 export function usePopup() {
   const createPopUp = (place: Place) => {
-    const store = useMapStore();
-    const photos = convertBase64ToFiles(place.photos || []);
-    const firstPhotoUrl =
-      photos.length > 0 ? URL.createObjectURL(photos[0]) : "";
+    const popupContainer = document.createElement('div')
 
-    const handlePopupClick = (place: Place) => {
-      store.setCurrentPlace(place);
-    };
+    createApp({
+      render() {
+        return h(PopUp, { place })
+      },
+    }).mount(popupContainer)
 
-    const popupContent = document.createElement("div");
-    popupContent.classList.add("popup-content");
-
-    const linkElement = document.createElement("a");
-    linkElement.classList.add("popup-title");
-    linkElement.href = "/place";
-    linkElement.target = "_blank";
-    linkElement.textContent = place.title;
-
-    linkElement.addEventListener("click", () => handlePopupClick(place));
-
-    if (firstPhotoUrl) {
-      const photoDiv = document.createElement("div");
-      const img = document.createElement("img");
-      img.classList.add("place-photo");
-      img.src = firstPhotoUrl;
-      img.onload = () => {
-        photoDiv.appendChild(img);
-        popupContent.appendChild(photoDiv);
-      };
-    }
-
-    popupContent.appendChild(linkElement);
-
-    return popupContent;
-  };
+    return popupContainer
+  }
 
   return {
     createPopUp,
-  };
+  }
 }
+
+// import type { Place } from "@/types/interfaces";
+// import { convertBase64ToFiles } from "@/utils/typeConversion.ts";
+// import { useMapStore } from "@/stores/mapStore";
+
+// // если через конкатенацию строк - то событие onclick не срабатывает
+// // если создавать компоненту PopUp, то ее внедрить получится только через CreateApp
+// export function usePopup() {
+//   const createPopUp = (place: Place) => {
+//     const store = useMapStore();
+//     const photos = convertBase64ToFiles(place.photos || []);
+//     const firstPhotoUrl =
+//       photos.length > 0 ? URL.createObjectURL(photos[0]) : "";
+
+//     const handlePopupClick = (place: Place) => {
+//       store.setCurrentPlace(place);
+//     };
+
+//     const popupContent = document.createElement("div");
+//     popupContent.classList.add("popup-content");
+
+//     const linkElement = document.createElement("a");
+//     linkElement.classList.add("popup-title");
+//     linkElement.href = "/place";
+//     linkElement.target = "_blank";
+//     linkElement.textContent = place.title;
+
+//     linkElement.addEventListener("click", () => handlePopupClick(place));
+
+//     if (firstPhotoUrl) {
+//       const photoDiv = document.createElement("div");
+//       const img = document.createElement("img");
+//       img.classList.add("place-photo");
+//       img.src = firstPhotoUrl;
+//       img.onload = () => {
+//         photoDiv.appendChild(img);
+//         popupContent.appendChild(photoDiv);
+//       };
+//     }
+
+//     popupContent.appendChild(linkElement);
+
+//     return popupContent;
+//   };
+
+//   return {
+//     createPopUp,
+//   };
+// }
 
 // import type { Place } from '@/types/interfaces'
 // import router from '@/router'

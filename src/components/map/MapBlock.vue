@@ -9,7 +9,7 @@
 import { useMap } from '@/composables/useMap.ts'
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 import { useMapStore } from '@/stores/mapStore.ts'
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 const store = useMapStore()
 
 const places = computed(() => store.getFilteredPlaces)
@@ -19,7 +19,7 @@ const handleCheckboxChange = () => {
   checkboxChecked.value = !checkboxChecked.value
   store.setOnlyUserPlaces(checkboxChecked.value)
 }
-console.log(places.value)
+
 const { mapContainer } = useMap(places)
 </script>
 

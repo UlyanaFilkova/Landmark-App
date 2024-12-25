@@ -1,4 +1,4 @@
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, createApp, h } from 'vue'
 import type { Ref } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -6,14 +6,24 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
 import type { Place } from '@/types/interfaces'
-import { usePopup } from '@/composables/usePopup'
+import PopUp from '@/components/map/PopUp.vue'
 
 export function useMap(places: Ref<Place[]>) {
-  const { createPopUp } = usePopup()
-
   const mapContainer = ref<HTMLDivElement | null>(null)
   const map = ref<L.Map>()
   const markers = ref<L.MarkerClusterGroup>()
+
+  const createPopUp = (place: Place) => {
+    const popupContainer = document.createElement('div')
+
+    createApp({
+      render() {
+        return h(PopUp, { place })
+      },
+    }).mount(popupContainer)
+
+    return popupContainer
+  }
 
   const addMarkers = (places: Place[]) => {
     if (map.value) {
@@ -69,6 +79,6 @@ export function useMap(places: Ref<Place[]>) {
   })
 
   return {
-    mapContainer
+    mapContainer,
   }
 }
