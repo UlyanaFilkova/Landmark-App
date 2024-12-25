@@ -1,7 +1,12 @@
 <template>
   <div class="top-places_container">
     <h1 class="top-places_h1">Top Places</h1>
-    <div v-for="(place, index) in displayedPlaces" :key="place.id" class="place-card-container" click>
+    <div
+      v-for="(place, index) in displayedPlaces"
+      :key="place.id"
+      class="place-card-container"
+      click
+    >
       <span class="place-number">{{ index + 1 }}</span>
       <PlaceCard :place="place" />
     </div>
@@ -11,9 +16,9 @@
 <script setup lang="ts">
 import { ref, watch, computed, onBeforeUnmount } from 'vue'
 import PlaceCard from '@/components/map/PlaceCard.vue'
-import { Place } from '@/types/interfaces'
-import { useMapStore } from '@/stores/store'
-import { calculateMetricRating } from '@/services/place'
+import type { Place } from '@/types/interfaces.ts'
+import { useMapStore } from '@/stores/mapStore.ts'
+import { calculateMetricRating } from '@/services/place.ts'
 
 const store = useMapStore()
 const places = computed(() => store.getPlaces)
@@ -48,7 +53,6 @@ const loadMorePlaces = () => {
 
   loading.value = false
 }
-
 
 // vue-virtual-scroll
 const onScroll = () => {

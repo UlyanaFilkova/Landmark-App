@@ -1,12 +1,24 @@
 <template>
-  <RouterLink to="/place" class="place-container" @click="handlePlaceClick">
+  <RouterLink
+    to="/place"
+    class="place-container"
+    @click="handlePlaceClick"
+  >
     <div class="place_img">
-      <img :src="imageSrc" alt="Place Image" />
+      <img
+        :src="imageSrc"
+        alt="Place Image"
+      />
     </div>
     <div class="place_info">
       <div class="place_text">
         <p class="place_title">{{ place.title }}</p>
-        <p class="place_description" ref="description">{{ place.description }}</p>
+        <p
+          class="place_description"
+          ref="description"
+        >
+          {{ place.description }}
+        </p>
       </div>
       <div class="place_rating">{{ place.rating }}</div>
     </div>
@@ -14,44 +26,48 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, onMounted, ref } from 'vue'
-import { Place } from '@/types/interfaces'
-import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
-import { useMapStore } from '@/stores/store'
+import { defineProps, computed, onMounted, ref } from "vue";
+import type { Place } from "@/types/interfaces.ts";
+import reservePlaceIconPath from "@/assets/img/place_icon.jpg";
+import { useMapStore } from "@/stores/mapStore.ts";
+const store = useMapStore();
 
 const props = defineProps<{
-  place: Place
-}>()
+  place: Place;
+}>();
 
 const imageSrc = computed(() => {
   if (props.place.photos && props.place.photos.length > 0) {
-    if (props.place.photos[0].startsWith('data:image')) {
-      return props.place.photos[0]
+    if (props.place.photos[0].startsWith("data:image")) {
+      return props.place.photos[0];
     }
-    return `data:image/jpeg;base64,${props.place.photos[0]}`
+    return `data:image/jpeg;base64,${props.place.photos[0]}`;
   } else {
-    return reservePlaceIconPath
+    return reservePlaceIconPath;
   }
-})
+});
 
-const description = ref<HTMLElement | null>(null)
+const description = ref<HTMLElement | null>(null);
 
-// TODO ???
-onMounted(() => {
+const limitDescriptionLength = () => {
   if (description.value !== null) {
-    const lines = 2
-    const lineHeight = parseInt(window.getComputedStyle(description.value).lineHeight, 10)
-    const maxHeight = lineHeight * lines
-    description.value.style.maxHeight = `${maxHeight}px`
+    const lines = 2;
+    const lineHeight = parseInt(
+      window.getComputedStyle(description.value).lineHeight,
+      10
+    );
+    const maxHeight = lineHeight * lines;
+    description.value.style.maxHeight = `${maxHeight}px`;
   }
-})
-
-// TODO
-const store = useMapStore()
+};
 
 const handlePlaceClick = () => {
-  store.setCurrentPlace(props.place)
-}
+  store.setCurrentPlace(props.place);
+};
+
+onMounted(() => {
+  limitDescriptionLength();
+});
 </script>
 
 <style scoped>
@@ -118,6 +134,8 @@ const handlePlaceClick = () => {
   display: -moz-box;
   -moz-line-clamp: 2;
   -moz-box-orient: vertical;
+
+  line-clamp: 2;
 }
 
 .place_rating {

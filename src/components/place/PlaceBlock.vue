@@ -55,13 +55,15 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import { Place } from '@/types/interfaces'
+import type { Place } from '@/types/interfaces.ts'
 import StarRating from '@/components/base/StarRating.vue'
 import LocationMap from '@/components/place/LocationMap.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
-import { useMapStore } from '@/stores/store'
+import { useMapStore } from '@/stores/mapStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
 
-const store = useMapStore()
+const mapStore = useMapStore()
+const userStore = useUserStore()
 
 const place = ref<Place | null>(null)
 const photoViewerVisible = ref(false)
@@ -69,11 +71,21 @@ const photoViewerIndex = ref(0)
 const userRating = ref<number>(0)
 
 const isAdmin = computed(() => {
-  return store.getUser?.role === 1
+  return userStore.getUser?.role === 1
 })
 
+const openPhotoViewer = (index: number) => {
+  photoViewerIndex.value = index
+  photoViewerVisible.value = true
+}
+
+const updateUserRating = (value: number) => {
+  userRating.value = value
+  mapStore.setNewCurrentPlaceUserRating(value)
+}
+
 watch(
-  () => store.getCurrentPlaceUserRating,
+  () => mapStore.getCurrentPlaceUserRating,
   (newValue) => {
     userRating.value = newValue || 0
   },
@@ -81,7 +93,7 @@ watch(
 )
 
 watch(
-  () => store.getCurrentPlace,
+  () => mapStore.getCurrentPlace,
   (newPlace) => {
     if (newPlace) {
       place.value = newPlace
@@ -92,16 +104,6 @@ watch(
   },
   { immediate: true },
 )
-
-const openPhotoViewer = (index: number) => {
-  photoViewerIndex.value = index
-  photoViewerVisible.value = true
-}
-
-const updateUserRating = (value: number) => {
-  userRating.value = value
-  store.setNewCurrentPlaceUserRating(value)
-}
 </script>
 
 <style scoped>

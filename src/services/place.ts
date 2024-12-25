@@ -9,8 +9,8 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-} from '@/services/firebase.config.js'
-import { Place, Rating } from '@/types/interfaces'
+} from '@/services/firebase.config'
+import type { Place, Rating } from '@/types/interfaces'
 
 const placesCollection = collection(firestore, 'places')
 const ratingsCollection = collection(firestore, 'ratings')

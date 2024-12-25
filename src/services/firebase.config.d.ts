@@ -1,4 +1,4 @@
-declare module '@/services/firebase.config.js' {
+declare module "@/services/firebase.config" {
   import {
     Firestore,
     CollectionReference,
@@ -6,57 +6,77 @@ declare module '@/services/firebase.config.js' {
     Query,
     QueryConstraint,
     QuerySnapshot,
-  } from 'firebase/firestore'
-  import { FirebaseStorage, StorageReference, UploadResult, UploadMetadata } from 'firebase/storage'
+  } from "firebase/firestore";
+  import {
+    FirebaseStorage,
+    StorageReference,
+    UploadResult,
+    UploadMetadata,
+  } from "firebase/storage";
 
-  const firestore: Firestore
-  const storage: FirebaseStorage
+  const firestore: Firestore;
+  const storage: FirebaseStorage;
 
-  function collection<T = DocumentData>(firestore: Firestore, path: string): CollectionReference<T>
+  function collection<T = DocumentData>(
+    firestore: Firestore,
+    path: string
+  ): CollectionReference<T>;
 
-  function addDoc<T = DocumentData>(ref: CollectionReference<T>, data: T): Promise<{ id: string }>
+  function addDoc<T = DocumentData>(
+    ref: CollectionReference<T>,
+    data: T
+  ): Promise<{ id: string }>;
 
   function query<T = DocumentData>(
     collectionRef: CollectionReference<T>,
     ...queryConstraints: QueryConstraint[]
-  ): Query<T>
+  ): Query<T>;
 
   function where(
     fieldPath: string,
     opStr:
-      | '<'
-      | '<='
-      | '=='
-      | '!='
-      | '>='
-      | '>'
-      | 'array-contains'
-      | 'in'
-      | 'array-contains-any'
-      | 'not-in',
-    value: unknown,
-  ): QueryConstraint
+      | "<"
+      | "<="
+      | "=="
+      | "!="
+      | ">="
+      | ">"
+      | "array-contains"
+      | "in"
+      | "array-contains-any"
+      | "not-in",
+    value: unknown
+  ): QueryConstraint;
 
-  function getDocs<T = DocumentData>(query: Query<T>): Promise<QuerySnapshot<T>>
+  function getDocs<T = DocumentData>(
+    query: Query<T>
+  ): Promise<QuerySnapshot<T>>;
 
-  function ref(storage: FirebaseStorage, path: string): StorageReference
+  function ref(storage: FirebaseStorage, path: string): StorageReference;
 
-  function doc<T = DocumentData>(firestore: Firestore, path: string): DocumentReference<T>
-  function getDoc<T = DocumentData>(docRef: DocumentReference<T>): Promise<DocumentSnapshot<T>>
+  function doc<T = DocumentData>(
+    firestore: Firestore,
+    path: string
+  ): DocumentReference<T>;
+  function getDoc<T = DocumentData>(
+    docRef: DocumentReference<T>
+  ): Promise<DocumentSnapshot<T>>;
   function updateDoc<T = DocumentData>(
     docRef: DocumentReference<T>,
-    data: Partial<T>,
-  ): Promise<void>
+    data: Partial<T>
+  ): Promise<void>;
 
-  function deleteDoc<T = DocumentData>(docRef: DocumentReference<T>): Promise<void>
+  function deleteDoc<T = DocumentData>(
+    docRef: DocumentReference<T>
+  ): Promise<void>;
 
   function uploadBytes(
     ref: StorageReference,
     data: Blob | Uint8Array | ArrayBuffer,
-    metadata?: UploadMetadata,
-  ): Promise<UploadResult>
+    metadata?: UploadMetadata
+  ): Promise<UploadResult>;
 
-  function getDownloadURL(ref: StorageReference): Promise<string>
+  function getDownloadURL(ref: StorageReference): Promise<string>;
 
   export {
     collection,
@@ -73,5 +93,6 @@ declare module '@/services/firebase.config.js' {
     ref,
     uploadBytes,
     getDownloadURL,
-  }
+    GeoPoint,
+  };
 }

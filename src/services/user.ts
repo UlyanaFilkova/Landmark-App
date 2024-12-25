@@ -7,8 +7,8 @@ import {
   getDocs,
   getDoc,
   doc,
-} from '@/services/firebase.config.js'
-import { FullUser } from '@/types/interfaces'
+} from '@/services/firebase.config'
+import type { FullUser } from '@/types/interfaces'
 
 const usersCollection = collection(firestore, 'users')
 

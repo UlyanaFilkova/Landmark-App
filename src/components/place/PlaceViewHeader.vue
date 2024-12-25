@@ -20,26 +20,31 @@ import { ref, computed } from 'vue'
 import BackButton from '@/components/base/BackButton.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import ConfirmModal from '@/components/base/ConfirmModal.vue'
-import { useMapStore } from '@/stores/store'
+import { useMapStore } from '@/stores/mapStore'
+import { useUserStore } from '@/stores/userStore'
 import { useRouter } from 'vue-router'
+
+const mapStore = useMapStore()
+const userStore = useUserStore()
 const router = useRouter()
-const store = useMapStore()
 
 const showModal = ref(false)
 
 const handleBackClick = () => {
-  store.removeCurrentPlace()
+  mapStore.removeCurrentPlace()
 }
+
+const userHasEditPermission = computed(() => {
+  return userStore.getUser?.role === 1 || mapStore.getCurrentPlace?.authorId === userStore.getUser?.id
+})
 
 const handleDeleteClick = async () => {
   showModal.value = false
-  await store.removePlace(store.getCurrentPlace!.id)
-  store.fetchPlaces()
+  await mapStore.removePlace(mapStore.getCurrentPlace!.id)
+  mapStore.fetchPlaces()
   router.push({ name: 'generalMap' })
 }
-const userHasEditPermission = computed(() => {
-  return store.getUser?.role === 1 || store.getCurrentPlace?.authorId === store.getUser?.id
-})
+
 </script>
 
 <style scoped>

@@ -58,7 +58,6 @@ watch(
   },
 )
 
-
 // TODO useMap Composable
 onMounted(() => {
   if (mapContainer.value) {

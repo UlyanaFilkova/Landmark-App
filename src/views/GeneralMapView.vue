@@ -13,19 +13,23 @@ import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
 import TopPlaces from '@/components/map/TopPlaces.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-import { useMapStore } from '@/stores/store'
+import { useMapStore } from '@/stores/mapStore'
 
 const store = useMapStore()
 const isLoading = ref(true)
 
-// TODO
-onBeforeMount(async () => {
+const loadData = async () => {
   isLoading.value = true
-
   if (store.getPlaces.length === 0) {
     await store.loadInitialData()
+  } else {
+    store.loadCurrentPlace()
   }
   isLoading.value = false
+}
+
+onBeforeMount(() => {
+  loadData()
 })
 </script>
 

@@ -30,14 +30,14 @@ const emit = defineEmits<{
 
 const internalRating = ref(props.modelValue)
 
-watch(() => props.modelValue, (newValue) => {
-  internalRating.value = newValue
-})
-
 const updateRating = (value: number) => {
   internalRating.value = value
   emit('update:modelValue', value)
 }
+
+watch(() => props.modelValue, (newValue) => {
+  internalRating.value = newValue
+})
 </script>
 
 <style scoped>

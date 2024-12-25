@@ -33,9 +33,9 @@ import { required, email, minLength } from '@vuelidate/validators'
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 
-import { checkUser } from '@/services/user'
+import { checkUser } from '@/services/user.ts'
 
-import { InputField } from '@/types/interfaces'
+import type { InputField } from '@/types/interfaces.ts'
 
 const router = useRouter()
 

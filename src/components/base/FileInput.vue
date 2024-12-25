@@ -41,6 +41,7 @@
       </ul>
     </div>
     <p v-if="fileTypeInvalid" class="error-message">{{ errorMessage }}</p>
+    <p v-if="fileSizeError" class="error-message">{{ fileSizeErrorMessage }}</p>
     <vue-easy-lightbox
       :visible="visible"
       :imgs="imageUrls"
@@ -113,6 +114,10 @@ const visible = ref(false)
 const currentImageIndex = ref(0)
 const imageUrls = computed(() => props.modelValue.map((file) => URL.createObjectURL(file)))
 
+const fileSizeError = ref(false)
+const fileSizeErrorMessage = ref('File size exceeds 1MB. Please upload a smaller file.')
+
+
 const getFileUrl = (file: File) => URL.createObjectURL(file)
 
 const showImage = (index: number) => {
@@ -128,8 +133,18 @@ const handleFileChange = (event: Event) => {
   const input = event.target as HTMLInputElement
   if (input.files && input.files.length > 0) {
     const newFiles = Array.from(input.files)
-    const updatedFiles = [...props.modelValue, ...newFiles]
-    emit('update:modelValue', updatedFiles)
+    const validFiles = newFiles.filter((file) => {
+      if (file.size > 1048576) {
+        fileSizeError.value = true
+        return false
+      }
+      return true
+    })
+    if (validFiles.length > 0) {
+      fileSizeError.value = false
+      const updatedFiles = [...props.modelValue, ...validFiles]
+      emit('update:modelValue', updatedFiles)
+    }
   }
 }
 
@@ -160,8 +175,18 @@ const handleDrop = (event: DragEvent) => {
   isDragOver.value = false
   if (!props.isDisabled && event.dataTransfer && event.dataTransfer.files.length > 0) {
     const newFiles = Array.from(event.dataTransfer.files)
-    const updatedFiles = [...props.modelValue, ...newFiles]
-    emit('update:modelValue', updatedFiles)
+    const validFiles = newFiles.filter((file) => {
+      if (file.size > 1048576) {
+        fileSizeError.value = true
+        return false
+      }
+      return true
+    })
+    if (validFiles.length > 0) {
+      fileSizeError.value = false
+      const updatedFiles = [...props.modelValue, ...validFiles]
+      emit('update:modelValue', updatedFiles)
+    }
   }
 }
 </script>
