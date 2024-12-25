@@ -1,21 +1,20 @@
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import type { Ref } from 'vue'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
 import type { Place } from '@/types/interfaces'
-import { useMapStore } from '@/stores/mapStore'
 import { usePopup } from '@/composables/usePopup'
 
-export function useMap() {
-  const store = useMapStore()
+export function useMap(places: Ref<Place[]>) {
   const { createPopUp } = usePopup()
 
   const mapContainer = ref<HTMLDivElement | null>(null)
   const map = ref<L.Map>()
   const markers = ref<L.MarkerClusterGroup>()
-  const checkboxChecked = ref<boolean>(false)
+  // const checkboxChecked = ref<boolean>(false)
 
   const addMarkers = (places: Place[]) => {
     if (map.value) {
@@ -27,7 +26,7 @@ export function useMap() {
     }
   }
 
-  const places = computed(() => store.getFilteredPlaces)
+  // const places = computed(() => store.getFilteredPlaces)
 
   const initializeMap = async () => {
     if (mapContainer.value) {
@@ -42,15 +41,15 @@ export function useMap() {
     }
   }
 
-  const handleCheckboxChange = () => {
-    checkboxChecked.value = !checkboxChecked.value
-    store.setOnlyUserPlaces(checkboxChecked.value)
-  }
+  // const handleCheckboxChange = () => {
+  //   checkboxChecked.value = !checkboxChecked.value
+  //   store.setOnlyUserPlaces(checkboxChecked.value)
+  // }
 
   watch(
-    () => store.getFilteredPlaces,
-    (newPlaces) => {
-      addMarkers(newPlaces)
+    () => places.value,
+    (newPlacesValue) => {
+      addMarkers(newPlacesValue)
       setTimeout(() => {
         if (map.value) {
           map.value.invalidateSize()
@@ -74,13 +73,11 @@ export function useMap() {
   })
 
   onMounted(async () => {
-    checkboxChecked.value = store.getOnlyUserPlaces
+    // checkboxChecked.value = store.getOnlyUserPlaces
     initializeMap()
   })
 
   return {
-    mapContainer,
-    checkboxChecked,
-    handleCheckboxChange,
+    mapContainer
   }
 }
