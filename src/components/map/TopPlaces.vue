@@ -1,6 +1,130 @@
 <template>
   <div class="top-places_container">
     <h1 class="top-places_h1">Top Places</h1>
+    <virtual-list
+      :data-key="'id'"
+      :data-sources="items"
+      :data-component="PlaceCardWrapper"
+      :estimate-size="10"
+      @tobottom="onScrollToBottom"
+      class="virtual-list-container"
+    >
+      <template #footer v-if="loading">
+        <div class="loading-spinner">Loading ...</div>
+      </template>
+    </virtual-list>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue'
+import VirtualList from 'vue3-virtual-scroll-list'
+import PlaceCard from '@/components/map/PlaceCard.vue'
+import { useMapStore } from '@/stores/mapStore.ts'
+import { calculateMetricRating } from '@/services/place.ts'
+import type { Place } from '@/types/interfaces.ts'
+
+const store = useMapStore()
+const places = computed(() => store.getPlaces)
+
+const PlaceCardWrapper = {
+  props: ['source'],
+  components: { PlaceCard },
+  template: '<PlaceCard :place="source" />',
+}
+
+const sortedPlaces = computed(() => {
+  return places.value
+    .map((place) => {
+      const metricRating = calculateMetricRating(place.rating, place.voices)
+      return { ...place, metricRating }
+    })
+    .sort((a, b) => b.metricRating - a.metricRating)
+})
+
+const pageSize = 10
+const items = ref<Place[]>([])
+let pageNum = 0
+const loading = ref(false)
+
+const loadMorePlaces = () => {
+  if (loading.value) return
+  loading.value = true
+
+  const start = pageNum * pageSize
+  const end = start + pageSize
+  const nextPlaces = sortedPlaces.value.slice(start, end)
+
+  if (nextPlaces.length > 0) {
+    items.value = items.value.concat(nextPlaces)
+    pageNum++
+  }
+  loading.value = false
+}
+
+const onScrollToBottom = () => {
+  loadMorePlaces()
+}
+
+watch(
+  places,
+  () => {
+    if (places.value.length > 0 && pageNum === 0) {
+      loadMorePlaces()
+    }
+  },
+  { immediate: true },
+)
+</script>
+
+<style scoped>
+.top-places_container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.virtual-list-container {
+  height: 500px;
+  overflow-y: auto;
+}
+
+.top-places_h1 {
+  margin: 24px 0 20px 0;
+  font-size: 28px;
+  text-align: center;
+  color: #3c3c3c;
+}
+
+.place-card-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: -10px;
+}
+
+.place-number {
+  font-size: 20px;
+  color: #555;
+  min-width: 40px;
+  text-align: center;
+}
+
+.loading-indicator {
+  text-align: center;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.loading-spinner {
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
+
+<!-- <template>
+  <div class="top-places_container">
+    <h1 class="top-places_h1">Top Places</h1>
     <div
       v-for="(place, index) in displayedPlaces"
       :key="place.id"
@@ -115,4 +239,4 @@ onBeforeUnmount(() => {
   font-size: 16px;
   margin-top: 20px;
 }
-</style>
+</style> -->

@@ -8,19 +8,19 @@
 <script setup lang="ts">
 import { useMap } from '@/composables/useMap.ts'
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
-import { useMapStore } from "@/stores/mapStore.ts";
+import { useMapStore } from '@/stores/mapStore.ts'
 import { ref, computed, onMounted, watch } from 'vue'
-const store = useMapStore();
+const store = useMapStore()
 
 const places = computed(() => store.getFilteredPlaces)
 const checkboxChecked = ref<boolean>(false)
 
 const handleCheckboxChange = () => {
-    checkboxChecked.value = !checkboxChecked.value
-    store.setOnlyUserPlaces(checkboxChecked.value)
-  }
+  checkboxChecked.value = !checkboxChecked.value
+  store.setOnlyUserPlaces(checkboxChecked.value)
+}
 console.log(places.value)
-const { mapContainer} = useMap(places)
+const { mapContainer } = useMap(places)
 </script>
 
 <style>
@@ -40,7 +40,7 @@ const { mapContainer} = useMap(places)
   align-items: center;
 }
 
-::v-deep .leaflet-popup-close-button span {
+.leaflet-popup-close-button span {
   display: block;
   font-size: 28px;
   width: 12px;
@@ -51,7 +51,7 @@ const { mapContainer} = useMap(places)
   color: #004085;
 }
 
-::v-deep .leaflet-popup-close-button:hover span {
+.leaflet-popup-close-button:hover span {
   display: block;
   color: #e00000;
 }

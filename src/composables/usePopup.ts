@@ -26,10 +26,6 @@ export function usePopup() {
 
     linkElement.addEventListener("click", () => handlePopupClick(place));
 
-    const starRating = document.createElement("div");
-    starRating.classList.add("star-rating");
-    starRating.setAttribute("data-rating", place.rating.toString());
-
     if (firstPhotoUrl) {
       const photoDiv = document.createElement("div");
       const img = document.createElement("img");
@@ -42,7 +38,6 @@ export function usePopup() {
     }
 
     popupContent.appendChild(linkElement);
-    popupContent.appendChild(starRating);
 
     return popupContent;
   };

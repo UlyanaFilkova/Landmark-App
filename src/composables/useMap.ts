@@ -14,7 +14,6 @@ export function useMap(places: Ref<Place[]>) {
   const mapContainer = ref<HTMLDivElement | null>(null)
   const map = ref<L.Map>()
   const markers = ref<L.MarkerClusterGroup>()
-  // const checkboxChecked = ref<boolean>(false)
 
   const addMarkers = (places: Place[]) => {
     if (map.value) {
@@ -25,8 +24,6 @@ export function useMap(places: Ref<Place[]>) {
       })
     }
   }
-
-  // const places = computed(() => store.getFilteredPlaces)
 
   const initializeMap = async () => {
     if (mapContainer.value) {
@@ -40,11 +37,6 @@ export function useMap(places: Ref<Place[]>) {
       addMarkers(places.value)
     }
   }
-
-  // const handleCheckboxChange = () => {
-  //   checkboxChecked.value = !checkboxChecked.value
-  //   store.setOnlyUserPlaces(checkboxChecked.value)
-  // }
 
   watch(
     () => places.value,
@@ -73,7 +65,6 @@ export function useMap(places: Ref<Place[]>) {
   })
 
   onMounted(async () => {
-    // checkboxChecked.value = store.getOnlyUserPlaces
     initializeMap()
   })
 
