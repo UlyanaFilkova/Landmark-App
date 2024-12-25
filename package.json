@@ -12,6 +12,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@morpheme/rating": "^1.0.0",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "eslint-plugin-vue": "^9.32.0",
@@ -22,7 +23,7 @@
     "vue": "^3.5.13",
     "vue-easy-lightbox": "^1.19.0",
     "vue-router": "^4.4.5",
-    "vue-star-rating": "^1.7.0",
+    "vue-star-rating": "^2.1.0",
     "vue-virtual-scroll-list": "^2.3.5",
     "vue3-virtual-scroll-list": "^0.2.1"
   },
