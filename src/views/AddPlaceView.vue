@@ -1,6 +1,6 @@
 <template>
   <div class="place-view">
-    <PlaceAddHeader class="place-header"/>
+    <PlaceAddHeader class="place-header" />
     <NewPlaceForm />
   </div>
 </template>
@@ -8,6 +8,24 @@
 <script setup lang="ts">
 import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
 import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
+import { ref, onBeforeMount } from 'vue'
+
+import { useMapStore } from '@/stores/mapStore'
+
+const store = useMapStore()
+const isLoading = ref(true)
+
+const loadData = async () => {
+  isLoading.value = true
+  if (store.getPlaces.length === 0) {
+    await store.loadInitialData()
+  }
+  isLoading.value = false
+}
+
+onBeforeMount(() => {
+  loadData()
+})
 </script>
 
 <style scoped>
@@ -17,8 +35,8 @@ import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
 }
 
 @media (max-width: 576px) {
-.place-header{
-  margin-bottom: 10px;
-}
+  .place-header {
+    margin-bottom: 10px;
+  }
 }
 </style>

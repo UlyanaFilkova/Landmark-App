@@ -28,9 +28,7 @@
 
     <div class="place-details-group">
       <h3>Location</h3>
-      <!-- <div class="map-container"> -->
       <LocationMap :latitude="place.location[0]" :longitude="place.location[1]" />
-      <!-- </div> -->
     </div>
 
     <div class="place-details-group">

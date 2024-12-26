@@ -32,15 +32,9 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-.place-container{
-  
+.place-container {
+  width: min(762px, 95%);
 }
-
-
-  .place-container {
-    width: min(762px, 95%);
-  }
-
 
 @media (max-width: 576px) {
   .place-container {
