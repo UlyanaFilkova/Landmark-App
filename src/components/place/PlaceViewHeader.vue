@@ -49,7 +49,6 @@ const handleDeleteClick = async () => {
 
 <style scoped>
 .place-header {
-  max-width: 762px;
   width: 100%;
   margin: 0 auto;
   display: flex;

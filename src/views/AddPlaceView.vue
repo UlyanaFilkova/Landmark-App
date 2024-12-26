@@ -1,6 +1,6 @@
 <template>
   <div class="place-view">
-    <PlaceAddHeader />
+    <PlaceAddHeader class="place-header"/>
     <NewPlaceForm />
   </div>
 </template>
@@ -14,5 +14,11 @@ import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
 .place-view {
   width: 90%;
   max-width: 600px;
+}
+
+@media (max-width: 576px) {
+.place-header{
+  margin-bottom: 10px;
+}
 }
 </style>

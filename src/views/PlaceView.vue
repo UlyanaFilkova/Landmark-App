@@ -1,7 +1,9 @@
 <template>
-  <BaseLoader v-if="isLoading" />
-  <PlaceViewHeader />
-  <PlaceBlock />
+  <div class="place-container">
+    <BaseLoader v-if="isLoading" />
+    <PlaceViewHeader />
+    <PlaceBlock />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +32,22 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
+.place-container{
+  
+}
+
+
+  .place-container {
+    width: min(762px, 95%);
+  }
+
+
+@media (max-width: 576px) {
+  .place-container {
+    margin: 0 15px;
+  }
+}
+
 .place-header {
   padding: 15px 20px 0 20px;
 }

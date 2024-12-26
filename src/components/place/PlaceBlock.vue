@@ -28,9 +28,9 @@
 
     <div class="place-details-group">
       <h3>Location</h3>
-      <div class="map-container">
-        <LocationMap :latitude="place.location[0]" :longitude="place.location[1]" />
-      </div>
+      <!-- <div class="map-container"> -->
+      <LocationMap :latitude="place.location[0]" :longitude="place.location[1]" />
+      <!-- </div> -->
     </div>
 
     <div class="place-details-group">
@@ -44,6 +44,7 @@
           class="photo-thumbnail"
         />
       </div>
+      <div v-if="place.photos.length === 0">No photos</div>
     </div>
 
     <vue-easy-lightbox
@@ -128,6 +129,14 @@ watch(
   display: flex;
   gap: 20%;
 }
+
+@media (max-width: 576px) {
+  .ratings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
 .rating-voices {
   font-size: 14px;
   margin: 5px 0 0 0;
@@ -139,10 +148,6 @@ h3 {
 
 .place-details-group {
   margin-bottom: 30px;
-}
-
-.map-container {
-  width: 100%;
 }
 
 .photo-grid {
