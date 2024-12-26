@@ -1,6 +1,6 @@
 <template>
   <div class="place-view">
-    <PlaceAddHeader/>
+    <PlaceAddHeader />
     <NewPlaceForm />
   </div>
 </template>

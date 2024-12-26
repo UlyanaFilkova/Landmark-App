@@ -1,15 +1,28 @@
 <template>
-  <div class="only-my-places" @click="handleCheckboxChange">
-    <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+  <div class="map-content">
+    <div class="only-my-places" @click="handleCheckboxChange">
+      <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+    </div>
+    <div ref="mapContainer" id="map" class="map-container"></div>
   </div>
-  <div ref="mapContainer" id="map" class="map-container"></div>
 </template>
 
 <script setup lang="ts">
 import { useMap } from '@/composables/useMap.ts'
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
+import { useMapStore } from '@/stores/mapStore.ts'
+import { ref, computed } from 'vue'
+const store = useMapStore()
 
-const { mapContainer, checkboxChecked, handleCheckboxChange } = useMap()
+const places = computed(() => store.getFilteredPlaces)
+const checkboxChecked = ref<boolean>(false)
+
+const handleCheckboxChange = () => {
+  checkboxChecked.value = !checkboxChecked.value
+  store.setOnlyUserPlaces(checkboxChecked.value)
+}
+
+const { mapContainer } = useMap(places)
 </script>
 
 <style>
@@ -27,9 +40,10 @@ const { mapContainer, checkboxChecked, handleCheckboxChange } = useMap()
   gap: 10px;
   margin: 10px 0 15px 0;
   align-items: center;
+  justify-content: center;
 }
 
-::v-deep .leaflet-popup-close-button span {
+.leaflet-popup-close-button span {
   display: block;
   font-size: 28px;
   width: 12px;
@@ -40,7 +54,7 @@ const { mapContainer, checkboxChecked, handleCheckboxChange } = useMap()
   color: #004085;
 }
 
-::v-deep .leaflet-popup-close-button:hover span {
+.leaflet-popup-close-button:hover span {
   display: block;
   color: #e00000;
 }

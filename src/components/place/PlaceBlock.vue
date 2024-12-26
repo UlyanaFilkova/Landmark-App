@@ -9,7 +9,7 @@
     <div class="ratings place-details-group">
       <div class="average-rating">
         <h3>Rating</h3>
-        <StarRating :rating="place.rating" readonly />
+        <StarRating :rating="place.rating" readonly :starSize="30" textClass="big" />
         <span class="rating-voices">{{ place.voices }} voices</span>
       </div>
 
@@ -19,7 +19,9 @@
           :rating="userRating"
           :readonly="false"
           @update:rating="updateUserRating"
-          class="star-rating"
+          :increment="0.5"
+          :starSize="30"
+          textClass="big"
         />
       </div>
     </div>

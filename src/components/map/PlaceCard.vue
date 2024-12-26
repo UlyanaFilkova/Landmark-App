@@ -1,22 +1,12 @@
 <template>
-  <RouterLink
-    to="/place"
-    class="place-container"
-    @click="handlePlaceClick"
-  >
+  <RouterLink to="/place" target="_blank" class="place-container" @click="handlePlaceClick">
     <div class="place_img">
-      <img
-        :src="imageSrc"
-        alt="Place Image"
-      />
+      <img :src="imageSrc" alt="Place Image" />
     </div>
     <div class="place_info">
       <div class="place_text">
         <p class="place_title">{{ place.title }}</p>
-        <p
-          class="place_description"
-          ref="description"
-        >
+        <p class="place_description" ref="description">
           {{ place.description }}
         </p>
       </div>
@@ -26,48 +16,46 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, onMounted, ref } from "vue";
-import type { Place } from "@/types/interfaces.ts";
-import reservePlaceIconPath from "@/assets/img/place_icon.jpg";
-import { useMapStore } from "@/stores/mapStore.ts";
-const store = useMapStore();
+import { defineProps, computed, onMounted, ref } from 'vue'
+import type { Place } from '@/types/interfaces.ts'
+import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
+import { useMapStore } from '@/stores/mapStore.ts'
+const store = useMapStore()
 
 const props = defineProps<{
-  place: Place;
-}>();
+  place: Place
+}>()
 
 const imageSrc = computed(() => {
   if (props.place.photos && props.place.photos.length > 0) {
-    if (props.place.photos[0].startsWith("data:image")) {
-      return props.place.photos[0];
+    if (props.place.photos[0].startsWith('data:image')) {
+      return props.place.photos[0]
     }
-    return `data:image/jpeg;base64,${props.place.photos[0]}`;
+    return `data:image/jpeg;base64,${props.place.photos[0]}`
   } else {
-    return reservePlaceIconPath;
+    return reservePlaceIconPath
   }
-});
+})
 
-const description = ref<HTMLElement | null>(null);
+const description = ref<HTMLElement | null>(null)
 
 const limitDescriptionLength = () => {
   if (description.value !== null) {
-    const lines = 2;
-    const lineHeight = parseInt(
-      window.getComputedStyle(description.value).lineHeight,
-      10
-    );
-    const maxHeight = lineHeight * lines;
-    description.value.style.maxHeight = `${maxHeight}px`;
+    const lines = 2
+    const lineHeight = parseInt(window.getComputedStyle(description.value).lineHeight, 10)
+    const maxHeight = lineHeight * lines
+    description.value.style.maxHeight = `${maxHeight}px`
+    description.value.style.maxWidth = `${100}%`
   }
-};
+}
 
 const handlePlaceClick = () => {
-  store.setCurrentPlace(props.place);
-};
+  store.setCurrentPlace(props.place)
+}
 
 onMounted(() => {
-  limitDescriptionLength();
-});
+  limitDescriptionLength()
+})
 </script>
 
 <style scoped>
@@ -100,9 +88,9 @@ onMounted(() => {
 
 .place_info {
   flex-grow: 1;
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
   gap: 15px;
   padding: 5px 0 10px 0;
   height: 100%;
@@ -113,6 +101,8 @@ onMounted(() => {
   flex-direction: column;
   gap: 10px;
   height: 100%;
+  max-width: 100%;
+  align-items: start;
 }
 
 .place_title {
@@ -120,7 +110,7 @@ onMounted(() => {
 }
 
 .place_description {
-  width: 100%;
+  max-width: 100%;
   font-size: 15px;
   line-height: 1.2;
   color: var(--color-text-second);
@@ -136,9 +126,13 @@ onMounted(() => {
   -moz-box-orient: vertical;
 
   line-clamp: 2;
+
+  max-width: 100%; /* чтобы текст обрезался в пределах контейнера */
+  white-space: normal;
 }
 
 .place_rating {
   font-size: 20px;
+  flex-shrink: 0;
 }
 </style>

@@ -1,9 +1,6 @@
 {
   "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -11,6 +8,6 @@
       "@/services/firebase.config": ["src/services/firebase.config"]
     },
     "typeRoots": ["node_modules/@types", "src/types"],
-    "moduleResolution": "node",
+    "moduleResolution": "node"
   }
 }

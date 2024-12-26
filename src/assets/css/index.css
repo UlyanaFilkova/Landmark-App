@@ -44,7 +44,6 @@ select {
 }
 
 .wrapper {
-  max-width: 762px;
   min-height: 100vh;
   margin: 0 auto;
 

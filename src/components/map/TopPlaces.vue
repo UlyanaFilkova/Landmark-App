@@ -1,27 +1,38 @@
 <template>
   <div class="top-places_container">
-    <h1 class="top-places_h1">Top Places</h1>
-    <div
-      v-for="(place, index) in displayedPlaces"
-      :key="place.id"
-      class="place-card-container"
-      click
+    <!-- <h1 class="top-places_h1">Top Places</h1> -->
+    <div class="top-places-subtitle">Rating</div>
+    <virtual-list
+      :data-key="'id'"
+      :data-sources="items"
+      :data-component="PlaceCardWrapper"
+      :estimate-size="10"
+      @tobottom="onScrollToBottom"
+      class="virtual-list-container"
     >
-      <span class="place-number">{{ index + 1 }}</span>
-      <PlaceCard :place="place" />
-    </div>
+      <template #footer v-if="loading">
+        <div class="loading-spinner">Loading ...</div>
+      </template>
+    </virtual-list>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onBeforeUnmount } from 'vue'
+import { ref, computed, watch } from 'vue'
+import VirtualList from 'vue3-virtual-scroll-list'
 import PlaceCard from '@/components/map/PlaceCard.vue'
-import type { Place } from '@/types/interfaces.ts'
 import { useMapStore } from '@/stores/mapStore.ts'
 import { calculateMetricRating } from '@/services/place.ts'
+import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
 const places = computed(() => store.getPlaces)
+
+const PlaceCardWrapper = {
+  props: ['source'],
+  components: { PlaceCard },
+  template: '<PlaceCard :place="source" />',
+}
 
 const sortedPlaces = computed(() => {
   return places.value
@@ -33,64 +44,71 @@ const sortedPlaces = computed(() => {
 })
 
 const pageSize = 10
+const items = ref<Place[]>([])
+let pageNum = 0
 const loading = ref(false)
-const currentPage = ref(1)
-const displayedPlaces = ref<Place[]>([])
 
 const loadMorePlaces = () => {
   if (loading.value) return
-
   loading.value = true
-  const start = (currentPage.value - 1) * pageSize
-  const end = currentPage.value * pageSize
 
+  const start = pageNum * pageSize
+  const end = start + pageSize
   const nextPlaces = sortedPlaces.value.slice(start, end)
 
   if (nextPlaces.length > 0) {
-    displayedPlaces.value.push(...nextPlaces)
-    currentPage.value++
+    items.value = items.value.concat(nextPlaces)
+    pageNum++
   }
-
   loading.value = false
 }
 
-// vue-virtual-scroll
-const onScroll = () => {
-  const scrollPosition = window.scrollY + window.innerHeight
-  const pageHeight = document.documentElement.scrollHeight
-
-  const nearBottom = pageHeight - scrollPosition <= 100
-  if (nearBottom && !loading.value && displayedPlaces.value.length <= sortedPlaces.value.length) {
-    loadMorePlaces()
-  }
+const onScrollToBottom = () => {
+  loadMorePlaces()
 }
 
 watch(
   places,
   () => {
-    if (places.value.length > 0 && displayedPlaces.value.length === 0) {
+    if (places.value.length > 0 && pageNum === 0) {
       loadMorePlaces()
     }
   },
   { immediate: true },
 )
-
-window.addEventListener('scroll', onScroll)
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', onScroll)
-})
 </script>
 
 <style scoped>
 .top-places_container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+}
+
+.virtual-list-container {
+  height: 70vh;
+  overflow-y: auto;
+}
+
+.virtual-list-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.virtual-list-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-forth);
+  border-radius: 4px;
+}
+
+.virtual-list-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-forth-hover);
+}
+
+.virtual-list-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-forth) transparent;
 }
 
 .top-places_h1 {
-  margin: 24px 0 20px 0;
   font-size: 28px;
   text-align: center;
   color: #3c3c3c;
@@ -115,4 +133,16 @@ onBeforeUnmount(() => {
   font-size: 16px;
   margin-top: 20px;
 }
+
+.loading-spinner {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.top-places-subtitle {
+  text-align: end;
+  margin: 20px 10px 5px 0;
+  color: #555;
+}
+
 </style>

@@ -23,4 +23,13 @@ export default [
       '@typescript-eslint': pluginTypeScript,
     },
   },
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+        extraFileExtensions: ['.vue'],
+      },
+    },
+  },
 ]

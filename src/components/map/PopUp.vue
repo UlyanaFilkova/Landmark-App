@@ -1,8 +1,8 @@
 <template>
   <div class="popup-content">
-    <RouterLink to="/place" target="_blank" class="popup-title" @click="handlePopupClick">{{
+    <a href="/place" target="_blank" class="popup-title" @click="handlePopupClick">{{
       props.place.title
-    }}</RouterLink>
+    }}</a>
     <StarRating :rating="place.rating" readonly />
     <div v-if="photos.length > 0">
       <img :src="getFileUrl(photos[0])" class="place-photo" />
