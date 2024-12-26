@@ -1,8 +1,10 @@
 <template>
-  <div class="only-my-places" @click="handleCheckboxChange">
-    <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+  <div class="map-content">
+    <div class="only-my-places" @click="handleCheckboxChange">
+      <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+    </div>
+    <div ref="mapContainer" id="map" class="map-container"></div>
   </div>
-  <div ref="mapContainer" id="map" class="map-container"></div>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +40,7 @@ const { mapContainer } = useMap(places)
   gap: 10px;
   margin: 10px 0 15px 0;
   align-items: center;
+  justify-content: center;
 }
 
 .leaflet-popup-close-button span {

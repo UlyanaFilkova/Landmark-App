@@ -45,6 +45,7 @@ const limitDescriptionLength = () => {
     const lineHeight = parseInt(window.getComputedStyle(description.value).lineHeight, 10)
     const maxHeight = lineHeight * lines
     description.value.style.maxHeight = `${maxHeight}px`
+    description.value.style.maxWidth = `${100}%`
   }
 }
 
@@ -87,9 +88,9 @@ onMounted(() => {
 
 .place_info {
   flex-grow: 1;
+  max-width: 100%;
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
   gap: 15px;
   padding: 5px 0 10px 0;
   height: 100%;
@@ -100,6 +101,8 @@ onMounted(() => {
   flex-direction: column;
   gap: 10px;
   height: 100%;
+  max-width: 100%;
+  align-items: start;
 }
 
 .place_title {
@@ -107,7 +110,7 @@ onMounted(() => {
 }
 
 .place_description {
-  width: 100%;
+  max-width: 100%;
   font-size: 15px;
   line-height: 1.2;
   color: var(--color-text-second);
@@ -123,9 +126,13 @@ onMounted(() => {
   -moz-box-orient: vertical;
 
   line-clamp: 2;
+
+  max-width: 100%; /* чтобы текст обрезался в пределах контейнера */
+  white-space: normal;
 }
 
 .place_rating {
   font-size: 20px;
+  flex-shrink: 0;
 }
 </style>

@@ -160,4 +160,8 @@ h1 {
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+.medium-button {
+  margin-bottom: 10px;
+}
 </style>

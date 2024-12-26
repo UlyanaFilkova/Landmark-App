@@ -1,6 +1,6 @@
 <template>
   <div class="top-places_container">
-    <h1 class="top-places_h1">Top Places</h1>
+    <!-- <h1 class="top-places_h1">Top Places</h1> -->
     <div class="top-places-subtitle">Rating</div>
     <virtual-list
       :data-key="'id'"
@@ -82,11 +82,10 @@ watch(
 .top-places_container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .virtual-list-container {
-  height: 500px;
+  height: 70vh;
   overflow-y: auto;
 }
 
@@ -110,7 +109,6 @@ watch(
 }
 
 .top-places_h1 {
-  margin: 24px 0 0 0;
   font-size: 28px;
   text-align: center;
   color: #3c3c3c;
@@ -143,6 +141,8 @@ watch(
 
 .top-places-subtitle {
   text-align: end;
-  margin: -10px 20px 0 0;
+  margin: 20px 10px 5px 0;
+  color: #555;
 }
+
 </style>
