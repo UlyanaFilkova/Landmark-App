@@ -8,7 +8,7 @@ import 'leaflet.markercluster'
 import type { Place } from '@/types/interfaces'
 import PopUp from '@/components/map/PopUp.vue'
 
-export function useMap(places: Ref<Place[]>) {
+export function usePlaceMap(location, readonly: Boolean, emits: (event: "update:latitude" | "update:longitude")) {
   const mapContainer = ref<HTMLDivElement | null>(null)
   const map = ref<L.Map>()
   const markers = ref<L.MarkerClusterGroup>() 

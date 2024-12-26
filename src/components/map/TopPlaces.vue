@@ -1,6 +1,5 @@
 <template>
   <div class="top-places_container">
-    <!-- <h1 class="top-places_h1">Top Places</h1> -->
     <div class="top-places-subtitle">Rating</div>
     <virtual-list
       :data-key="'id'"
@@ -49,8 +48,8 @@ let pageNum = 0
 const loading = ref(false)
 
 const loadMorePlaces = () => {
-  if (loading.value) return
-  loading.value = true
+  // if (loading.value) return
+  // loading.value = true
 
   const start = pageNum * pageSize
   const end = start + pageSize
@@ -60,10 +59,11 @@ const loadMorePlaces = () => {
     items.value = items.value.concat(nextPlaces)
     pageNum++
   }
-  loading.value = false
+  // loading.value = false
 }
 
 const onScrollToBottom = () => {
+  console.log('scrolled to bottom')
   loadMorePlaces()
 }
 

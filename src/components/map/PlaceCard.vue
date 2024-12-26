@@ -126,9 +126,6 @@ onMounted(() => {
   -moz-box-orient: vertical;
 
   line-clamp: 2;
-
-  max-width: 100%; /* чтобы текст обрезался в пределах контейнера */
-  white-space: normal;
 }
 
 .place_rating {

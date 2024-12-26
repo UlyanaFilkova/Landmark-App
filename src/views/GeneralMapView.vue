@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <BaseLoader v-if="isLoading" />
-    <MapHeader class="map-header"/>
+    <MapHeader class="map-header" />
     <div class="content">
       <MapBlock />
       <h2 class="map-header__h2">Top Places</h2>
@@ -62,14 +62,14 @@ onBeforeMount(() => {
   }
 }
 
+.map-header__h2 {
+  display: none;
+}
+
 .content {
   width: 100%;
   display: flex;
   gap: 4%;
-}
-
-.map-header__h2 {
-  display: none;
 }
 
 .content > * {
@@ -93,12 +93,9 @@ onBeforeMount(() => {
     line-height: normal;
     margin-top: 30px;
   }
-  .content > *,
-  .map-header {
+  .content > * {
     width: 95%;
     margin: 10px auto 15px;
   }
 }
-
-
 </style>
