@@ -10,16 +10,14 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 
-const props = defineProps<{
-  modelValue: string,
-  placeholder: string,
-  type?: string,
+defineProps<{
+  modelValue: string
+  placeholder: string
+  type?: string
   errorMessage?: string
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
+const emit = defineEmits(['update:modelValue'])
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement

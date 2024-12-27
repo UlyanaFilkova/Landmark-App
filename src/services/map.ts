@@ -1,4 +1,4 @@
-import { firestore, collection, addDoc, query, where, getDocs } from '@/firebase/firebase.config'
+import { firestore, collection, getDocs } from '@/firebase/firebase.config'
 import type { Place, Rating } from '@/types/interfaces'
 
 const placesCollection = collection(firestore, 'places')

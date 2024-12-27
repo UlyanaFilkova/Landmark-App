@@ -27,11 +27,14 @@
 <script lang="ts" setup>
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
+import { required, email, minLength, sameAs } from '@vuelidate/validators'
+
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+
 import { registerUser, checkUsernameExists } from '@/services/user.ts'
+
 import type { InputField } from '@/types/interfaces.ts'
 
 const inputFields = reactive<InputField[]>([
@@ -68,12 +71,6 @@ const errorMessage = ref<string>('')
 const requestIsProcessing = ref<boolean>(false)
 const router = useRouter()
 
-const validationFields = computed(() => ({
-  username: inputFields[0].model,
-  password: inputFields[1].model,
-  repeatPassword: inputFields[2].model,
-}))
-
 const rules = {
   validationFields: {
     username: { required, email },
@@ -84,6 +81,12 @@ const rules = {
     },
   },
 }
+
+const validationFields = computed(() => ({
+  username: inputFields[0].model,
+  password: inputFields[1].model,
+  repeatPassword: inputFields[2].model,
+}))
 
 const v$ = useVuelidate(rules, {
   validationFields,

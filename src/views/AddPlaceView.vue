@@ -6,9 +6,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onBeforeMount } from 'vue'
+
 import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
 import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
-import { ref, onBeforeMount } from 'vue'
 
 import { useMapStore } from '@/stores/mapStore'
 

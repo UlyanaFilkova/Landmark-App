@@ -58,16 +58,19 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import type { Place } from '@/types/interfaces.ts'
+import { useRouter } from 'vue-router'
+
 import LocationInput from '@/components/place/LocationInput.vue'
 import StarRating from '@/components/base/StarRating.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FileInput from '@/components/base/FileInput.vue'
-import { useMapStore } from '@/stores/mapStore.ts'
-import { useRouter } from 'vue-router'
 import BaseTextarea from '@/components/base/BaseTextarea.vue'
+
+import { useMapStore } from '@/stores/mapStore.ts'
 import { convertFilesToBase64, convertBase64ToFiles } from '@/utils/typeConversion.ts'
+
+import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
 const router = useRouter()
@@ -109,21 +112,13 @@ const isSubmitButtonDisabled = computed(() => {
 })
 
 const isFormDataChanged = computed(() => {
-  const isFilesEqual = (files1: File[], files2: File[]) => {
-    if (files1.length !== files2.length) return false
-    for (let i = 0; i < files1.length; i++) {
-      if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false
-    }
-    return true
-  }
-
   return (
     formData.value.title !== originalFormData.value.title ||
     formData.value.description !== originalFormData.value.description ||
     formData.value.latitude !== originalFormData.value.latitude ||
     formData.value.longitude !== originalFormData.value.longitude ||
     formData.value.rating !== originalFormData.value.rating ||
-    !isFilesEqual(formData.value.photos, originalFormData.value.photos)
+    !areFilesEqual(formData.value.photos, originalFormData.value.photos)
   )
 })
 
@@ -138,6 +133,14 @@ const isFormValid = computed(() => {
     !fileTypeInvalid.value
   )
 })
+
+const areFilesEqual = (files1: File[], files2: File[]) => {
+  if (files1.length !== files2.length) return false
+  for (let i = 0; i < files1.length; i++) {
+    if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false
+  }
+  return true
+}
 
 const updateRating = (value: number) => {
   formData.value.rating = value
@@ -177,7 +180,7 @@ const clearForm = (): void => {
   formData.value = { ...initialFormData }
 }
 
-onMounted(() => {
+const loadCurrentPlace = () => {
   if (store.getCurrentPlace !== undefined) {
     const place = store.getCurrentPlace
     formData.value.title = place.title
@@ -191,6 +194,10 @@ onMounted(() => {
     headerText.value = 'Edit place'
     buttonText.value = 'Save place'
   }
+}
+
+onMounted(() => {
+  loadCurrentPlace()
 })
 </script>
 

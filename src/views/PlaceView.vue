@@ -8,10 +8,11 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
+import { useMapStore } from '@/stores/mapStore'
+
 import PlaceViewHeader from '@/components/place/PlaceViewHeader.vue'
 import PlaceBlock from '@/components/place/PlaceBlock.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-import { useMapStore } from '@/stores/mapStore'
 
 const store = useMapStore()
 const isLoading = ref(true)

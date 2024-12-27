@@ -18,7 +18,7 @@ export const useMapStore = defineStore('place', () => {
 
   const userStore = useUserStore()
   const userId = computed(() => userStore.getUser?.id)
-
+  
   const getPlaces = computed(() => places.value)
   const getFilteredPlaces = computed(() => filteredPlaces.value)
   const getRatings = computed(() => ratings.value)

@@ -3,20 +3,17 @@
     <DoneIcon v-if="checked" />
   </div>
 </template>
-<script>
+
+<script setup lang="ts">
+import { defineProps } from 'vue'
 import DoneIcon from '@/components/icons/DoneIcon.vue'
 
-export default {
-  components: {
-    DoneIcon,
+defineProps({
+  checked: {
+    type: Boolean,
+    default: false,
   },
-  props: {
-    checked: {
-      type: Boolean,
-      default: false,
-    },
-  },
-}
+})
 </script>
 
 <style scoped>

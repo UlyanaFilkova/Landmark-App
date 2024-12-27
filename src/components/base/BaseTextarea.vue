@@ -11,11 +11,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue'
+
+defineProps({
     modelValue: {
-      type: [String, Boolean],
+      type: [String],
       default: '',
     },
     label: {
@@ -32,13 +33,11 @@ export default {
       type: Number,
       default: 1000,
     },
-  },
-  emits: ['update:modelValue'],
-  methods: {
-    handleInput(event) {
-      this.$emit('update:modelValue', event.target.value)
-    },
-  },
+})
+const emit = defineEmits(['update:modelValue'])
+
+const handleInput = (event: Event) => {
+  emit('update:modelValue', (event.target as HTMLInputElement).value)
 }
 </script>
 

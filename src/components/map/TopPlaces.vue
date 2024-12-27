@@ -19,7 +19,9 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import VirtualList from 'vue3-virtual-scroll-list'
+
 import PlaceCard from '@/components/map/PlaceCard.vue'
+
 import { useMapStore } from '@/stores/mapStore.ts'
 import { calculateMetricRating } from '@/services/place.ts'
 import type { Place } from '@/types/interfaces.ts'
@@ -33,6 +35,11 @@ const PlaceCardWrapper = {
   template: '<PlaceCard :place="source" />',
 }
 
+const pageSize = 10
+const items = ref<Place[]>([])
+let pageNum = 0
+const loading = ref(false)
+
 const sortedPlaces = computed(() => {
   return places.value
     .map((place) => {
@@ -42,14 +49,17 @@ const sortedPlaces = computed(() => {
     .sort((a, b) => b.metricRating - a.metricRating)
 })
 
-const pageSize = 10
-const items = ref<Place[]>([])
-let pageNum = 0
-const loading = ref(false)
+const updateListHeight = () => {
+  const scrollList = document.querySelector('virtual-list-container') as HTMLDivElement
+  const windowHeight = window.innerHeight
+  if (scrollList) {
+    scrollList.style.height = `${windowHeight * 0.7}px`
+  }
+}
 
 const loadMorePlaces = () => {
-  // if (loading.value) return
-  // loading.value = true
+  if (loading.value) return
+  loading.value = true
 
   const start = pageNum * pageSize
   const end = start + pageSize
@@ -59,11 +69,10 @@ const loadMorePlaces = () => {
     items.value = items.value.concat(nextPlaces)
     pageNum++
   }
-  // loading.value = false
+  loading.value = false
 }
 
 const onScrollToBottom = () => {
-  console.log('scrolled to bottom')
   loadMorePlaces()
 }
 
@@ -72,6 +81,7 @@ watch(
   () => {
     if (places.value.length > 0 && pageNum === 0) {
       loadMorePlaces()
+      updateListHeight()
     }
   },
   { immediate: true },
@@ -144,5 +154,4 @@ watch(
   margin: 20px 10px 5px 0;
   color: #555;
 }
-
 </style>

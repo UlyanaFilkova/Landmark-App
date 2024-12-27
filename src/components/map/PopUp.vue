@@ -12,10 +12,13 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
-import { useMapStore } from '@/stores/mapStore.ts'
-import type { Place } from '@/types/interfaces.ts'
 import StarRating from '@/components/base/StarRating.vue'
+
+import { useMapStore } from '@/stores/mapStore.ts'
 import { convertBase64ToFiles } from '@/utils/typeConversion.ts'
+
+import type { Place } from '@/types/interfaces.ts'
+
 const store = useMapStore()
 
 const props = defineProps<{

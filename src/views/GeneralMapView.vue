@@ -12,11 +12,12 @@
 
 <script lang="ts" setup>
 import { ref, onBeforeMount } from 'vue'
+import { useMapStore } from '@/stores/mapStore'
+
 import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
 import TopPlaces from '@/components/map/TopPlaces.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
-import { useMapStore } from '@/stores/mapStore'
 
 const store = useMapStore()
 const isLoading = ref(true)

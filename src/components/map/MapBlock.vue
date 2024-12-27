@@ -8,21 +8,25 @@
 </template>
 
 <script setup lang="ts">
-import { useMap } from '@/composables/useMap.ts'
-import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
-import { useMapStore } from '@/stores/mapStore.ts'
 import { ref, computed } from 'vue'
+
+import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
+
+import { useMap } from '@/composables/useMap.ts'
+import { useMapStore } from '@/stores/mapStore.ts'
+
 const store = useMapStore()
 
 const places = computed(() => store.getFilteredPlaces)
+
+const { mapContainer } = useMap(places)
+
 const checkboxChecked = ref<boolean>(false)
 
 const handleCheckboxChange = () => {
   checkboxChecked.value = !checkboxChecked.value
   store.setOnlyUserPlaces(checkboxChecked.value)
 }
-
-const { mapContainer } = useMap(places)
 </script>
 
 <style>

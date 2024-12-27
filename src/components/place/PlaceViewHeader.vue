@@ -17,12 +17,14 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
 import BackButton from '@/components/base/BackButton.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import ConfirmModal from '@/components/base/ConfirmModal.vue'
+
 import { useMapStore } from '@/stores/mapStore'
 import { useUserStore } from '@/stores/userStore'
-import { useRouter } from 'vue-router'
 
 const mapStore = useMapStore()
 const userStore = useUserStore()
@@ -30,21 +32,28 @@ const router = useRouter()
 
 const showModal = ref(false)
 
+const userHasEditPermission = computed(() => {
+  return (
+    userStore.getUser?.role === 1 || mapStore.getCurrentPlace?.authorId === userStore.getUser?.id
+  )
+})
+
 const handleBackClick = () => {
   mapStore.removeCurrentPlace()
 }
 
-const userHasEditPermission = computed(() => {
-  return userStore.getUser?.role === 1 || mapStore.getCurrentPlace?.authorId === userStore.getUser?.id
-})
-
 const handleDeleteClick = async () => {
   showModal.value = false
-  await mapStore.removePlace(mapStore.getCurrentPlace!.id)
-  mapStore.fetchPlaces()
-  router.push({ name: 'generalMap' })
-}
+  const currentPlace = mapStore.getCurrentPlace
 
+  if (currentPlace) {
+    await mapStore.removePlace(currentPlace.id)
+    mapStore.fetchPlaces()
+    router.push({ name: 'generalMap' })
+  } else {
+    console.error('Current place is undefined')
+  }
+}
 </script>
 
 <style scoped>

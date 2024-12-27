@@ -1,13 +1,13 @@
 <template>
-    <router-link :to="props.path" class="back-button">
-      <BackIcon />
-      Back
-    </router-link>
+  <router-link :to="props.path" class="back-button">
+    <BackIcon />
+    Back
+  </router-link>
 </template>
 
 <script setup lang="ts">
-import BackIcon from '@/components/icons/BackIcon.vue'
 import { defineProps } from 'vue'
+import BackIcon from '@/components/icons/BackIcon.vue'
 
 const props = defineProps<{
   path: string
@@ -34,4 +34,5 @@ const props = defineProps<{
 }
 .back-button:hover svg {
   fill: var(--color-card-third);
-}</style>
+}
+</style>

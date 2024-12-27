@@ -53,8 +53,10 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, computed } from 'vue'
-import BaseButton from '@/components/base/BaseButton.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
+
+import BaseButton from '@/components/base/BaseButton.vue'
+
 import { convertFileToBase64 } from '@/utils/typeConversion.ts'
 
 const props = defineProps({
@@ -113,12 +115,13 @@ const emit = defineEmits(['update:modelValue'])
 const isDragOver = ref(false)
 const visible = ref(false)
 const currentImageIndex = ref(0)
-const imageUrls = computed(() => props.modelValue.map((file) => URL.createObjectURL(file)))
 
 const fileSizeError = ref(false)
 const fileSizeErrorMessage = ref('File size exceeds limit. Please upload a smaller file.')
 
 const getFileUrl = (file: File) => URL.createObjectURL(file)
+
+const imageUrls = computed(() => props.modelValue.map((file) => URL.createObjectURL(file)))
 
 const showImage = (index: number) => {
   currentImageIndex.value = index

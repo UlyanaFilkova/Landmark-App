@@ -56,12 +56,15 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import type { Place } from '@/types/interfaces.ts'
+import VueEasyLightbox from 'vue-easy-lightbox'
+
 import StarRating from '@/components/base/StarRating.vue'
 import LocationMap from '@/components/place/LocationMap.vue'
-import VueEasyLightbox from 'vue-easy-lightbox'
+
 import { useMapStore } from '@/stores/mapStore.ts'
 import { useUserStore } from '@/stores/userStore.ts'
+
+import type { Place } from '@/types/interfaces.ts'
 
 const mapStore = useMapStore()
 const userStore = useUserStore()
