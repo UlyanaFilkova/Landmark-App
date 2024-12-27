@@ -1,6 +1,5 @@
 <template>
   <div class="top-places_container">
-    <!-- <h1 class="top-places_h1">Top Places</h1> -->
     <div class="top-places-subtitle">Rating</div>
     <virtual-list
       :data-key="'id'"
@@ -20,7 +19,9 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import VirtualList from 'vue3-virtual-scroll-list'
+
 import PlaceCard from '@/components/map/PlaceCard.vue'
+
 import { useMapStore } from '@/stores/mapStore.ts'
 import { calculateMetricRating } from '@/services/place.ts'
 import type { Place } from '@/types/interfaces.ts'
@@ -34,6 +35,11 @@ const PlaceCardWrapper = {
   template: '<PlaceCard :place="source" />',
 }
 
+const pageSize = 10
+const items = ref<Place[]>([])
+let pageNum = 0
+const loading = ref(false)
+
 const sortedPlaces = computed(() => {
   return places.value
     .map((place) => {
@@ -43,10 +49,13 @@ const sortedPlaces = computed(() => {
     .sort((a, b) => b.metricRating - a.metricRating)
 })
 
-const pageSize = 10
-const items = ref<Place[]>([])
-let pageNum = 0
-const loading = ref(false)
+const updateListHeight = () => {
+  const scrollList = document.querySelector('virtual-list-container') as HTMLDivElement
+  const windowHeight = window.innerHeight
+  if (scrollList) {
+    scrollList.style.height = `${windowHeight * 0.7}px`
+  }
+}
 
 const loadMorePlaces = () => {
   if (loading.value) return
@@ -72,6 +81,7 @@ watch(
   () => {
     if (places.value.length > 0 && pageNum === 0) {
       loadMorePlaces()
+      updateListHeight()
     }
   },
   { immediate: true },
@@ -111,7 +121,7 @@ watch(
 .top-places_h1 {
   font-size: 28px;
   text-align: center;
-  color: #3c3c3c;
+  color: var(--coor-header-1);
 }
 
 .place-card-container {
@@ -123,7 +133,7 @@ watch(
 
 .place-number {
   font-size: 20px;
-  color: #555;
+  color: var(--color-14);
   min-width: 40px;
   text-align: center;
 }
@@ -142,7 +152,6 @@ watch(
 .top-places-subtitle {
   text-align: end;
   margin: 20px 10px 5px 0;
-  color: #555;
+  color: var(--color-14);
 }
-
 </style>

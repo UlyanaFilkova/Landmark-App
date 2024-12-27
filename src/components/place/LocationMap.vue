@@ -18,8 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import L from 'leaflet'
+import { usePlaceMap } from '@/composables/usePlaceMap.ts'
 
 const props = defineProps({
   latitude: {
@@ -30,43 +29,9 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  locationInvalid: {
-    type: Boolean,
-    default: false,
-  },
 })
 
-const mapContainer = ref<HTMLDivElement | null>(null)
-const map = ref<L.Map | null>(null)
-const marker = ref<L.Marker | null>(null)
-
-const updateMapCenter = (lat: number, lng: number) => {
-  if (map.value) {
-    map.value.setView([lat, lng], map.value.getZoom())
-    if (marker.value) {
-      marker.value.setLatLng([lat, lng])
-    } else {
-      marker.value = L.marker([lat, lng]).addTo(map.value)
-    }
-  }
-}
-
-watch(
-  () => [props.latitude, props.longitude],
-  ([newLat, newLng]) => {
-    updateMapCenter(newLat, newLng)
-  },
-)
-
-// TODO useMap Composable
-onMounted(() => {
-  if (mapContainer.value) {
-    map.value = L.map(mapContainer.value).setView([props.latitude, props.longitude], 11)
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
-    updateMapCenter(props.latitude, props.longitude)
-  }
-})
+const { mapContainer } = usePlaceMap(props.latitude, props.longitude, true)
 </script>
 
 <style scoped>
@@ -77,13 +42,13 @@ onMounted(() => {
 .map-container {
   height: 300px;
   width: 100%;
-  border: 3px solid #aaa;
+  border: 3px solid var(--color-forth);
   border-radius: 5px;
   margin-top: 20px;
 }
 
 .error-message {
-  color: red;
+  color: var(--color-invalid-input);
   font-size: 12px;
 }
 
@@ -108,7 +73,7 @@ input {
   width: 90%;
   padding: 10px;
   border: none;
-  outline: 1px solid #555;
+  outline: 1px solid var(--color-14);
   border-radius: 5px;
   cursor: auto;
 }

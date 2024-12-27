@@ -35,7 +35,7 @@ export function useMap(places: Ref<Place[]>) {
     }
   }
 
-  const initializeMap = async () => {
+  const initializeGeneralMap = async () => {
     if (mapContainer.value) {
       map.value = L.map(mapContainer.value).setView([53.9, 27.5667], 11)
 
@@ -45,6 +45,19 @@ export function useMap(places: Ref<Place[]>) {
       map.value.addLayer(markers.value)
 
       addMarkers(places.value)
+    }
+  }
+
+  const handleMapMove = () => {
+    if (map.value) {
+      addMarkers(places.value)
+    }
+  }
+
+  const addMapMoveEvents = () => {
+    if (map.value) {
+      map.value.on('moveend', handleMapMove)
+      map.value.on('zoomend', handleMapMove)
     }
   }
 
@@ -61,21 +74,9 @@ export function useMap(places: Ref<Place[]>) {
     { immediate: true },
   )
 
-  const handleMapMove = () => {
-    if (map.value) {
-      addMarkers(places.value)
-    }
-  }
-
-  onMounted(() => {
-    if (map.value) {
-      map.value.on('moveend', handleMapMove)
-      map.value.on('zoomend', handleMapMove)
-    }
-  })
-
   onMounted(async () => {
-    initializeMap()
+    initializeGeneralMap()
+    addMapMoveEvents()
   })
 
   return {

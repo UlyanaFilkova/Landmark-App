@@ -80,11 +80,6 @@ const submitButtonDisabled = computed<boolean>(
   () => !validationFields.value.username || !validationFields.value.password,
 )
 
-// TODO
-const updateValue = (field: InputField, value: string): void => {
-  errorMessage.value = ''
-  field.model = value
-}
 const getValidateMessage = (): string => {
   const validationErrors = {
     'username.required': 'Email is required',
@@ -104,9 +99,11 @@ const getValidateMessage = (): string => {
   }
   return ''
 }
+
 const clearForm = (): void => {
   inputFields.forEach((field) => (field.model = ''))
 }
+
 const handleSubmit = async (): Promise<void> => {
   v$.value.validationFields.$touch()
 
@@ -141,7 +138,7 @@ h1 {
   margin-bottom: 10px;
 }
 
-.medium-button{
+.medium-button {
   margin-bottom: 10px;
 }
 </style>

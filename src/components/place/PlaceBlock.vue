@@ -28,9 +28,7 @@
 
     <div class="place-details-group">
       <h3>Location</h3>
-      <div class="map-container">
-        <LocationMap :latitude="place.location[0]" :longitude="place.location[1]" />
-      </div>
+      <LocationMap :latitude="place.location[0]" :longitude="place.location[1]" />
     </div>
 
     <div class="place-details-group">
@@ -44,6 +42,7 @@
           class="photo-thumbnail"
         />
       </div>
+      <div v-if="place.photos.length === 0">No photos</div>
     </div>
 
     <vue-easy-lightbox
@@ -57,12 +56,15 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
-import type { Place } from '@/types/interfaces.ts'
+import VueEasyLightbox from 'vue-easy-lightbox'
+
 import StarRating from '@/components/base/StarRating.vue'
 import LocationMap from '@/components/place/LocationMap.vue'
-import VueEasyLightbox from 'vue-easy-lightbox'
+
 import { useMapStore } from '@/stores/mapStore.ts'
 import { useUserStore } from '@/stores/userStore.ts'
+
+import type { Place } from '@/types/interfaces.ts'
 
 const mapStore = useMapStore()
 const userStore = useUserStore()
@@ -128,6 +130,14 @@ watch(
   display: flex;
   gap: 20%;
 }
+
+@media (max-width: 576px) {
+  .ratings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
 .rating-voices {
   font-size: 14px;
   margin: 5px 0 0 0;
@@ -139,10 +149,6 @@ h3 {
 
 .place-details-group {
   margin-bottom: 30px;
-}
-
-.map-container {
-  width: 100%;
 }
 
 .photo-grid {
@@ -157,10 +163,10 @@ h3 {
   object-fit: cover;
   cursor: pointer;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-one);
 }
 
 .photo-thumbnail:hover {
-  border-color: #888;
+  border-color: var(--color-border-two);
 }
 </style>

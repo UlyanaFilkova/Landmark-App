@@ -17,14 +17,19 @@
 
 <script setup lang="ts">
 import { defineProps, computed, onMounted, ref } from 'vue'
-import type { Place } from '@/types/interfaces.ts'
-import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
 import { useMapStore } from '@/stores/mapStore.ts'
+
+import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
+
+import type { Place } from '@/types/interfaces.ts'
+
 const store = useMapStore()
 
 const props = defineProps<{
   place: Place
 }>()
+
+const description = ref<HTMLElement | null>(null)
 
 const imageSrc = computed(() => {
   if (props.place.photos && props.place.photos.length > 0) {
@@ -36,8 +41,6 @@ const imageSrc = computed(() => {
     return reservePlaceIconPath
   }
 })
-
-const description = ref<HTMLElement | null>(null)
 
 const limitDescriptionLength = () => {
   if (description.value !== null) {
@@ -126,9 +129,6 @@ onMounted(() => {
   -moz-box-orient: vertical;
 
   line-clamp: 2;
-
-  max-width: 100%; /* чтобы текст обрезался в пределах контейнера */
-  white-space: normal;
 }
 
 .place_rating {

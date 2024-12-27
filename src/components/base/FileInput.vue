@@ -53,8 +53,11 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, computed } from 'vue'
-import BaseButton from '@/components/base/BaseButton.vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
+
+import BaseButton from '@/components/base/BaseButton.vue'
+
+import { convertFileToBase64 } from '@/utils/typeConversion.ts'
 
 const props = defineProps({
   modelValue: {
@@ -112,13 +115,13 @@ const emit = defineEmits(['update:modelValue'])
 const isDragOver = ref(false)
 const visible = ref(false)
 const currentImageIndex = ref(0)
-const imageUrls = computed(() => props.modelValue.map((file) => URL.createObjectURL(file)))
 
 const fileSizeError = ref(false)
-const fileSizeErrorMessage = ref('File size exceeds 1MB. Please upload a smaller file.')
-
+const fileSizeErrorMessage = ref('File size exceeds limit. Please upload a smaller file.')
 
 const getFileUrl = (file: File) => URL.createObjectURL(file)
+
+const imageUrls = computed(() => props.modelValue.map((file) => URL.createObjectURL(file)))
 
 const showImage = (index: number) => {
   currentImageIndex.value = index
@@ -133,8 +136,10 @@ const handleFileChange = (event: Event) => {
   const input = event.target as HTMLInputElement
   if (input.files && input.files.length > 0) {
     const newFiles = Array.from(input.files)
-    const validFiles = newFiles.filter((file) => {
-      if (file.size > 1048576) {
+
+    const validFiles = newFiles.filter(async (file) => {
+      const base64String = await convertFileToBase64(file)
+      if (base64String.length >= 1048576) {
         fileSizeError.value = true
         return false
       }
@@ -175,8 +180,9 @@ const handleDrop = (event: DragEvent) => {
   isDragOver.value = false
   if (!props.isDisabled && event.dataTransfer && event.dataTransfer.files.length > 0) {
     const newFiles = Array.from(event.dataTransfer.files)
-    const validFiles = newFiles.filter((file) => {
-      if (file.size > 1048576) {
+    const validFiles = newFiles.filter(async (file) => {
+      const base64String = await convertFileToBase64(file)
+      if (base64String.length >= 1048576) {
         fileSizeError.value = true
         return false
       }
@@ -204,7 +210,7 @@ const handleDrop = (event: DragEvent) => {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--color-border-one);
   border-radius: 5px;
   text-align: center;
   cursor: pointer;
@@ -212,8 +218,8 @@ const handleDrop = (event: DragEvent) => {
 }
 
 .drop-area.dragover {
-  background-color: #f0f0f0;
-  border-color: #333;
+  background-color: var(--color-light-backgroud);
+  border-color: var(--color-14-hover);
 }
 
 .drop-area input[type='file'] {
@@ -227,7 +233,7 @@ const handleDrop = (event: DragEvent) => {
 .drop-area-text {
   margin-top: 10px;
   font-size: 14px;
-  color: #555;
+  color: var(--color-14);
 }
 
 ul {
@@ -250,18 +256,18 @@ li {
 li button {
   background: none;
   border: none;
-  color: #555;
+  color: var(--color-14);
   cursor: pointer;
   font-size: 16px;
 }
 
 .error-message {
-  color: red;
+  color: var(--color-invalid-input);
   font-size: 12px;
 }
 
 .warning-message {
-  color: #555;
+  color: var(--color-14);
   font-size: 12px;
   margin-top: 5px;
 }

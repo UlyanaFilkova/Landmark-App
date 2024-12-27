@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 
-const props = defineProps({
+defineProps({
   modelValue: [String, Number],
   type: {
     type: String,
@@ -75,16 +75,16 @@ const handleInput = (event: Event) => {
 input {
   padding: 10px;
   border: none;
-  outline: 1px solid #555;
+  outline: 1px solid var(--color-14);
   border-radius: 5px;
 }
 
 input:focus {
-  outline: 1.5px solid #333;
+  outline: 1.5px solid var(--color-14-hover);
 }
 
 .error-message {
-  color: red;
+  color: var(--color-invalid-input);
   font-size: 12px;
 }
 </style>

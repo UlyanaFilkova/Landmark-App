@@ -58,16 +58,19 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import type { Place } from '@/types/interfaces.ts'
+import { useRouter } from 'vue-router'
+
 import LocationInput from '@/components/place/LocationInput.vue'
 import StarRating from '@/components/base/StarRating.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FileInput from '@/components/base/FileInput.vue'
-import { useMapStore } from '@/stores/mapStore.ts'
-import { useRouter } from 'vue-router'
 import BaseTextarea from '@/components/base/BaseTextarea.vue'
+
+import { useMapStore } from '@/stores/mapStore.ts'
 import { convertFilesToBase64, convertBase64ToFiles } from '@/utils/typeConversion.ts'
+
+import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
 const router = useRouter()
@@ -109,21 +112,13 @@ const isSubmitButtonDisabled = computed(() => {
 })
 
 const isFormDataChanged = computed(() => {
-  const isFilesEqual = (files1: File[], files2: File[]) => {
-    if (files1.length !== files2.length) return false
-    for (let i = 0; i < files1.length; i++) {
-      if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false
-    }
-    return true
-  }
-
   return (
     formData.value.title !== originalFormData.value.title ||
     formData.value.description !== originalFormData.value.description ||
     formData.value.latitude !== originalFormData.value.latitude ||
     formData.value.longitude !== originalFormData.value.longitude ||
     formData.value.rating !== originalFormData.value.rating ||
-    !isFilesEqual(formData.value.photos, originalFormData.value.photos)
+    !areFilesEqual(formData.value.photos, originalFormData.value.photos)
   )
 })
 
@@ -138,6 +133,14 @@ const isFormValid = computed(() => {
     !fileTypeInvalid.value
   )
 })
+
+const areFilesEqual = (files1: File[], files2: File[]) => {
+  if (files1.length !== files2.length) return false
+  for (let i = 0; i < files1.length; i++) {
+    if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false
+  }
+  return true
+}
 
 const updateRating = (value: number) => {
   formData.value.rating = value
@@ -177,7 +180,7 @@ const clearForm = (): void => {
   formData.value = { ...initialFormData }
 }
 
-onMounted(() => {
+const loadCurrentPlace = () => {
   if (store.getCurrentPlace !== undefined) {
     const place = store.getCurrentPlace
     formData.value.title = place.title
@@ -191,6 +194,10 @@ onMounted(() => {
     headerText.value = 'Edit place'
     buttonText.value = 'Save place'
   }
+}
+
+onMounted(() => {
+  loadCurrentPlace()
 })
 </script>
 
@@ -203,9 +210,9 @@ h2 {
 .new-place-form {
   margin: 0 auto 30px;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-block-border);
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-block-background);
 }
 
 .form-group {
@@ -228,24 +235,8 @@ textarea {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-one);
   border-radius: 4px;
-}
-
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #45a049;
 }
 
 .custom-file-upload {
@@ -261,27 +252,8 @@ button:hover {
   top: 0;
 }
 
-ul {
-  padding: 0;
-  list-style: none;
-}
-
-li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-li button {
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  font-size: 16px;
-}
-
 .error-message {
-  color: red;
+  color: var(--color-invalid-input);
   font-size: 12px;
 }
 
