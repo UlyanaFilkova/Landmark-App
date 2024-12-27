@@ -64,13 +64,13 @@ watch(rating, (newValue) => {
 .normal {
   margin-left: 5px;
   font-size: 16px;
-  color: #555;
+  color: var(--color-14);
 }
 
 .big {
   margin-left: 5px;
   font-size: 20px;
-  color: #555;
+  color: var(--color-14);
 }
 
 .pointer-cursor {

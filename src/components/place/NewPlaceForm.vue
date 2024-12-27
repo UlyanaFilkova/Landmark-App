@@ -210,9 +210,9 @@ h2 {
 .new-place-form {
   margin: 0 auto 30px;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-block-border);
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-block-background);
 }
 
 .form-group {
@@ -235,24 +235,8 @@ textarea {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-one);
   border-radius: 4px;
-}
-
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #45a049;
 }
 
 .custom-file-upload {
@@ -268,27 +252,8 @@ button:hover {
   top: 0;
 }
 
-ul {
-  padding: 0;
-  list-style: none;
-}
-
-li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-li button {
-  background: none;
-  border: none;
-  color: red;
-  cursor: pointer;
-  font-size: 16px;
-}
-
 .error-message {
-  color: red;
+  color: var(--color-invalid-input);
   font-size: 12px;
 }
 

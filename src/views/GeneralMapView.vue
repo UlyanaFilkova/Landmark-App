@@ -87,7 +87,7 @@ onBeforeMount(() => {
 
   .map-header__h2 {
     display: block;
-    color: #555;
+    color: var(--color-14);
     flex-grow: 1;
     text-align: center;
     padding: 0;

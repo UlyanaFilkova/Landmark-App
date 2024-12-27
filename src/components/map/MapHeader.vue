@@ -38,11 +38,11 @@ const handleLogoutClick = () => {
   align-items: center;
 }
 .map-header__h1 {
-  color: #555;
+  color: var(--color-14);
 }
 
 .map-header__h2 {
-  color: #555;
+  color: var(--color-14);
   flex-grow: 1;
   text-align: center;
   padding: 0;

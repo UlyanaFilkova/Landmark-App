@@ -34,7 +34,7 @@ const handleCheckboxChange = () => {
   height: 70vh;
   max-height: 600px;
   width: 100%;
-  border: 3px solid #aaa;
+  border: 3px solid var(--color-forth);
   border-radius: 5px;
 }
 
@@ -61,12 +61,12 @@ const handleCheckboxChange = () => {
   line-height: 40px;
   text-align: center;
   background-color: transparent;
-  color: #004085;
+  color: var(--color-delete-span);
 }
 
 .leaflet-popup-close-button:hover span {
   display: block;
-  color: #e00000;
+  color: var(--color-delete-span-hover);
 }
 
 .popup-content {
@@ -81,7 +81,7 @@ const handleCheckboxChange = () => {
   font-weight: bold;
   font-size: 18px;
   text-decoration: none;
-  color: #004085;
+  color: var(--color-delete-span);
   display: block;
 }
 

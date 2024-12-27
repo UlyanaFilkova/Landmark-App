@@ -121,7 +121,7 @@ watch(
 .top-places_h1 {
   font-size: 28px;
   text-align: center;
-  color: #3c3c3c;
+  color: var(--coor-header-1);
 }
 
 .place-card-container {
@@ -133,7 +133,7 @@ watch(
 
 .place-number {
   font-size: 20px;
-  color: #555;
+  color: var(--color-14);
   min-width: 40px;
   text-align: center;
 }
@@ -152,6 +152,6 @@ watch(
 .top-places-subtitle {
   text-align: end;
   margin: 20px 10px 5px 0;
-  color: #555;
+  color: var(--color-14);
 }
 </style>

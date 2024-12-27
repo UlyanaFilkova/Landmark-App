@@ -47,7 +47,7 @@ const handlePopupClick = () => {
   font-weight: bold;
   font-size: 18px;
   text-decoration: none;
-  color: #004085;
+  color: var(--color-delete-span);
   display: block;
 }
 

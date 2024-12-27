@@ -42,13 +42,13 @@ const { mapContainer } = usePlaceMap(props.latitude, props.longitude, true)
 .map-container {
   height: 300px;
   width: 100%;
-  border: 3px solid #aaa;
+  border: 3px solid var(--color-forth);
   border-radius: 5px;
   margin-top: 20px;
 }
 
 .error-message {
-  color: red;
+  color: var(--color-invalid-input);
   font-size: 12px;
 }
 
@@ -73,7 +73,7 @@ input {
   width: 90%;
   padding: 10px;
   border: none;
-  outline: 1px solid #555;
+  outline: 1px solid var(--color-14);
   border-radius: 5px;
   cursor: auto;
 }

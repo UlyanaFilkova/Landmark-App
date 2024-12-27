@@ -53,12 +53,12 @@ const handleInput = (event: Event) => {
   min-height: 100px;
   padding: 10px;
   border: none;
-  outline: 1px solid #555;
+  outline: 1px solid var(--color-14);
   border-radius: 8px;
   display: block;
   margin-bottom: 20px;
 }
 .input-group textarea:focus {
-  outline: 1.5px solid #333;
+  outline: 1.5px solid var(--color-14-hover);
 }
 </style>

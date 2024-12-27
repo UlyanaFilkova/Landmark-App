@@ -18,7 +18,6 @@ export function usePlaceMap(
   const marker = ref<L.Marker | null>(null)
   const latitude = ref(initialLatitude)
   const longitude = ref(initialLongitude)
-  console.log(latitude.value, longitude.value)
 
   const initializePlaceMap = async () => {
     if (mapContainer.value) {
@@ -39,6 +38,7 @@ export function usePlaceMap(
           }
         })
       }
+
       updateMapCenter(latitude.value, longitude.value)
     }
   }
@@ -66,12 +66,12 @@ export function usePlaceMap(
     }
   }
 
-  // watch(
-  //   () => latitude,
-  //   (newLat) => {
-  //     updateMapCenter(newLat.value, longitude.value)
-  //   },
-  // )
+  watch(
+    () => [latitude, longitude],
+    ([newLat, newLng]) => {
+      updateMapCenter(newLat.value, newLng.value)
+    },
+  )
 
   onMounted(() => {
     initializePlaceMap()

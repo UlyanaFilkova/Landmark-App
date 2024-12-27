@@ -163,10 +163,10 @@ h3 {
   object-fit: cover;
   cursor: pointer;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-one);
 }
 
 .photo-thumbnail:hover {
-  border-color: #888;
+  border-color: var(--color-border-two);
 }
 </style>

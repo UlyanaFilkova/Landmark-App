@@ -210,7 +210,7 @@ const handleDrop = (event: DragEvent) => {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--color-border-one);
   border-radius: 5px;
   text-align: center;
   cursor: pointer;
@@ -218,8 +218,8 @@ const handleDrop = (event: DragEvent) => {
 }
 
 .drop-area.dragover {
-  background-color: #f0f0f0;
-  border-color: #333;
+  background-color: var(--color-light-backgroud);
+  border-color: var(--color-14-hover);
 }
 
 .drop-area input[type='file'] {
@@ -233,7 +233,7 @@ const handleDrop = (event: DragEvent) => {
 .drop-area-text {
   margin-top: 10px;
   font-size: 14px;
-  color: #555;
+  color: var(--color-14);
 }
 
 ul {
@@ -256,18 +256,18 @@ li {
 li button {
   background: none;
   border: none;
-  color: #555;
+  color: var(--color-14);
   cursor: pointer;
   font-size: 16px;
 }
 
 .error-message {
-  color: red;
+  color: var(--color-invalid-input);
   font-size: 12px;
 }
 
 .warning-message {
-  color: #555;
+  color: var(--color-14);
   font-size: 12px;
   margin-top: 5px;
 }
