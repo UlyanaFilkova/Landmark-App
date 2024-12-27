@@ -40,8 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
-import L from 'leaflet'
+import { usePlaceMap } from '@/composables/usePlaceMap.ts'
 
 const props = defineProps({
   latitude: {
@@ -60,10 +59,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:latitude', 'update:longitude'])
 
-const mapContainer = ref<HTMLDivElement | null>(null)
-const map = ref<L.Map | null>(null)
-const marker = ref<L.Marker | null>(null)
-
 const updateLatitude = (event: Event) => {
   emit('update:latitude', parseFloat((event.target as HTMLInputElement).value))
 }
@@ -72,44 +67,7 @@ const updateLongitude = (event: Event) => {
   emit('update:longitude', parseFloat((event.target as HTMLInputElement).value))
 }
 
-const updateMapCenter = (lat: number, lng: number) => {
-  if (map.value) {
-    map.value.setView([lat, lng], map.value.getZoom())
-    if (marker.value) {
-      marker.value.setLatLng([lat, lng])
-    } else {
-      marker.value = L.marker([lat, lng]).addTo(map.value)
-    }
-  }
-}
-
-watch(
-  () => [props.latitude, props.longitude],
-  ([newLat, newLng]) => {
-    updateMapCenter(newLat, newLng)
-  },
-)
-
-onMounted(() => {
-  if (mapContainer.value) {
-    map.value = L.map(mapContainer.value).setView([props.latitude, props.longitude], 11)
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
-
-    map.value.on('click', (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng
-      emit('update:latitude', lat)
-      emit('update:longitude', lng)
-
-      if (marker.value) {
-        marker.value.setLatLng(e.latlng)
-      } else {
-        marker.value = L.marker(e.latlng).addTo(map.value)
-      }
-    })
-    updateMapCenter(props.latitude, props.longitude)
-  }
-})
+const { mapContainer } = usePlaceMap(props.latitude, props.longitude, false, emit)
 </script>
 
 <style scoped>
