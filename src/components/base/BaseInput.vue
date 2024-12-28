@@ -20,38 +20,27 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, withDefaults } from 'vue'
 
-defineProps({
-  modelValue: [String, Number],
-  type: {
-    type: String,
-    default: 'text',
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: '',
-  },
-  step: Number,
-  min: Number,
-  max: Number,
-  maxlength: Number,
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  errorMessage: {
-    type: String,
-    default: '',
-  },
+interface Props {
+  modelValue: string | number
+  type?: string
+  id: string
+  label: string
+  placeholder?: string
+  step?: number
+  min?: number
+  max?: number
+  maxlength?: number
+  required?: boolean
+  errorMessage?: string
+}
+
+withDefaults(defineProps<Props>(), {
+  type: 'text',
+  placeholder: '',
+  required: false,
+  errorMessage: '',
 })
 
 const emit = defineEmits(['update:modelValue'])

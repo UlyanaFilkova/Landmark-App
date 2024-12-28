@@ -12,28 +12,22 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, withDefaults } from 'vue'
 
-defineProps({
-    modelValue: {
-      type: [String],
-      default: '',
-    },
-    label: {
-      type: String,
-    },
-    name: {
-      type: String,
-    },
-    required: {
-      type: Boolean,
-      default: false,
-    },
-    maxlength: {
-      type: Number,
-      default: 1000,
-    },
+interface Props {
+  modelValue?: string
+  label?: string
+  name?: string
+  required?: boolean
+  maxlength?: number
+}
+
+withDefaults(defineProps<Props>(), {
+  modelValue: '',
+  required: false,
+  maxlength: 1000,
 })
+
 const emit = defineEmits(['update:modelValue'])
 
 const handleInput = (event: Event) => {

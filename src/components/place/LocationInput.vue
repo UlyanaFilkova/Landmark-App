@@ -42,19 +42,14 @@
 <script setup lang="ts">
 import { usePlaceMap } from '@/composables/usePlaceMap.ts'
 
-const props = defineProps({
-  latitude: {
-    type: Number,
-    required: true,
-  },
-  longitude: {
-    type: Number,
-    required: true,
-  },
-  locationInvalid: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  latitude: number
+  longitude: number
+  locationInvalid?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  locationInvalid: false,
 })
 
 const emit = defineEmits(['update:latitude', 'update:longitude'])

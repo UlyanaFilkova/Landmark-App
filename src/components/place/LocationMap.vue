@@ -20,16 +20,10 @@
 <script setup lang="ts">
 import { usePlaceMap } from '@/composables/usePlaceMap.ts'
 
-const props = defineProps({
-  latitude: {
-    type: Number,
-    required: true,
-  },
-  longitude: {
-    type: Number,
-    required: true,
-  },
-})
+const props = defineProps<{
+  latitude: number
+  longitude: number
+}>()
 
 const { mapContainer } = usePlaceMap(props.latitude, props.longitude, true)
 </script>

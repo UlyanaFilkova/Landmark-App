@@ -5,14 +5,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, withDefaults } from 'vue'
 import DoneIcon from '@/components/icons/DoneIcon.vue'
 
-defineProps({
-  checked: {
-    type: Boolean,
-    default: false,
-  },
+withDefaults(defineProps<{ checked?: boolean }>(), {
+  checked: false,
 })
 </script>
 

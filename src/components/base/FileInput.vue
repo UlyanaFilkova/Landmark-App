@@ -59,55 +59,32 @@ import BaseButton from '@/components/base/BaseButton.vue'
 
 import { convertFileToBase64 } from '@/utils/typeConversion.ts'
 
-const props = defineProps({
-  modelValue: {
-    type: Array as () => File[],
-    default: () => [],
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  accept: {
-    type: String,
-    default: 'image/*',
-  },
-  multiple: {
-    type: Boolean,
-    default: true,
-  },
-  maxFiles: {
-    type: Number,
-    default: 5,
-  },
-  errorMessage: {
-    type: String,
-    default: '',
-  },
-  buttonText: {
-    type: String,
-    default: 'Choose Files',
-  },
-  isFileLimitReached: {
-    type: Boolean,
-    default: false,
-  },
-  warningMessage: {
-    type: String,
-    default: '',
-  },
-  fileTypeInvalid: {
-    type: Boolean,
-    default: false,
-  },
-  isDisabled: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  modelValue: File[]
+  id: string
+  label: string
+  accept?: string
+  multiple?: boolean
+  maxFiles?: number
+  errorMessage?: string
+  buttonText?: string
+  isFileLimitReached?: boolean
+  warningMessage?: string
+  fileTypeInvalid?: boolean
+  isDisabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: () => [] as File[],
+  accept: 'image/*',
+  multiple: true,
+  maxFiles: 5,
+  errorMessage: '',
+  buttonText: 'Choose Files',
+  isFileLimitReached: false,
+  warningMessage: '',
+  fileTypeInvalid: false,
+  isDisabled: false,
 })
 
 const emit = defineEmits(['update:modelValue'])
