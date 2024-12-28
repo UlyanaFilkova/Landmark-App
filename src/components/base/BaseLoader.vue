@@ -13,7 +13,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: white;
+  background-color: var(--color-text-main);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,8 +31,8 @@
 .spinner {
   width: 50px;
   height: 50px;
-  border: 6px solid #ccc;
-  border-top: 6px solid orange;
+  border: 6px solid var(--color-block-border);
+  border-top: 6px solid var(--color-undone);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

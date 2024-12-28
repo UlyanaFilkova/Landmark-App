@@ -2,7 +2,7 @@
   <div class="map-header">
     <div class="map-header-container">
       <h1 class="map-header__h1">Map</h1>
-      <RouterLink to="/add-place">
+      <RouterLink :to="{ name: 'addPlace' }">
         <BaseButton class="medium-button" text="Add new place" />
       </RouterLink>
     </div>
@@ -60,7 +60,7 @@ const handleLogoutClick = () => {
     flex-grow: 1;
     align-items: center;
   }
-  .map-header-container.single{
+  .map-header-container.single {
     width: fit-content;
     flex-grow: 0;
   }

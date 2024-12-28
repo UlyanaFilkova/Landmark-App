@@ -28,7 +28,7 @@ export const routes = [
   },
   {
     path: '/add-place',
-    name: 'AddPlace',
+    name: 'addPlace',
     component: AddPlaceView,
     meta: { requiresAuth: true },
   },
