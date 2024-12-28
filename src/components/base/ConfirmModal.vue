@@ -13,12 +13,7 @@
 import { toRefs, defineProps, defineEmits } from 'vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 
-const props = defineProps({
-  isVisible: {
-    type: Boolean,
-    required: true,
-  },
-})
+const props = defineProps<{ isVisible: boolean }>()
 
 const emit = defineEmits(['confirm', 'cancel'])
 

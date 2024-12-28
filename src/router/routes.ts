@@ -32,8 +32,8 @@ export const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/place',
-    name: 'Place',
+    path: '/place/:id',
+    name: 'place',
     component: PlaceView,
     meta: { requiresAuth: true },
   },

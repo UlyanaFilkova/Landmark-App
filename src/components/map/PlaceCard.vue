@@ -1,5 +1,10 @@
 <template>
-  <RouterLink to="/place" target="_blank" class="place-container" @click="handlePlaceClick">
+  <RouterLink
+    :to="{ name: 'place', params: { id: place.id } }"
+    target="_blank"
+    class="place-container"
+    @click="handlePlaceClick"
+  >
     <div class="place_img">
       <img :src="imageSrc" alt="Place Image" />
     </div>

@@ -132,27 +132,6 @@ const handleHide = () => {
   visible.value = false
 }
 
-const handleFileChange = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  if (input.files && input.files.length > 0) {
-    const newFiles = Array.from(input.files)
-
-    const validFiles = newFiles.filter(async (file) => {
-      const base64String = await convertFileToBase64(file)
-      if (base64String.length >= 1048576) {
-        fileSizeError.value = true
-        return false
-      }
-      return true
-    })
-    if (validFiles.length > 0) {
-      fileSizeError.value = false
-      const updatedFiles = [...props.modelValue, ...validFiles]
-      emit('update:modelValue', updatedFiles)
-    }
-  }
-}
-
 const removeFile = (index: number) => {
   const newFiles = [...props.modelValue]
   newFiles.splice(index, 1)
@@ -180,19 +159,31 @@ const handleDrop = (event: DragEvent) => {
   isDragOver.value = false
   if (!props.isDisabled && event.dataTransfer && event.dataTransfer.files.length > 0) {
     const newFiles = Array.from(event.dataTransfer.files)
-    const validFiles = newFiles.filter(async (file) => {
-      const base64String = await convertFileToBase64(file)
-      if (base64String.length >= 1048576) {
-        fileSizeError.value = true
-        return false
-      }
-      return true
-    })
-    if (validFiles.length > 0) {
-      fileSizeError.value = false
-      const updatedFiles = [...props.modelValue, ...validFiles]
-      emit('update:modelValue', updatedFiles)
+    handleuploadedFile(newFiles)
+  }
+}
+
+const handleFileChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  if (input.files && input.files.length > 0) {
+    const newFiles = Array.from(input.files)
+    handleuploadedFile(newFiles)
+  }
+}
+
+const handleuploadedFile = (newFiles: File[]) => {
+  const validFiles = newFiles.filter(async (file) => {
+    const base64String = await convertFileToBase64(file)
+    if (base64String.length >= 1048576) {
+      fileSizeError.value = true
+      return false
     }
+    return true
+  })
+  if (validFiles.length > 0) {
+    fileSizeError.value = false
+    const updatedFiles = [...props.modelValue, ...validFiles]
+    emit('update:modelValue', updatedFiles)
   }
 }
 </script>
