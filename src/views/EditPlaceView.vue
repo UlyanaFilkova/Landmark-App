@@ -1,7 +1,7 @@
 <template>
   <div class="place-view">
     <PlaceAddHeader class="place-header" />
-    <NewPlaceForm :isEditing="false" />
+    <NewPlaceForm :isEditing="true" :place="place" />
   </div>
 </template>
 
@@ -12,9 +12,25 @@ import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
 import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
 
 import { useMapStore } from '@/stores/mapStore'
+import { useRoute } from 'vue-router'
+
+import { getPlaceById } from '@/services/place.ts'
+
+import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
+const route = useRoute()
 const isLoading = ref(true)
+const placeId = route.params.id as string
+const place = ref<Place | null>(null)
+
+const loadPlace = async (placeId: string) => {
+  try {
+    place.value = await getPlaceById(placeId)
+  } catch (error) {
+    console.error('Failed to load place:', error)
+  }
+}
 
 const loadData = async () => {
   isLoading.value = true
@@ -25,6 +41,7 @@ const loadData = async () => {
 }
 
 onBeforeMount(() => {
+  loadPlace(placeId)
   loadData()
 })
 </script>

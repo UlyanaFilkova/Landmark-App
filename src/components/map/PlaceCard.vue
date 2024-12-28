@@ -26,9 +26,7 @@ import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
 
 import type { Place } from '@/types/interfaces.ts'
 
-const props = defineProps<{
-  place: Place
-}>()
+const props = defineProps<{ place: Place }>()
 
 const description = ref<HTMLElement | null>(null)
 

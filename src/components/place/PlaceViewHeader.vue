@@ -2,7 +2,7 @@
   <div class="place-header">
     <BackLink path="../general-map" />
     <div v-if="userHasEditPermission" class="header-buttons">
-      <RouterLink to="/add-place">
+      <RouterLink :to="{ name: 'edit', params: { id: place.id } }">
         <BaseButton class="medium-button grey" text="Edit" />
       </RouterLink>
       <BaseButton class="medium-button red" text="Delete" @click="showModal = true" />
@@ -34,7 +34,7 @@ const router = useRouter()
 
 const showModal = ref(false)
 
-const props = defineProps<{ place: Place | null }>()
+const props = defineProps<{ place: Place }>()
 
 const userHasEditPermission = computed(() => {
   if (props.place) {
