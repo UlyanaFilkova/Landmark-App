@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import LocationInput from '@/components/place/LocationInput.vue'
@@ -75,6 +75,11 @@ import type { Place } from '@/types/interfaces.ts'
 const store = useMapStore()
 const router = useRouter()
 
+const props = defineProps<{
+  isEditing: boolean
+  place?: Place | null
+}>()
+
 const initialFormData = {
   title: '',
   description: '',
@@ -84,7 +89,7 @@ const initialFormData = {
   rating: store.getCurrentPlaceUserRating || 5,
 }
 
-const headerText = ref('Add a new place')
+const headerText = ref('')
 const buttonText = ref('Add place')
 
 const formData = ref({ ...initialFormData })
@@ -101,10 +106,8 @@ const locationInvalid = computed(
 const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
-const isEditing = computed(() => store.getCurrentPlace !== undefined)
-
 const isSubmitButtonDisabled = computed(() => {
-  if (isEditing.value) {
+  if (props.isEditing) {
     return !isFormDataChanged.value || !isFormValid.value
   } else {
     return !isFormValid.value
@@ -160,10 +163,7 @@ const handleSubmit = async () => {
         voices: 1,
       }
 
-      const result =
-        store.getCurrentPlace !== undefined
-          ? await store.editPlace(place)
-          : await store.addNewPlace(place)
+      const result = props.isEditing ? await store.editPlace(place) : await store.addNewPlace(place)
       if (result === 'success') {
         router.push({ name: 'generalMap' })
         clearForm()
@@ -181,24 +181,40 @@ const clearForm = (): void => {
 }
 
 const loadCurrentPlace = () => {
-  if (store.getCurrentPlace !== undefined) {
-    const place = store.getCurrentPlace
-    formData.value.title = place.title
-    formData.value.description = place.description
-    formData.value.latitude = place.location[0]
-    formData.value.longitude = place.location[1]
+  if (props.isEditing && props.place) {
+    formData.value.title = props.place.title
+    formData.value.description = props.place.description
+    formData.value.latitude = props.place.location[0]
+    formData.value.longitude = props.place.location[1]
     formData.value.rating = store.getCurrentPlaceUserRating || 0
-    formData.value.photos = convertBase64ToFiles(place.photos || [])
+    formData.value.photos = convertBase64ToFiles(props.place.photos || [])
 
     originalFormData.value = { ...formData.value }
-    headerText.value = 'Edit place'
     buttonText.value = 'Save place'
   }
 }
 
-onMounted(() => {
-  loadCurrentPlace()
-})
+watch(
+  () => props.isEditing,
+  () => {
+    if (!props.isEditing) {
+      headerText.value = 'Add a new place'
+    } else {
+      headerText.value = 'Edit place'
+    }
+  },
+  { immediate: true },
+)
+
+watch(
+  () => props.place,
+  () => {
+    if (props.place != null) {
+      loadCurrentPlace()
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

@@ -81,6 +81,23 @@ export const deletePlace = async (placeId: string): Promise<string> => {
   }
 }
 
+export const getPlaceById = async (placeId: string): Promise<Place> => {
+  try {
+    const placeDocRef = doc(firestore, `places/${placeId}`)
+    const placeDoc = await getDoc(placeDocRef)
+
+    if (!placeDoc.exists()) {
+      throw new Error('Place not found')
+    }
+
+    const placeData = placeDoc.data() as Place
+    return placeData
+  } catch (error) {
+    console.error('Error fetching place by ID:', error)
+    throw new Error('Error fetching place from Firestore')
+  }
+}
+
 export const addRating = async (rating: Omit<Rating, 'id'>): Promise<{ id: string }> => {
   try {
     const ratingsQuery = query(
@@ -147,10 +164,4 @@ const updatePlaceRating = async (placeId: string, isNewRating: boolean) => {
     console.error('Error updating place rating:', error)
     throw new Error('Error updating place rating in Firestore')
   }
-}
-
-export const calculateMetricRating = (averageRating: number, ratingCount: number): number => {
-  const k = 0.1
-  const metricRating = averageRating * (1 - Math.exp(-k * ratingCount))
-  return metricRating
 }

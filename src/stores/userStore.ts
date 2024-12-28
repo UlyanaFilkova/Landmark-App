@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import router from '@/router'
-
 import { getUserById } from '@/services/user'
-
+import router from '@/router'
 import type { User } from '@/types/interfaces'
 
 export const useUserStore = defineStore('user', () => {

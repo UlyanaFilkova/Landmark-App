@@ -1,5 +1,9 @@
 <template>
-  <RouterLink to="/place" target="_blank" class="place-container" @click="handlePlaceClick">
+  <RouterLink
+    :to="{ name: 'place', params: { id: place.id } }"
+    target="_blank"
+    class="place-container"
+  >
     <div class="place_img">
       <img :src="imageSrc" alt="Place Image" />
     </div>
@@ -17,17 +21,12 @@
 
 <script setup lang="ts">
 import { defineProps, computed, onMounted, ref } from 'vue'
-import { useMapStore } from '@/stores/mapStore.ts'
 
 import reservePlaceIconPath from '@/assets/img/place_icon.jpg'
 
 import type { Place } from '@/types/interfaces.ts'
 
-const store = useMapStore()
-
-const props = defineProps<{
-  place: Place
-}>()
+const props = defineProps<{ place: Place }>()
 
 const description = ref<HTMLElement | null>(null)
 
@@ -50,10 +49,6 @@ const limitDescriptionLength = () => {
     description.value.style.maxHeight = `${maxHeight}px`
     description.value.style.maxWidth = `${100}%`
   }
-}
-
-const handlePlaceClick = () => {
-  store.setCurrentPlace(props.place)
 }
 
 onMounted(() => {

@@ -59,55 +59,32 @@ import BaseButton from '@/components/base/BaseButton.vue'
 
 import { convertFileToBase64 } from '@/utils/typeConversion.ts'
 
-const props = defineProps({
-  modelValue: {
-    type: Array as () => File[],
-    default: () => [],
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  accept: {
-    type: String,
-    default: 'image/*',
-  },
-  multiple: {
-    type: Boolean,
-    default: true,
-  },
-  maxFiles: {
-    type: Number,
-    default: 5,
-  },
-  errorMessage: {
-    type: String,
-    default: '',
-  },
-  buttonText: {
-    type: String,
-    default: 'Choose Files',
-  },
-  isFileLimitReached: {
-    type: Boolean,
-    default: false,
-  },
-  warningMessage: {
-    type: String,
-    default: '',
-  },
-  fileTypeInvalid: {
-    type: Boolean,
-    default: false,
-  },
-  isDisabled: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  modelValue: File[]
+  id: string
+  label: string
+  accept?: string
+  multiple?: boolean
+  maxFiles?: number
+  errorMessage?: string
+  buttonText?: string
+  isFileLimitReached?: boolean
+  warningMessage?: string
+  fileTypeInvalid?: boolean
+  isDisabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: () => [] as File[],
+  accept: 'image/*',
+  multiple: true,
+  maxFiles: 5,
+  errorMessage: '',
+  buttonText: 'Choose Files',
+  isFileLimitReached: false,
+  warningMessage: '',
+  fileTypeInvalid: false,
+  isDisabled: false,
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -130,27 +107,6 @@ const showImage = (index: number) => {
 
 const handleHide = () => {
   visible.value = false
-}
-
-const handleFileChange = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  if (input.files && input.files.length > 0) {
-    const newFiles = Array.from(input.files)
-
-    const validFiles = newFiles.filter(async (file) => {
-      const base64String = await convertFileToBase64(file)
-      if (base64String.length >= 1048576) {
-        fileSizeError.value = true
-        return false
-      }
-      return true
-    })
-    if (validFiles.length > 0) {
-      fileSizeError.value = false
-      const updatedFiles = [...props.modelValue, ...validFiles]
-      emit('update:modelValue', updatedFiles)
-    }
-  }
 }
 
 const removeFile = (index: number) => {
@@ -180,19 +136,31 @@ const handleDrop = (event: DragEvent) => {
   isDragOver.value = false
   if (!props.isDisabled && event.dataTransfer && event.dataTransfer.files.length > 0) {
     const newFiles = Array.from(event.dataTransfer.files)
-    const validFiles = newFiles.filter(async (file) => {
-      const base64String = await convertFileToBase64(file)
-      if (base64String.length >= 1048576) {
-        fileSizeError.value = true
-        return false
-      }
-      return true
-    })
-    if (validFiles.length > 0) {
-      fileSizeError.value = false
-      const updatedFiles = [...props.modelValue, ...validFiles]
-      emit('update:modelValue', updatedFiles)
+    handleuploadedFile(newFiles)
+  }
+}
+
+const handleFileChange = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  if (input.files && input.files.length > 0) {
+    const newFiles = Array.from(input.files)
+    handleuploadedFile(newFiles)
+  }
+}
+
+const handleuploadedFile = (newFiles: File[]) => {
+  const validFiles = newFiles.filter(async (file) => {
+    const base64String = await convertFileToBase64(file)
+    if (base64String.length >= 1048576) {
+      fileSizeError.value = true
+      return false
     }
+    return true
+  })
+  if (validFiles.length > 0) {
+    fileSizeError.value = false
+    const updatedFiles = [...props.modelValue, ...validFiles]
+    emit('update:modelValue', updatedFiles)
   }
 }
 </script>

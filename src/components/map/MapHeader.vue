@@ -2,7 +2,7 @@
   <div class="map-header">
     <div class="map-header-container">
       <h1 class="map-header__h1">Map</h1>
-      <RouterLink to="/add-place">
+      <RouterLink v-if="userHasAddPermission" :to="{ name: 'addPlace' }">
         <BaseButton class="medium-button" text="Add new place" />
       </RouterLink>
     </div>
@@ -14,13 +14,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 
-const store = useUserStore()
+const userStore = useUserStore()
+
+const userHasAddPermission = computed(() => {
+  return userStore.getUser?.role === 2
+})
 
 const handleLogoutClick = () => {
-  store.logout()
+  userStore.logout()
 }
 </script>
 
@@ -29,7 +35,7 @@ const handleLogoutClick = () => {
   padding: 20px 0 0 0;
   display: flex;
   justify-content: space-between;
-  gap: 30px;
+  gap: 4%;
 }
 .map-header-container {
   display: flex;
@@ -60,7 +66,7 @@ const handleLogoutClick = () => {
     flex-grow: 1;
     align-items: center;
   }
-  .map-header-container.single{
+  .map-header-container.single {
     width: fit-content;
     flex-grow: 0;
   }

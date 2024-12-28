@@ -14,30 +14,22 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, watch, defineEmits } from 'vue'
+import { defineProps, withDefaults, ref, watch, defineEmits } from 'vue'
 import { Rating } from '@morpheme/rating'
 
-const props = defineProps({
-  rating: {
-    type: Number,
-    required: true,
-  },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
-  increment: {
-    type: Number,
-    default: 0.1,
-  },
-  starSize: {
-    type: Number,
-    default: 24,
-  },
-  textClass: {
-    type: String,
-    default: 'normal',
-  },
+interface Props {
+  rating: number
+  readonly?: boolean
+  increment?: number
+  starSize?: number
+  textClass?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  readonly: false,
+  increment: 0.1,
+  starSize: 24,
+  textClass: 'normal',
 })
 
 const emit = defineEmits(['update:rating'])

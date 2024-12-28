@@ -66,10 +66,11 @@ import { useUserStore } from '@/stores/userStore.ts'
 
 import type { Place } from '@/types/interfaces.ts'
 
+const props = defineProps<{ place: Place | null }>()
+
 const mapStore = useMapStore()
 const userStore = useUserStore()
 
-const place = ref<Place | null>(null)
 const photoViewerVisible = ref(false)
 const photoViewerIndex = ref(0)
 const userRating = ref<number>(0)
@@ -84,27 +85,16 @@ const openPhotoViewer = (index: number) => {
 }
 
 const updateUserRating = (value: number) => {
-  userRating.value = value
-  mapStore.setNewCurrentPlaceUserRating(value)
+  if (props.place) {
+    userRating.value = value
+    mapStore.setNewUserRating(value, props.place)
+  }
 }
 
 watch(
   () => mapStore.getCurrentPlaceUserRating,
   (newValue) => {
     userRating.value = newValue || 0
-  },
-  { immediate: true },
-)
-
-watch(
-  () => mapStore.getCurrentPlace,
-  (newPlace) => {
-    if (newPlace) {
-      place.value = newPlace
-      photoViewerVisible.value = false
-    } else {
-      place.value = null
-    }
   },
   { immediate: true },
 )
@@ -128,6 +118,7 @@ watch(
 
 .ratings {
   display: flex;
+  justify-content: center;
   gap: 20%;
 }
 

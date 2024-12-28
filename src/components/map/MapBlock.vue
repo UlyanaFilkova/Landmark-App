@@ -8,24 +8,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 
 import { useMap } from '@/composables/useMap.ts'
 import { useMapStore } from '@/stores/mapStore.ts'
+import { useUserStore } from '@/stores/userStore.ts'
+import { getFilteredPlacesData } from '@/services/map'
 
 const store = useMapStore()
+const userStore = useUserStore()
+const userId = computed(() => userStore.getUser?.id)
 
-const places = computed(() => store.getFilteredPlaces)
+const places = computed(() => store.getPlaces)
 
-const { mapContainer } = useMap(places)
+const filteredPlaces = ref(places.value)
+
+const { mapContainer } = useMap(filteredPlaces)
+
+watch(
+  places,
+  (newPlaces) => {
+    filteredPlaces.value = newPlaces
+  },
+  { immediate: true },
+)
 
 const checkboxChecked = ref<boolean>(false)
 
-const handleCheckboxChange = () => {
+const handleCheckboxChange = async () => {
   checkboxChecked.value = !checkboxChecked.value
-  store.setOnlyUserPlaces(checkboxChecked.value)
+  if (checkboxChecked.value && userId.value) {
+    const resultPlaces = await getFilteredPlacesData(userId.value)
+    filteredPlaces.value = resultPlaces
+  } else {
+    filteredPlaces.value = places.value
+  }
 }
 </script>
 
@@ -74,7 +93,7 @@ const handleCheckboxChange = () => {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .popup-title {
@@ -95,5 +114,18 @@ const handleCheckboxChange = () => {
   height: auto;
   margin-bottom: 10px;
   border-radius: 8px;
+}
+
+.star-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.star-rating .star {
+  font-size: 20px;
+  color: #ffd700;
 }
 </style>

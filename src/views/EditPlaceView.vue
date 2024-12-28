@@ -1,30 +1,28 @@
 <template>
-  <div class="place-container">
-    <BaseLoader v-if="isLoading" />
-    <PlaceViewHeader :place="place" />
-    <PlaceBlock :place="place" />
+  <div class="place-view">
+    <PlaceAddHeader class="place-header" />
+    <NewPlaceForm :isEditing="true" :place="place" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
+
+import NewPlaceForm from '@/components/place/NewPlaceForm.vue'
+import PlaceAddHeader from '@/components/place/PlaceAddHeader.vue'
+
 import { useMapStore } from '@/stores/mapStore'
 import { useRoute } from 'vue-router'
-
-import PlaceViewHeader from '@/components/place/PlaceViewHeader.vue'
-import PlaceBlock from '@/components/place/PlaceBlock.vue'
-import BaseLoader from '@/components/base/BaseLoader.vue'
 
 import { getPlaceById } from '@/services/place.ts'
 
 import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
-const isLoading = ref(true)
 const route = useRoute()
-const place = ref<Place | null>(null)
-
+const isLoading = ref(true)
 const placeId = route.params.id as string
+const place = ref<Place | null>(null)
 
 const loadPlace = async (placeId: string) => {
   try {
@@ -49,17 +47,14 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-.place-container {
-  width: min(762px, 95%);
+.place-view {
+  width: 90%;
+  max-width: 600px;
 }
 
 @media (max-width: 576px) {
-  .place-container {
-    margin: 0 15px;
+  .place-header {
+    margin-bottom: 10px;
   }
-}
-
-.place-header {
-  padding: 15px 20px 0 20px;
 }
 </style>

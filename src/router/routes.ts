@@ -3,6 +3,7 @@ import RegistrationView from '@/views/RegistrationView.vue'
 import GeneralMapView from '@/views/GeneralMapView.vue'
 import AddPlaceView from '@/views/AddPlaceView.vue'
 import PlaceView from '@/views/PlaceView.vue'
+import EditPlaceView from '@/views/EditPlaceView.vue'
 
 export const routes = [
   {
@@ -27,13 +28,19 @@ export const routes = [
   },
   {
     path: '/add-place',
-    name: 'AddPlace',
+    name: 'addPlace',
     component: AddPlaceView,
     meta: { requiresAuth: true },
   },
   {
-    path: '/place',
-    name: 'Place',
+    path: '/edit/:id',
+    name: 'edit',
+    component: EditPlaceView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/place/:id',
+    name: 'place',
     component: PlaceView,
     meta: { requiresAuth: true },
   },

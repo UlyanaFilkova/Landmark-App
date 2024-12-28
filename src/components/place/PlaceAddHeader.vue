@@ -1,18 +1,11 @@
 <template>
   <div class="place-header">
-    <BackButton path="general-map" @click="handleBackClick" />
+    <BackLink path="../general-map" />
   </div>
 </template>
 
 <script setup lang="ts">
-import BackButton from '@/components/base/BackButton.vue'
-import { useMapStore } from '@/stores/mapStore.ts'
-
-const store = useMapStore()
-
-const handleBackClick = () => {
-  store.removeCurrentPlace()
-}
+import BackLink from '@/components/base/BackLink.vue'
 </script>
 
 <style scoped>

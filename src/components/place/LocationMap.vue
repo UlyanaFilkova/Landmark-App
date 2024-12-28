@@ -1,14 +1,14 @@
 <template>
   <div class="location-input">
     <div class="form-group form-group-inline">
-      <div class="inputs">
-        <div class="input-group">
+      <div class="groups">
+        <div class="group">
           <label>Latitude:</label>
-          <input :value="latitude" type="number" step="any" placeholder="Latitude" readonly />
+          <div>{{ latitude }}</div>
         </div>
-        <div class="input-group">
+        <div class="group">
           <label>Longitude:</label>
-          <input :value="longitude" type="number" step="any" placeholder="Longitude" readonly />
+          <div>{{ longitude }}</div>
         </div>
       </div>
     </div>
@@ -20,16 +20,10 @@
 <script setup lang="ts">
 import { usePlaceMap } from '@/composables/usePlaceMap.ts'
 
-const props = defineProps({
-  latitude: {
-    type: Number,
-    required: true,
-  },
-  longitude: {
-    type: Number,
-    required: true,
-  },
-})
+const props = defineProps<{
+  latitude: number
+  longitude: number
+}>()
 
 const { mapContainer } = usePlaceMap(props.latitude, props.longitude, true)
 </script>
@@ -58,15 +52,42 @@ const { mapContainer } = usePlaceMap(props.latitude, props.longitude, true)
   display: block;
 }
 
-.inputs {
+.groups {
+  display: flex;
+  gap: 10%;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+@media (max-width: 576px) {
+  .groups {
+    display: flex;
+    flex-direction: column;
+    gap: 10%;
+    justify-content: start;
+  }
+}
+
+.group {
   display: flex;
   gap: 10%;
   justify-content: center;
 }
 
+@media (max-width: 300px) {
+  .groups {
+    gap: 20px;
+    align-items: center;
+  }
+  .group {
+    flex-direction: column;
+  }
+}
+
 label {
   display: block;
   margin-bottom: 10px;
+  font-weight: 500;
 }
 
 input {
