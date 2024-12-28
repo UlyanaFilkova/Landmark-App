@@ -73,7 +73,7 @@ const { mapContainer } = usePlaceMap(props.latitude, props.longitude, false, emi
 .map-container {
   height: 300px;
   width: 100%;
-  border: 3px solid var(--color-forth);
+  border: 3px solid var(--color-border-three);
   border-radius: 5px;
   margin-top: 20px;
 }

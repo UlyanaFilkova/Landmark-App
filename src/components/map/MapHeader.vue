@@ -14,20 +14,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { watch, ref } from 'vue'
 
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 
 const userStore = useUserStore()
 
-const userHasAddPermission = computed(() => {
-  return userStore.getUser?.role === 2
-})
+const userHasAddPermission = ref(true)
 
 const handleLogoutClick = () => {
   userStore.logout()
 }
+
+watch(
+  () => userStore.getUser,
+  () => {
+    if (userStore.getUser) {
+      userHasAddPermission.value = userStore.getUser?.role === 2
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

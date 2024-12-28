@@ -1,11 +1,12 @@
 <template>
   <h2>{{ headerText }}</h2>
   <form @submit.prevent="handleSubmit" class="new-place-form">
-    <BaseInput
+    <label class="light-label">Title:</label>
+    <FormInput
       v-model:modelValue="formData.title"
       type="text"
-      id="title"
       label="Title"
+      placeholder=""
       :maxlength="70"
       :required="true"
     />
@@ -62,7 +63,7 @@ import { useRouter } from 'vue-router'
 
 import LocationInput from '@/components/place/LocationInput.vue'
 import StarRating from '@/components/base/StarRating.vue'
-import BaseInput from '@/components/base/BaseInput.vue'
+import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import FileInput from '@/components/base/FileInput.vue'
 import BaseTextarea from '@/components/base/BaseTextarea.vue'
@@ -244,6 +245,11 @@ label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
+}
+
+.light-label {
+  font-weight: 400;
+  margin-bottom: -10px;
 }
 
 input,

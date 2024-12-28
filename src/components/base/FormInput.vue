@@ -1,6 +1,13 @@
 <template>
   <div class="input-group">
-    <input :type="type" :value="modelValue" @input="handleInput" :placeholder="placeholder" />
+    <input
+      :type="type"
+      :value="modelValue"
+      @input="handleInput"
+      :placeholder="placeholder"
+      :required="required"
+      :maxlength="maxlength || undefined"
+    />
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
@@ -15,6 +22,8 @@ defineProps<{
   placeholder: string
   type?: string
   errorMessage?: string
+  required?: boolean
+  maxlength?: number
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -32,7 +41,7 @@ const handleInput = (event: Event) => {
 input {
   width: 100%;
   padding: 10px;
-  border: 1px solid var(--color-border-one);
+  border: 1px solid var(--color-border-three);
   border-radius: 5px;
 }
 .invalid-input {

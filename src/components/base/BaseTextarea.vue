@@ -47,7 +47,7 @@ const handleInput = (event: Event) => {
   min-height: 100px;
   padding: 10px;
   border: none;
-  outline: 1px solid var(--color-14);
+  outline: 1px solid var(--color-border-three);
   border-radius: 8px;
   display: block;
   margin-bottom: 20px;

@@ -129,6 +129,12 @@ export const useMapStore = defineStore('place', () => {
     }
   }
 
+  const resetStore = () => {
+    places.value = []
+    ratings.value = []
+    currentPlaceUserRating.value = undefined
+  }
+
   return {
     getPlaces,
     getRatings,
@@ -141,5 +147,6 @@ export const useMapStore = defineStore('place', () => {
     addNewPlace,
     editPlace,
     removePlace,
+    resetStore,
   }
 })
