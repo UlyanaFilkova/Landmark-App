@@ -1,6 +1,6 @@
 <template>
   <div class="place-header">
-    <BackButton path="general-map" @click="handleBackClick" />
+    <BackLink path="../general-map" />
     <div v-if="userHasEditPermission" class="header-buttons">
       <RouterLink to="/add-place">
         <BaseButton class="medium-button grey" text="Edit" />
@@ -19,39 +19,39 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-import BackButton from '@/components/base/BackButton.vue'
+import BackLink from '@/components/base/BackLink.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import ConfirmModal from '@/components/base/ConfirmModal.vue'
-
 import { useMapStore } from '@/stores/mapStore'
+
 import { useUserStore } from '@/stores/userStore'
 
-const mapStore = useMapStore()
+import type { Place } from '@/types/interfaces.ts'
+
 const userStore = useUserStore()
+const mapStore = useMapStore()
 const router = useRouter()
 
 const showModal = ref(false)
 
-const userHasEditPermission = computed(() => {
-  return (
-    userStore.getUser?.role === 1 || mapStore.getCurrentPlace?.authorId === userStore.getUser?.id
-  )
-})
+const props = defineProps<{ place: Place | null }>()
 
-const handleBackClick = () => {
-  mapStore.removeCurrentPlace()
-}
+const userHasEditPermission = computed(() => {
+  if (props.place) {
+    return userStore.getUser?.role === 1 || userStore.getUser?.id === props.place.authorId
+  }
+  return false
+})
 
 const handleDeleteClick = async () => {
   showModal.value = false
-  const currentPlace = mapStore.getCurrentPlace
 
-  if (currentPlace) {
-    await mapStore.removePlace(currentPlace.id)
+  if (props.place) {
+    await mapStore.removePlace(props.place.id)
     mapStore.fetchPlaces()
     router.push({ name: 'generalMap' })
   } else {
-    console.error('Current place is undefined')
+    console.error('props.place is undefined')
   }
 }
 </script>

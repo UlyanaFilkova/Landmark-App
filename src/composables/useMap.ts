@@ -19,7 +19,7 @@ export function useMap(places: Ref<Place[]>) {
 
     const htmlContent = `
       <div class="popup-content">
-        <a href="/place" target="_blank" class="popup-title">
+        <a href="/place/${place.id}" target="_blank" class="popup-title">
           ${place.title}
         </a>
         <div class="star-rating" style="pointer-events: none;">

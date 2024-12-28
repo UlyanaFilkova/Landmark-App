@@ -23,7 +23,7 @@ import VirtualList from 'vue3-virtual-scroll-list'
 import PlaceCard from '@/components/map/PlaceCard.vue'
 
 import { useMapStore } from '@/stores/mapStore.ts'
-import { calculateMetricRating } from '@/services/place.ts'
+import { calculateMetricRating } from '@/utils/typeConversion.ts'
 import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()

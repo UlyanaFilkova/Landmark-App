@@ -1,3 +1,9 @@
+export const calculateMetricRating = (averageRating: number, ratingCount: number): number => {
+  const k = 0.1
+  const metricRating = averageRating * (1 - Math.exp(-k * ratingCount))
+  return metricRating
+}
+
 export const convertFilesToBase64 = (files: File[]): Promise<string[]> => {
   return new Promise((resolve, reject) => {
     if (files.length === 0) {

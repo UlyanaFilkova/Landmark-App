@@ -26,8 +26,6 @@ const loadData = async () => {
   isLoading.value = true
   if (store.getPlaces.length === 0) {
     await store.loadInitialData()
-  } else {
-    store.loadCurrentPlace()
   }
   isLoading.value = false
 }
