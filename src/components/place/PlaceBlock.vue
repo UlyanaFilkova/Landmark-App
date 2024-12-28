@@ -118,6 +118,7 @@ watch(
 
 .ratings {
   display: flex;
+  justify-content: center;
   gap: 20%;
 }
 
