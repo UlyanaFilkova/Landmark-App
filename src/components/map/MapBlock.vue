@@ -74,7 +74,7 @@ const handleCheckboxChange = () => {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .popup-title {
@@ -95,5 +95,18 @@ const handleCheckboxChange = () => {
   height: auto;
   margin-bottom: 10px;
   border-radius: 8px;
+}
+
+.star-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.star-rating .star {
+  font-size: 20px;
+  color: #ffd700;
 }
 </style>
