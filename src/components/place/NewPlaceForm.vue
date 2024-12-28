@@ -190,12 +190,21 @@ const loadCurrentPlace = () => {
     formData.value.photos = convertBase64ToFiles(props.place.photos || [])
 
     originalFormData.value = { ...formData.value }
-    headerText.value = 'Edit place'
     buttonText.value = 'Save place'
-  } else {
-    headerText.value = 'Add a new place'
   }
 }
+
+watch(
+  () => props.isEditing,
+  () => {
+    if (!props.isEditing) {
+      headerText.value = 'Add a new place'
+    } else {
+      headerText.value = 'Edit place'
+    }
+  },
+  { immediate: true },
+)
 
 watch(
   () => props.place,
