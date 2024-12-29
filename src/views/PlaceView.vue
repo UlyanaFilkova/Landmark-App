@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import { useMapStore } from '@/stores/mapStore'
 import { useRoute } from 'vue-router'
 
@@ -46,6 +46,16 @@ onBeforeMount(() => {
   loadPlace(placeId)
   loadData()
 })
+
+watch(
+  () => store.isDataLoaded,
+  (newValue) => {
+    if (newValue) {
+      loadPlace(placeId)
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

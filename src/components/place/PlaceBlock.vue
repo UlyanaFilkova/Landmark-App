@@ -63,6 +63,7 @@ import LocationMap from '@/components/place/LocationMap.vue'
 
 import { useMapStore } from '@/stores/mapStore.ts'
 import { useUserStore } from '@/stores/userStore.ts'
+import { getPlaceById } from '@/services/place.ts'
 
 import type { Place } from '@/types/interfaces.ts'
 

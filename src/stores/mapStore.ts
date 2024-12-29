@@ -53,8 +53,11 @@ export const useMapStore = defineStore('place', () => {
       userId: userId.value,
       placeId: place.id,
     }
+    isDataLoaded.value = false
     await addRating(rating)
     await Promise.all([fetchRatings(), fetchPlaces()])
+
+    isDataLoaded.value = true
   }
 
   const loadUserRating = (place: Place) => {
