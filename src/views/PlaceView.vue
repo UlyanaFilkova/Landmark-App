@@ -1,7 +1,7 @@
 <template>
   <div class="place-container">
     <BaseLoader v-if="isLoading" />
-    <PlaceViewHeader :place="place" />
+    <PlaceViewHeader v-if="place" :place="place" />
     <PlaceBlock :place="place" />
   </div>
 </template>

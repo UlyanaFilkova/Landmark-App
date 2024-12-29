@@ -1,8 +1,7 @@
 import { ref, onMounted, watch } from 'vue'
-import * as L from 'leaflet'
+import { tileLayer, marker, Marker, map, Map } from 'leaflet'
+import type { LeafletMouseEvent } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
 
 type Emit = (event: 'update:latitude' | 'update:longitude', ...args: any[]) => void
@@ -14,27 +13,27 @@ export function usePlaceMap(
   emit?: Emit,
 ) {
   const mapContainer = ref<HTMLDivElement | null>(null)
-  const map = ref<L.Map>()
-  const marker = ref<L.Marker | null>(null)
+  const mapEntity = ref<Map>()
+  const markerEntity = ref<Marker | null>(null)
   const latitude = ref(initialLatitude)
   const longitude = ref(initialLongitude)
 
   const initializePlaceMap = async () => {
     if (mapContainer.value) {
-      map.value = L.map(mapContainer.value).setView([latitude.value, longitude.value], 11)
+      mapEntity.value = map(mapContainer.value).setView([latitude.value, longitude.value], 11)
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map.value)
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapEntity.value)
 
       if (!readonly) {
-        map.value.on('click', (e: L.LeafletMouseEvent) => {
+        mapEntity.value.on('click', (e: LeafletMouseEvent) => {
           const { lat, lng } = e.latlng
           updateLatitude(lat)
           updateLongitude(lng)
 
-          if (marker.value) {
-            marker.value.setLatLng(e.latlng)
-          } else {
-            marker.value = L.marker(e.latlng).addTo(map.value)
+          if (markerEntity.value) {
+            markerEntity.value.setLatLng(e.latlng)
+          } else if (mapEntity.value) {
+            markerEntity.value = marker(e.latlng).addTo(mapEntity.value)
           }
         })
       }
@@ -44,12 +43,12 @@ export function usePlaceMap(
   }
 
   const updateMapCenter = (lat: number, lng: number) => {
-    if (map.value) {
-      map.value.setView([lat, lng], map.value.getZoom())
-      if (marker.value) {
-        marker.value.setLatLng([lat, lng])
+    if (mapEntity.value) {
+      mapEntity.value.setView([lat, lng], mapEntity.value.getZoom())
+      if (markerEntity.value) {
+        markerEntity.value.setLatLng([lat, lng])
       } else {
-        marker.value = L.marker([lat, lng]).addTo(map.value)
+        markerEntity.value = marker([lat, lng]).addTo(mapEntity.value)
       }
     }
   }

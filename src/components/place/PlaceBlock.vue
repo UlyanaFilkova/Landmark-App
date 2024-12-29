@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, computed, watch } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 
 import StarRating from '@/components/base/StarRating.vue'
