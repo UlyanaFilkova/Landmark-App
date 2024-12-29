@@ -82,6 +82,7 @@ export const useMapStore = defineStore('place', () => {
 
   const addNewPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
     try {
+      isDataLoaded.value = false
       if (!userId.value) {
         throw new Error('User ID is missing')
       }
@@ -90,7 +91,9 @@ export const useMapStore = defineStore('place', () => {
 
       if (response && response.id) {
         places.value.push({ ...placeData, authorId: userId.value, id: response.id })
-        return 'success'
+        await fetchRatings()
+        isDataLoaded.value = true
+        return response.id
       }
       return 'Error adding new place'
     } catch (error) {
@@ -100,6 +103,7 @@ export const useMapStore = defineStore('place', () => {
 
   const editPlace = async (placeId: string, placeData: Omit<Place, 'authorId' | 'id'>) => {
     try {
+      isDataLoaded.value = false
       if (!userId.value || !placeId) {
         throw new Error('User ID or Place ID is missing')
       }
@@ -113,7 +117,9 @@ export const useMapStore = defineStore('place', () => {
         const placeIndex = places.value.findIndex((place) => place.id === placeId)
         if (placeIndex !== -1) {
           places.value[placeIndex] = { ...places.value[placeIndex], ...placeData }
-          return 'success'
+          await fetchRatings()
+          isDataLoaded.value = true
+          return places.value[placeIndex].id
         }
         return 'Error updating place locally'
       }

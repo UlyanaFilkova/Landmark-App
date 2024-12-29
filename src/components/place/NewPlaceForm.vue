@@ -168,8 +168,8 @@ const handleSubmit = async () => {
         props.isEditing && props.place
           ? await store.editPlace(props.place?.id, placeData)
           : await store.addNewPlace(placeData)
-      if (result === 'success') {
-        router.push({ name: 'generalMap' })
+      if (result) {
+        router.push({ name: 'place', params: { id: result } })
         clearForm()
       }
     } catch (error) {
