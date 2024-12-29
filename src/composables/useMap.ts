@@ -27,7 +27,13 @@ export function useMap(places: Ref<Place[]>) {
         <div class="star-rating" style="pointer-events: none;">
           Rating: ${place.rating}<span class="star">★</span>
         </div>
-        ${photos.length > 0 ? `<img src="${getFileUrl(photos[0])}" class="place-photo" />` : ''}
+        ${
+          photos.length > 0
+            ? `<div class="place-photo-wrapper">
+           <img src="${getFileUrl(photos[0])}" class="place-photo" />
+         </div>`
+            : ''
+        }
       </div>
     `
     popupContainer.innerHTML = htmlContent

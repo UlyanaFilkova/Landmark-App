@@ -109,11 +109,26 @@ const handleCheckboxChange = async () => {
   cursor: pointer;
 }
 
+.place-photo-wrapper {
+  width: 100%;
+  max-width: 100%;
+
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .place-photo {
   width: 100%;
   height: auto;
   margin-bottom: 10px;
   border-radius: 8px;
+  max-height: 100px;
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .star-rating {
