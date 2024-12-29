@@ -20,7 +20,7 @@ npm run dev
 
 **Routing**: Vue Router
 
-**State Management**: Vuex
+**State Management**: Pinia
 
 **Form Validation**: Vuelidate
 
@@ -29,3 +29,11 @@ npm run dev
 **Build Tool**: Vite
 
 **Linting and Formatting**: ESLint, Prettier
+
+**Mapping**: Leaflet + Leaflet.MarkerCluster
+
+**Lightbox**: Vue Easy Lightbox
+
+**Rating Component**: Morpheme Rating
+
+**Virtual Scrolling**: Vue Virtual Scroller
