@@ -35,6 +35,17 @@ const getTokenFromCookies = () => {
   return ''
 }
 
+const refreshTokenIfNeeded = async (user: FBUser): Promise<string> => {
+  try {
+    const newToken = await user.getIdToken(true)
+    await saveTokenInCookies(user)
+    return newToken
+  } catch (error) {
+    console.error('Error refreshing token:', error)
+    throw new Error('Error refreshing token')
+  }
+}
+
 export const checkUserAuthentication = async (): Promise<string | void> => {
   const idToken = getTokenFromCookies()
 
@@ -49,8 +60,14 @@ export const checkUserAuthentication = async (): Promise<string | void> => {
 
               resolve(userId)
             } else {
-              console.log('Token mismatch')
-              reject('Token mismatch')
+              console.log('Token mismatch, attempting to refresh token')
+              const newToken = await refreshTokenIfNeeded(user)
+              if (newToken === idToken) {
+                const userId = user.uid
+                resolve(userId)
+              } else {
+                reject('Token mismatch')
+              }
             }
           } catch (error) {
             console.error('Error verifying token', error)
@@ -96,31 +113,6 @@ export const checkUser = async (username: string, password: string): Promise<str
   }
 }
 
-// export const checkUser = async (username: string, password: string): Promise<string> => {
-//   try {
-//     const q = query(usersCollection, where('username', '==', username))
-//     const querySnapshot = await getDocs(q)
-
-//     if (!querySnapshot.empty) {
-//       const userDoc = querySnapshot.docs[0]
-//       const userData = userDoc.data() as FullUser
-
-//       const userId = userDoc.id
-
-//       if (userData.password === password) {
-//         // if passwords match
-//         localStorage.setItem('userId', userId)
-//         return ''
-//       }
-//     }
-//     // If the user is not found or the passwords do not match
-//     return 'Invalid email or password'
-//   } catch (error) {
-//     console.error('Error checking user:', error)
-//     return 'Error checking user'
-//   }
-// }
-
 export const registerUser = async (username: string, password: string): Promise<boolean> => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, username, password)
@@ -142,28 +134,6 @@ export const registerUser = async (username: string, password: string): Promise<
     return false
   }
 }
-
-// export const registerUser = async (username: string, password: string): Promise<boolean> => {
-//   try {
-//     const newUser: Omit<FullUser, 'id'> = {
-//       username,
-//       password,
-//       role: 2,
-//     }
-
-//     const docRef = await addDoc(usersCollection, newUser)
-
-//     if (!docRef) {
-//       return false
-//     }
-
-//     localStorage.setItem('userId', docRef.id)
-//     return true
-//   } catch (error) {
-//     console.error('Error registering user:', error)
-//     return false
-//   }
-// }
 
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
   try {
