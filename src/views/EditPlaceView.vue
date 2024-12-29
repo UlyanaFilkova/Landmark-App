@@ -1,6 +1,6 @@
 <template>
   <div class="place-view">
-    <PlaceAddHeader class="place-header" />
+    <PlaceAddHeader class="place-header" :place="place" />
     <NewPlaceForm :isEditing="true" :place="place" />
   </div>
 </template>
