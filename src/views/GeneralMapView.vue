@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <GlobalError v-if="isError" />
+  <div v-else class="container">
     <BaseLoader v-if="isLoading" />
     <MapHeader class="map-header" />
     <div class="content">
@@ -18,16 +19,25 @@ import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
 import TopPlaces from '@/components/map/TopPlaces.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
+import GlobalError from '@/components/base/GlobalError.vue'
 
 const store = useMapStore()
 const isLoading = ref(true)
+const isError = ref(false)
 
 const loadData = async () => {
   isLoading.value = true
-  if (store.getPlaces.length === 0) {
-    await store.loadInitialData()
+  isError.value = false
+  try {
+    if (store.getPlaces.length === 0) {
+      await store.loadInitialData()
+    }
+  } catch (error) {
+    console.error('Error loading data:', error)
+    isError.value = true
+  } finally {
+    isLoading.value = false
   }
-  isLoading.value = false
 }
 
 onBeforeMount(() => {
