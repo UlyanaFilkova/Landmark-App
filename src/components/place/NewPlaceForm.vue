@@ -92,6 +92,7 @@ const initialFormData = {
 
 const headerText = ref('')
 const buttonText = ref('Add place')
+const isSubmitting = ref(false)
 
 const formData = ref({ ...initialFormData })
 const originalFormData = ref({ ...initialFormData })
@@ -108,11 +109,11 @@ const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
 const fileTypeInvalid = ref(false)
 
 const isSubmitButtonDisabled = computed(() => {
-  if (props.isEditing) {
-    return !isFormDataChanged.value || !isFormValid.value
-  } else {
-    return !isFormValid.value
-  }
+  return (
+    (props.isEditing && (!isFormDataChanged.value || !isFormValid.value)) ||
+    !isFormValid.value ||
+    isSubmitting.value
+  )
 })
 
 const isFormDataChanged = computed(() => {
@@ -152,6 +153,7 @@ const updateRating = (value: number) => {
 
 const handleSubmit = async () => {
   if (isFormValid.value) {
+    isSubmitting.value = true
     try {
       const base64Photos = await convertFilesToBase64(formData.value.photos)
 

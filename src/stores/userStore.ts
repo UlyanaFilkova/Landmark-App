@@ -13,7 +13,8 @@ export const useUserStore = defineStore('user', () => {
 
   const fetchUser = async () => {
     try {
-      userId.value = checkUserAuthentication() || ''
+      userId.value = (await checkUserAuthentication()) || ''
+
       if (userId.value) {
         user.value = (await getUserById(userId.value)) as User
       }
@@ -25,7 +26,9 @@ export const useUserStore = defineStore('user', () => {
   const logout = () => {
     resetStore()
     useMapStore().resetStore()
-    localStorage.removeItem('userId')
+    document.cookie =
+      'idToken=; path=/; Secure; SameSite=Strict; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+
     router.push({ name: 'login' })
   }
 

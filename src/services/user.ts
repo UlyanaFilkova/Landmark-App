@@ -56,18 +56,18 @@ export const checkUserAuthentication = async (): Promise<string | void> => {
             if (token === idToken) {
               const userId = user.uid
 
-              resolve(userId) // Разрешаем промис с userId
+              resolve(userId)
             } else {
               console.log('Token mismatch')
-              reject('Token mismatch') // Отклоняем промис в случае несоответствия
+              reject('Token mismatch')
             }
           } catch (error) {
             console.error('Error verifying token', error)
-            reject('Error verifying token') // Отклоняем промис в случае ошибки
+            reject('Error verifying token')
           }
         } else {
           console.log('User not authenticated')
-          reject('User not authenticated') // Отклоняем промис, если пользователь не аутентифицирован
+          reject('User not authenticated')
         }
       })
     })
@@ -143,8 +143,7 @@ export const registerUser = async (username: string, password: string): Promise<
 
     await addDoc(usersCollection, { ...newUser })
 
-    const idToken = await userCredential.user.getIdToken()
-    localStorage.setItem('idToken', idToken)
+    await saveTokenInCookies(userCredential.user)
 
     return true
   } catch (error) {
@@ -188,11 +187,15 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
 
 export const getUserById = async (userId: string): Promise<User | null> => {
   try {
-    const userDocRef = doc(firestore, `users/${userId}`)
-    const userDocSnap = await getDoc(userDocRef)
-    if (userDocSnap.exists()) {
-      const userData = userDocSnap.data()
-      return { id: userDocSnap.id, role: userData.role } as User
+    const q = query(usersCollection, where('uid', '==', userId))
+    const querySnapshot = await getDocs(q)
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0]
+      const userData = userDoc.data() as FullUser
+
+      const id = userData.uid
+      const role = userData.role
+      return { id, role } as User
     } else {
       return null
     }
