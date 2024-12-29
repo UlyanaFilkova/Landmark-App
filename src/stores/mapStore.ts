@@ -9,16 +9,22 @@ import { useUserStore } from './userStore'
 import type { Place, Rating } from '@/types/interfaces'
 
 export const useMapStore = defineStore('place', () => {
+  const userStore = useUserStore()
+  const userId = computed(() => userStore.userId)
+
   const places = ref<Place[]>([])
   const ratings = ref<Rating[]>([])
-  const currentPlaceUserRating = ref<number | undefined>(undefined)
-
-  const userStore = useUserStore()
-  const userId = computed(() => userStore.getUser?.id)
+  const isDataLoaded = ref(false)
 
   const getPlaces = computed(() => places.value)
   const getRatings = computed(() => ratings.value)
-  const getCurrentPlaceUserRating = computed(() => currentPlaceUserRating.value)
+
+  const getCurrentPlaceUserRating = (placeId: string) => {
+    const userRating = ratings.value.find(
+      (rating) => rating.placeId === placeId && rating.userId === userId.value,
+    )
+    return userRating ? userRating.rating : 0
+  }
 
   const fetchPlaces = async () => {
     try {
@@ -42,7 +48,6 @@ export const useMapStore = defineStore('place', () => {
   const setNewUserRating = async (ratingValue: number, place: Place) => {
     if (!userId.value || !place) return
 
-    currentPlaceUserRating.value = ratingValue
     const rating: Omit<Rating, 'id'> = {
       rating: ratingValue,
       userId: userId.value,
@@ -69,6 +74,7 @@ export const useMapStore = defineStore('place', () => {
 
   const loadInitialData = async () => {
     await Promise.all([fetchPlaces(), userStore.fetchUser(), fetchRatings()])
+    isDataLoaded.value = true
   }
 
   const addNewPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
@@ -132,10 +138,10 @@ export const useMapStore = defineStore('place', () => {
   const resetStore = () => {
     places.value = []
     ratings.value = []
-    currentPlaceUserRating.value = undefined
   }
 
   return {
+    isDataLoaded,
     getPlaces,
     getRatings,
     getCurrentPlaceUserRating,

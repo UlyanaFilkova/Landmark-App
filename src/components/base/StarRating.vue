@@ -38,6 +38,13 @@ const rating = ref(props.rating)
 const activeColor = '#ffc013'
 const inactiveColor = '#aaa'
 
+watch(
+  () => props.rating,
+  (newValue) => {
+    rating.value = newValue
+  },
+)
+
 watch(rating, (newValue) => {
   emit('update:rating', newValue)
 })

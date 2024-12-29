@@ -35,6 +35,7 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     getUser,
+    userId,
     fetchUser,
     logout,
   }

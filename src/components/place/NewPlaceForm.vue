@@ -87,7 +87,7 @@ const initialFormData = {
   latitude: 53.9,
   longitude: 27.5667,
   photos: [] as File[],
-  rating: store.getCurrentPlaceUserRating || 5,
+  rating: 0,
 }
 
 const headerText = ref('')
@@ -155,7 +155,7 @@ const handleSubmit = async () => {
     try {
       const base64Photos = await convertFilesToBase64(formData.value.photos)
 
-      const place: Omit<Place, 'authorId' | 'id'> = {
+      const placeData: Omit<Place, 'authorId' | 'id'> = {
         title: formData.value.title,
         description: formData.value.description,
         rating: formData.value.rating,
@@ -164,7 +164,10 @@ const handleSubmit = async () => {
         voices: 1,
       }
 
-      const result = props.isEditing ? await store.editPlace(place) : await store.addNewPlace(place)
+      const result =
+        props.isEditing && props.place
+          ? await store.editPlace(props.place?.id, placeData)
+          : await store.addNewPlace(placeData)
       if (result === 'success') {
         router.push({ name: 'generalMap' })
         clearForm()
@@ -187,7 +190,7 @@ const loadCurrentPlace = () => {
     formData.value.description = props.place.description
     formData.value.latitude = props.place.location[0]
     formData.value.longitude = props.place.location[1]
-    formData.value.rating = store.getCurrentPlaceUserRating || 0
+    formData.value.rating = store.getCurrentPlaceUserRating(props.place?.id)
     formData.value.photos = convertBase64ToFiles(props.place.photos || [])
 
     originalFormData.value = { ...formData.value }
