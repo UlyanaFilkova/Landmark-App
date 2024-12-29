@@ -14,6 +14,29 @@ npm run dev
 
 ## Database snapshot
 
+```
+users
+  │── username
+  │── password
+  │── role
+
+
+places
+  │── title
+  │── description
+  │── location
+  │── photos
+  │── rating
+  │── voices
+  │── authorId
+
+
+ratings
+  │── rating
+  │── userId
+  │── placeId
+```
+
 ## Application stack
 
 **Frontend Framework**: Vue.js + TypeScript
@@ -30,7 +53,7 @@ npm run dev
 
 **Linting and Formatting**: ESLint, Prettier
 
-**Mapping**: Leaflet + Leaflet.MarkerCluster
+**Mapping**: Leaflet
 
 **Lightbox**: Vue Easy Lightbox
 
