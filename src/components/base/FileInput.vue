@@ -57,7 +57,7 @@ import VueEasyLightbox from 'vue-easy-lightbox'
 
 import BaseButton from '@/components/base/BaseButton.vue'
 
-import { convertFileToBase64 } from '@/utils/typeConversion.ts'
+import { convertFileToBase64, getFileUrl } from '@/utils/typeConversion.ts'
 
 interface Props {
   modelValue: File[]
@@ -95,8 +95,6 @@ const currentImageIndex = ref(0)
 
 const fileSizeError = ref(false)
 const fileSizeErrorMessage = ref('File size exceeds limit. Please upload a smaller file.')
-
-const getFileUrl = (file: File) => URL.createObjectURL(file)
 
 const imageUrls = computed(() => props.modelValue.map((file) => URL.createObjectURL(file)))
 

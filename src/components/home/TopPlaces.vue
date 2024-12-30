@@ -21,7 +21,7 @@ import { ref, computed, watch } from 'vue'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller } from 'vue-virtual-scroller'
 
-import PlaceCard from '@/components/map/PlaceCard.vue'
+import PlaceCard from '@/components/home/PlaceCard.vue'
 
 import { calculateMetricRating } from '@/utils/typeConversion.ts'
 import type { Place } from '@/types/interfaces.ts'

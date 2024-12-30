@@ -1,3 +1,5 @@
+export const getFileUrl = (file: File) => URL.createObjectURL(file)
+
 export const calculateMetricRating = (averageRating: number, ratingCount: number): number => {
   const k = 0.1
   const metricRating = averageRating * (1 - Math.exp(-k * ratingCount))

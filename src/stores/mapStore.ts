@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-import { getPlacesData, getRatingsData } from '@/services/map'
+import { getPlacesData, getRatingsData } from '@/services/place'
 import { addPlace, addRating, updatePlace, deletePlace } from '@/services/place'
 
 import { useUserStore } from './userStore'

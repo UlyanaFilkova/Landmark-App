@@ -6,8 +6,8 @@
         <div class="input-group">
           <label>Latitude:</label>
           <input
-            :value="latitude"
-            @input="updateLatitude($event)"
+            v-model="latitude"
+            @input="updateLatitude()"
             type="number"
             step="any"
             placeholder="Latitude"
@@ -19,8 +19,8 @@
         <div class="input-group">
           <label>Longitude:</label>
           <input
-            :value="longitude"
-            @input="updateLongitude($event)"
+            v-model="longitude"
+            @input="updateLongitude()"
             type="number"
             step="any"
             placeholder="Longitude"
@@ -35,12 +35,19 @@
       </p>
     </div>
 
-    <div ref="mapContainer" id="map" class="map-container"></div>
+    <MapComponent
+      :points="[point]"
+      :readonly="false"
+      :single="true"
+      @update:сoordinates="updateCoordinatesFromMap"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { usePlaceMap } from '@/composables/usePlaceMap.ts'
+import { ref, computed, watch } from 'vue'
+import MapComponent from '@/components/common/MapComponent.vue'
+import type { MapPoint } from '@/types/interfaces.ts'
 
 interface Props {
   latitude: number
@@ -52,17 +59,43 @@ const props = withDefaults(defineProps<Props>(), {
   locationInvalid: false,
 })
 
+const latitude = ref(props.latitude)
+const longitude = ref(props.longitude)
+
+const point = computed<MapPoint>(() => {
+  return {
+    id: '',
+    title: '',
+    location: [latitude.value, longitude.value],
+    rating: 0,
+    photos: [],
+  }
+})
+
 const emit = defineEmits(['update:latitude', 'update:longitude'])
 
-const updateLatitude = (event: Event) => {
-  emit('update:latitude', parseFloat((event.target as HTMLInputElement).value))
+const updateLatitude = () => {
+  emit('update:latitude', latitude.value)
 }
 
-const updateLongitude = (event: Event) => {
-  emit('update:longitude', parseFloat((event.target as HTMLInputElement).value))
+const updateLongitude = () => {
+  emit('update:longitude', longitude.value)
 }
 
-const { mapContainer } = usePlaceMap(props.latitude, props.longitude, false, emit)
+const updateCoordinatesFromMap = (coordinates: [number, number]) => {
+  latitude.value = coordinates[0]
+  longitude.value = coordinates[1]
+  updateLatitude()
+  updateLongitude()
+}
+
+watch(
+  () => [props.latitude, props.longitude],
+  ([newLat, newLng]) => {
+    latitude.value = newLat
+    longitude.value = newLng
+  },
+)
 </script>
 
 <style scoped>
