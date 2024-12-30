@@ -13,22 +13,22 @@ import { ref, computed, watch } from 'vue'
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 
 import { useMap } from '@/composables/useMap.ts'
-import { useMapStore } from '@/stores/mapStore.ts'
 import { useUserStore } from '@/stores/userStore.ts'
 import { getFilteredPlacesData } from '@/services/map'
 
-const store = useMapStore()
+import type { Place } from '@/types/interfaces.ts'
+
+const props = defineProps<{ places: Place[] }>()
+
 const userStore = useUserStore()
 const userId = computed(() => userStore.getUser?.id)
 
-const places = computed(() => store.getPlaces)
-
-const filteredPlaces = ref(places.value)
+const filteredPlaces = ref<Place[]>(props.places)
 
 const { mapContainer } = useMap(filteredPlaces)
 
 watch(
-  places,
+  () => props.places,
   (newPlaces) => {
     filteredPlaces.value = newPlaces
   },
@@ -43,7 +43,7 @@ const handleCheckboxChange = async () => {
     const resultPlaces = await getFilteredPlacesData(userId.value)
     filteredPlaces.value = resultPlaces
   } else {
-    filteredPlaces.value = places.value
+    filteredPlaces.value = props.places
   }
 }
 </script>

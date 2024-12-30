@@ -23,12 +23,10 @@ import { DynamicScroller } from 'vue-virtual-scroller'
 
 import PlaceCard from '@/components/map/PlaceCard.vue'
 
-import { useMapStore } from '@/stores/mapStore.ts'
 import { calculateMetricRating } from '@/utils/typeConversion.ts'
 import type { Place } from '@/types/interfaces.ts'
 
-const store = useMapStore()
-const places = computed(() => store.getPlaces)
+const props = defineProps<{ places: Place[] }>()
 
 const pageSize = 10
 const items = ref<Place[]>([])
@@ -36,7 +34,7 @@ let pageNum = 0
 const loading = ref(false)
 
 const sortedPlaces = computed(() => {
-  return places.value
+  return props.places
     .map((place) => {
       const metricRating = calculateMetricRating(place.rating, place.voices)
       return { ...place, metricRating }
@@ -75,9 +73,9 @@ const onScroll = (event: Event) => {
 }
 
 watch(
-  places,
+  () => props.places,
   () => {
-    if (places.value.length > 0 && pageNum === 0) {
+    if (props.places.length > 0 && pageNum === 0) {
       loadMorePlaces()
       updateListHeight()
     }
