@@ -30,7 +30,7 @@ const props = defineProps<{ place: Place }>()
 
 const description = ref<HTMLElement | null>(null)
 
-const imageSrc = computed(() => {
+const imageSrc = computed<string>(() => {
   if (props.place.photos && props.place.photos.length > 0) {
     if (props.place.photos[0].startsWith('data:image')) {
       return props.place.photos[0]

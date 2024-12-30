@@ -1,11 +1,19 @@
 <template>
   <div class="place-header">
-    <BackLink path="../general-map" />
+    <BackLink :path="path" />
   </div>
 </template>
 
 <script setup lang="ts">
 import BackLink from '@/components/base/BackLink.vue'
+import type { Place } from '@/types/interfaces.ts'
+import { computed } from 'vue'
+
+const props = defineProps<{
+  place?: Place | null
+}>()
+
+const path = computed<string>(() => (props.place ? '../place/' + props.place.id : '../general-map'))
 </script>
 
 <style scoped>

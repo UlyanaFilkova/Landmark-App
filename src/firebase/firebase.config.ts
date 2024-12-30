@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app'
 import {
   getFirestore,
   collection,
@@ -11,8 +11,9 @@ import {
   getDoc,
   GeoPoint,
   doc,
-} from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+} from 'firebase/firestore'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -21,10 +22,11 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_ID,
-};
-const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
-const storage = getStorage(app);
+}
+const app = initializeApp(firebaseConfig)
+const firestore = getFirestore(app)
+const storage = getStorage(app)
+const auth = getAuth(app)
 
 export {
   collection,
@@ -38,8 +40,9 @@ export {
   deleteDoc,
   firestore,
   storage,
+  auth,
   ref,
   uploadBytes,
   getDownloadURL,
   GeoPoint,
-};
+}

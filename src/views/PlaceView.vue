@@ -1,19 +1,21 @@
 <template>
-  <div class="place-container">
+  <GlobalError v-if="isError" />
+  <div v-else class="place-container">
     <BaseLoader v-if="isLoading" />
-    <PlaceViewHeader :place="place" />
+    <PlaceViewHeader v-if="place" :place="place" />
     <PlaceBlock :place="place" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, watch } from 'vue'
 import { useMapStore } from '@/stores/mapStore'
 import { useRoute } from 'vue-router'
 
 import PlaceViewHeader from '@/components/place/PlaceViewHeader.vue'
 import PlaceBlock from '@/components/place/PlaceBlock.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
+import GlobalError from '@/components/base/GlobalError.vue'
 
 import { getPlaceById } from '@/services/place.ts'
 
@@ -21,6 +23,7 @@ import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
 const isLoading = ref(true)
+const isError = ref(false)
 const route = useRoute()
 const place = ref<Place | null>(null)
 
@@ -36,16 +39,33 @@ const loadPlace = async (placeId: string) => {
 
 const loadData = async () => {
   isLoading.value = true
-  if (store.getPlaces.length === 0) {
-    await store.loadInitialData()
+  isError.value = false
+  try {
+    if (store.getPlaces.length === 0) {
+      await store.loadInitialData()
+    }
+  } catch (error) {
+    console.error('Error loading data:', error)
+    isError.value = true
+  } finally {
+    isLoading.value = false
   }
-  isLoading.value = false
 }
 
 onBeforeMount(() => {
   loadPlace(placeId)
   loadData()
 })
+
+watch(
+  () => store.isDataLoaded,
+  (newValue) => {
+    if (newValue) {
+      loadPlace(placeId)
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>

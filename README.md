@@ -14,13 +14,36 @@ npm run dev
 
 ## Database snapshot
 
+```
+users
+  │── username
+  │── password
+  │── role
+
+
+places
+  │── title
+  │── description
+  │── location
+  │── photos
+  │── rating
+  │── voices
+  │── authorId
+
+
+ratings
+  │── rating
+  │── userId
+  │── placeId
+```
+
 ## Application stack
 
 **Frontend Framework**: Vue.js + TypeScript
 
 **Routing**: Vue Router
 
-**State Management**: Vuex
+**State Management**: Pinia
 
 **Form Validation**: Vuelidate
 
@@ -29,3 +52,11 @@ npm run dev
 **Build Tool**: Vite
 
 **Linting and Formatting**: ESLint, Prettier
+
+**Mapping**: Leaflet
+
+**Lightbox**: Vue Easy Lightbox
+
+**Rating Component**: Morpheme Rating
+
+**Virtual Scrolling**: Vue Virtual Scroller

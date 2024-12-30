@@ -2,6 +2,8 @@ import { ref, onMounted, watch } from 'vue'
 import type { Ref } from 'vue'
 import { tileLayer, marker, map, Map, MarkerClusterGroup } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
 import { convertBase64ToFiles } from '@/utils/typeConversion.ts'
 import type { Place } from '@/types/interfaces'
@@ -25,7 +27,13 @@ export function useMap(places: Ref<Place[]>) {
         <div class="star-rating" style="pointer-events: none;">
           Rating: ${place.rating}<span class="star">★</span>
         </div>
-        ${photos.length > 0 ? `<img src="${getFileUrl(photos[0])}" class="place-photo" />` : ''}
+        ${
+          photos.length > 0
+            ? `<div class="place-photo-wrapper">
+           <img src="${getFileUrl(photos[0])}" class="place-photo" />
+         </div>`
+            : ''
+        }
       </div>
     `
     popupContainer.innerHTML = htmlContent

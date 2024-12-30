@@ -91,7 +91,7 @@ export const getPlaceById = async (placeId: string): Promise<Place> => {
     }
 
     const placeData = placeDoc.data() as Place
-    return placeData
+    return { ...placeData, id: placeDoc.id }
   } catch (error) {
     console.error('Error fetching place by ID:', error)
     throw new Error('Error fetching place from Firestore')

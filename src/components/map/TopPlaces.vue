@@ -1,47 +1,40 @@
 <template>
   <div class="top-places_container">
     <div class="top-places-subtitle">Rating</div>
-    <virtual-list
-      :data-key="'id'"
-      :data-sources="items"
-      :data-component="PlaceCardWrapper"
-      :estimate-size="10"
-      @tobottom="onScrollToBottom"
+    <dynamic-scroller
+      :items="items"
+      :min-item-size="100"
       class="virtual-list-container"
+      @resize="updateListHeight"
+      @scroll="onScroll"
     >
-      <template #footer v-if="loading">
-        <div class="loading-spinner">Loading ...</div>
+      <template #default="{ item }">
+        <PlaceCard :place="item" />
       </template>
-    </virtual-list>
+    </dynamic-scroller>
+    <div v-if="loading" class="loading-spinner">Loading ...</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import VirtualList from 'vue3-virtual-scroll-list'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller } from 'vue-virtual-scroller'
 
 import PlaceCard from '@/components/map/PlaceCard.vue'
 
-import { useMapStore } from '@/stores/mapStore.ts'
 import { calculateMetricRating } from '@/utils/typeConversion.ts'
 import type { Place } from '@/types/interfaces.ts'
 
-const store = useMapStore()
-const places = computed(() => store.getPlaces)
-
-const PlaceCardWrapper = {
-  props: ['source'],
-  components: { PlaceCard },
-  template: '<PlaceCard :place="source" />',
-}
+const props = defineProps<{ places: Place[] }>()
 
 const pageSize = 10
 const items = ref<Place[]>([])
 let pageNum = 0
-const loading = ref(false)
+const loading = ref<boolean>(false)
 
-const sortedPlaces = computed(() => {
-  return places.value
+const sortedPlaces = computed<Place[]>(() => {
+  return props.places
     .map((place) => {
       const metricRating = calculateMetricRating(place.rating, place.voices)
       return { ...place, metricRating }
@@ -72,14 +65,17 @@ const loadMorePlaces = () => {
   loading.value = false
 }
 
-const onScrollToBottom = () => {
-  loadMorePlaces()
+const onScroll = (event: Event) => {
+  const scroller = event.target as HTMLDivElement
+  if (scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 50) {
+    loadMorePlaces()
+  }
 }
 
 watch(
-  places,
+  () => props.places,
   () => {
-    if (places.value.length > 0 && pageNum === 0) {
+    if (props.places.length > 0 && pageNum === 0) {
       loadMorePlaces()
       updateListHeight()
     }

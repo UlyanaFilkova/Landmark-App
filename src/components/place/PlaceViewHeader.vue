@@ -32,11 +32,11 @@ const userStore = useUserStore()
 const mapStore = useMapStore()
 const router = useRouter()
 
-const showModal = ref(false)
+const showModal = ref<boolean>(false)
 
 const props = defineProps<{ place: Place }>()
 
-const userHasEditPermission = computed(() => {
+const userHasEditPermission = computed<boolean>(() => {
   if (props.place) {
     return userStore.getUser?.role === 1 || userStore.getUser?.id === props.place.authorId
   }

@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 
 import StarRating from '@/components/base/StarRating.vue'
@@ -71,11 +71,11 @@ const props = defineProps<{ place: Place | null }>()
 const mapStore = useMapStore()
 const userStore = useUserStore()
 
-const photoViewerVisible = ref(false)
-const photoViewerIndex = ref(0)
+const photoViewerVisible = ref<boolean>(false)
+const photoViewerIndex = ref<number>(0)
 const userRating = ref<number>(0)
 
-const isAdmin = computed(() => {
+const isAdmin = computed<boolean>(() => {
   return userStore.getUser?.role === 1
 })
 
@@ -91,13 +91,11 @@ const updateUserRating = (value: number) => {
   }
 }
 
-watch(
-  () => mapStore.getCurrentPlaceUserRating,
-  (newValue) => {
-    userRating.value = newValue || 0
-  },
-  { immediate: true },
-)
+watchEffect(() => {
+  if (props.place && mapStore.isDataLoaded) {
+    userRating.value = mapStore.getCurrentPlaceUserRating(props.place.id)
+  }
+})
 </script>
 
 <style scoped>

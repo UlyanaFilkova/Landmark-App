@@ -1,33 +1,46 @@
 <template>
-  <div class="container">
+  <GlobalError v-if="isError" />
+  <div v-else class="container">
     <BaseLoader v-if="isLoading" />
     <MapHeader class="map-header" />
     <div class="content">
-      <MapBlock />
+      <MapBlock :places="places" />
       <h2 class="map-header__h2">Top Places</h2>
-      <TopPlaces />
+      <TopPlaces :places="places" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import { useMapStore } from '@/stores/mapStore'
 
 import MapHeader from '@/components/map/MapHeader.vue'
 import MapBlock from '@/components/map/MapBlock.vue'
 import TopPlaces from '@/components/map/TopPlaces.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
+import GlobalError from '@/components/base/GlobalError.vue'
+
+import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
 const isLoading = ref(true)
+const isError = ref(false)
+const places = computed<Place[]>(() => store.getPlaces || [])
 
 const loadData = async () => {
   isLoading.value = true
-  if (store.getPlaces.length === 0) {
-    await store.loadInitialData()
+  isError.value = false
+  try {
+    if (store.getPlaces.length === 0) {
+      await store.loadInitialData()
+    }
+  } catch (error) {
+    console.error('Error loading data:', error)
+    isError.value = true
+  } finally {
+    isLoading.value = false
   }
-  isLoading.value = false
 }
 
 onBeforeMount(() => {

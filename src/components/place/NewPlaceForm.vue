@@ -87,16 +87,17 @@ const initialFormData = {
   latitude: 53.9,
   longitude: 27.5667,
   photos: [] as File[],
-  rating: store.getCurrentPlaceUserRating || 5,
+  rating: 0,
 }
 
-const headerText = ref('')
-const buttonText = ref('Add place')
+const headerText = ref<string>('')
+const buttonText = ref<string>('Add place')
+const isSubmitting = ref<boolean>(false)
 
 const formData = ref({ ...initialFormData })
 const originalFormData = ref({ ...initialFormData })
 
-const locationInvalid = computed(
+const locationInvalid = computed<boolean>(
   () =>
     formData.value.latitude < -90 ||
     formData.value.latitude > 90 ||
@@ -104,18 +105,18 @@ const locationInvalid = computed(
     formData.value.longitude > 180,
 )
 
-const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
-const fileTypeInvalid = ref(false)
+const isFileLimitReached = computed<boolean>(() => formData.value.photos.length >= 5)
+const fileTypeInvalid = ref<boolean>(false)
 
-const isSubmitButtonDisabled = computed(() => {
-  if (props.isEditing) {
-    return !isFormDataChanged.value || !isFormValid.value
-  } else {
-    return !isFormValid.value
-  }
+const isSubmitButtonDisabled = computed<boolean>(() => {
+  return (
+    (props.isEditing && (!isFormDataChanged.value || !isFormValid.value)) ||
+    !isFormValid.value ||
+    isSubmitting.value
+  )
 })
 
-const isFormDataChanged = computed(() => {
+const isFormDataChanged = computed<boolean>(() => {
   return (
     formData.value.title !== originalFormData.value.title ||
     formData.value.description !== originalFormData.value.description ||
@@ -126,10 +127,10 @@ const isFormDataChanged = computed(() => {
   )
 })
 
-const isFormValid = computed(() => {
+const isFormValid = computed<boolean>(() => {
   return (
-    formData.value.title &&
-    formData.value.description &&
+    Boolean(formData.value.title) &&
+    Boolean(formData.value.description) &&
     !locationInvalid.value &&
     formData.value.rating >= 0 &&
     formData.value.rating <= 5 &&
@@ -138,7 +139,7 @@ const isFormValid = computed(() => {
   )
 })
 
-const areFilesEqual = (files1: File[], files2: File[]) => {
+const areFilesEqual = (files1: File[], files2: File[]): boolean => {
   if (files1.length !== files2.length) return false
   for (let i = 0; i < files1.length; i++) {
     if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false
@@ -152,10 +153,11 @@ const updateRating = (value: number) => {
 
 const handleSubmit = async () => {
   if (isFormValid.value) {
+    isSubmitting.value = true
     try {
       const base64Photos = await convertFilesToBase64(formData.value.photos)
 
-      const place: Omit<Place, 'authorId' | 'id'> = {
+      const placeData: Omit<Place, 'authorId' | 'id'> = {
         title: formData.value.title,
         description: formData.value.description,
         rating: formData.value.rating,
@@ -164,9 +166,12 @@ const handleSubmit = async () => {
         voices: 1,
       }
 
-      const result = props.isEditing ? await store.editPlace(place) : await store.addNewPlace(place)
-      if (result === 'success') {
-        router.push({ name: 'generalMap' })
+      const result =
+        props.isEditing && props.place
+          ? await store.editPlace(props.place?.id, placeData)
+          : await store.addNewPlace(placeData)
+      if (result) {
+        router.push({ name: 'place', params: { id: result } })
         clearForm()
       }
     } catch (error) {
@@ -187,7 +192,7 @@ const loadCurrentPlace = () => {
     formData.value.description = props.place.description
     formData.value.latitude = props.place.location[0]
     formData.value.longitude = props.place.location[1]
-    formData.value.rating = store.getCurrentPlaceUserRating || 0
+    formData.value.rating = store.getCurrentPlaceUserRating(props.place?.id)
     formData.value.photos = convertBase64ToFiles(props.place.photos || [])
 
     originalFormData.value = { ...formData.value }

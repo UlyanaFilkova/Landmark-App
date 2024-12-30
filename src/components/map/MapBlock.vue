@@ -13,22 +13,22 @@ import { ref, computed, watch } from 'vue'
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 
 import { useMap } from '@/composables/useMap.ts'
-import { useMapStore } from '@/stores/mapStore.ts'
 import { useUserStore } from '@/stores/userStore.ts'
 import { getFilteredPlacesData } from '@/services/map'
 
-const store = useMapStore()
+import type { Place } from '@/types/interfaces.ts'
+
+const props = defineProps<{ places: Place[] }>()
+
 const userStore = useUserStore()
-const userId = computed(() => userStore.getUser?.id)
+const userId = computed<string | undefined>(() => userStore.getUser?.id)
 
-const places = computed(() => store.getPlaces)
-
-const filteredPlaces = ref(places.value)
+const filteredPlaces = ref<Place[]>(props.places)
 
 const { mapContainer } = useMap(filteredPlaces)
 
 watch(
-  places,
+  () => props.places,
   (newPlaces) => {
     filteredPlaces.value = newPlaces
   },
@@ -43,7 +43,7 @@ const handleCheckboxChange = async () => {
     const resultPlaces = await getFilteredPlacesData(userId.value)
     filteredPlaces.value = resultPlaces
   } else {
-    filteredPlaces.value = places.value
+    filteredPlaces.value = props.places
   }
 }
 </script>
@@ -109,11 +109,26 @@ const handleCheckboxChange = async () => {
   cursor: pointer;
 }
 
+.place-photo-wrapper {
+  width: 100%;
+  max-width: 100%;
+
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .place-photo {
   width: 100%;
   height: auto;
   margin-bottom: 10px;
   border-radius: 8px;
+  max-height: 100px;
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .star-rating {

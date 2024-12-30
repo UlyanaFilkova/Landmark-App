@@ -10,9 +10,8 @@ export interface Place {
 }
 
 export interface FullUser {
-  id: string
+  uid: string
   username: string
-  password: string
   role: number
 }
 
