@@ -71,11 +71,11 @@ const props = defineProps<{ place: Place | null }>()
 const mapStore = useMapStore()
 const userStore = useUserStore()
 
-const photoViewerVisible = ref(false)
-const photoViewerIndex = ref(0)
+const photoViewerVisible = ref<boolean>(false)
+const photoViewerIndex = ref<number>(0)
 const userRating = ref<number>(0)
 
-const isAdmin = computed(() => {
+const isAdmin = computed<boolean>(() => {
   return userStore.getUser?.role === 1
 })
 

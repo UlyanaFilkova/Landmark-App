@@ -19,7 +19,7 @@ export const useMapStore = defineStore('place', () => {
   const getPlaces = computed(() => places.value)
   const getRatings = computed(() => ratings.value)
 
-  const getCurrentPlaceUserRating = (placeId: string) => {
+  const getCurrentPlaceUserRating = (placeId: string): number => {
     const userRating = ratings.value.find(
       (rating) => rating.placeId === placeId && rating.userId === userId.value,
     )
@@ -60,27 +60,14 @@ export const useMapStore = defineStore('place', () => {
     isDataLoaded.value = true
   }
 
-  const loadUserRating = (place: Place) => {
-    if (place) {
-      const userRating = ratings.value.find(
-        (rating) => rating.placeId === place!.id && rating.userId === userId.value,
-      )
-      if (userRating) {
-        return userRating.rating
-      } else {
-        return 0
-      }
-    } else {
-      console.error('place is not provided')
-    }
-  }
-
   const loadInitialData = async () => {
     await Promise.all([fetchPlaces(), userStore.fetchUser(), fetchRatings()])
     isDataLoaded.value = true
   }
 
-  const addNewPlace = async (placeData: Omit<Place, 'authorId' | 'id'>) => {
+  const addNewPlace = async (
+    placeData: Omit<Place, 'authorId' | 'id'>,
+  ): Promise<string | undefined> => {
     try {
       isDataLoaded.value = false
       if (!userId.value) {
@@ -101,7 +88,10 @@ export const useMapStore = defineStore('place', () => {
     }
   }
 
-  const editPlace = async (placeId: string, placeData: Omit<Place, 'authorId' | 'id'>) => {
+  const editPlace = async (
+    placeId: string,
+    placeData: Omit<Place, 'authorId' | 'id'>,
+  ): Promise<string | undefined> => {
     try {
       isDataLoaded.value = false
       if (!userId.value || !placeId) {
@@ -129,7 +119,7 @@ export const useMapStore = defineStore('place', () => {
     }
   }
 
-  const removePlace = async (placeId: string) => {
+  const removePlace = async (placeId: string): Promise<string | undefined> => {
     try {
       const response = await deletePlace(placeId)
       if (response === 'success') {
@@ -157,7 +147,6 @@ export const useMapStore = defineStore('place', () => {
     fetchPlaces,
     fetchRatings,
     loadInitialData,
-    loadUserRating,
     setNewUserRating,
     addNewPlace,
     editPlace,

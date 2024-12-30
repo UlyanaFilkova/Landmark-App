@@ -21,7 +21,7 @@ import type { Place } from '@/types/interfaces.ts'
 const props = defineProps<{ places: Place[] }>()
 
 const userStore = useUserStore()
-const userId = computed(() => userStore.getUser?.id)
+const userId = computed<string | undefined>(() => userStore.getUser?.id)
 
 const filteredPlaces = ref<Place[]>(props.places)
 

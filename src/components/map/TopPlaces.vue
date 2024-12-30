@@ -31,9 +31,9 @@ const props = defineProps<{ places: Place[] }>()
 const pageSize = 10
 const items = ref<Place[]>([])
 let pageNum = 0
-const loading = ref(false)
+const loading = ref<boolean>(false)
 
-const sortedPlaces = computed(() => {
+const sortedPlaces = computed<Place[]>(() => {
   return props.places
     .map((place) => {
       const metricRating = calculateMetricRating(place.rating, place.voices)

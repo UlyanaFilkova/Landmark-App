@@ -90,14 +90,14 @@ const initialFormData = {
   rating: 0,
 }
 
-const headerText = ref('')
-const buttonText = ref('Add place')
-const isSubmitting = ref(false)
+const headerText = ref<string>('')
+const buttonText = ref<string>('Add place')
+const isSubmitting = ref<boolean>(false)
 
 const formData = ref({ ...initialFormData })
 const originalFormData = ref({ ...initialFormData })
 
-const locationInvalid = computed(
+const locationInvalid = computed<boolean>(
   () =>
     formData.value.latitude < -90 ||
     formData.value.latitude > 90 ||
@@ -105,10 +105,10 @@ const locationInvalid = computed(
     formData.value.longitude > 180,
 )
 
-const isFileLimitReached = computed(() => formData.value.photos.length >= 5)
-const fileTypeInvalid = ref(false)
+const isFileLimitReached = computed<boolean>(() => formData.value.photos.length >= 5)
+const fileTypeInvalid = ref<boolean>(false)
 
-const isSubmitButtonDisabled = computed(() => {
+const isSubmitButtonDisabled = computed<boolean>(() => {
   return (
     (props.isEditing && (!isFormDataChanged.value || !isFormValid.value)) ||
     !isFormValid.value ||
@@ -116,7 +116,7 @@ const isSubmitButtonDisabled = computed(() => {
   )
 })
 
-const isFormDataChanged = computed(() => {
+const isFormDataChanged = computed<boolean>(() => {
   return (
     formData.value.title !== originalFormData.value.title ||
     formData.value.description !== originalFormData.value.description ||
@@ -127,10 +127,10 @@ const isFormDataChanged = computed(() => {
   )
 })
 
-const isFormValid = computed(() => {
+const isFormValid = computed<boolean>(() => {
   return (
-    formData.value.title &&
-    formData.value.description &&
+    Boolean(formData.value.title) &&
+    Boolean(formData.value.description) &&
     !locationInvalid.value &&
     formData.value.rating >= 0 &&
     formData.value.rating <= 5 &&
@@ -139,7 +139,7 @@ const isFormValid = computed(() => {
   )
 })
 
-const areFilesEqual = (files1: File[], files2: File[]) => {
+const areFilesEqual = (files1: File[], files2: File[]): boolean => {
   if (files1.length !== files2.length) return false
   for (let i = 0; i < files1.length; i++) {
     if (files1[i].name !== files2[i].name || files1[i].size !== files2[i].size) return false

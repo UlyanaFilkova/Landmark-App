@@ -10,10 +10,10 @@ import type { Place } from '@/types/interfaces.ts'
 import { computed } from 'vue'
 
 const props = defineProps<{
-  place: Place | null
+  place?: Place | null
 }>()
 
-const path = computed(() => (props.place ? '../place/' + props.place.id : '../general-map'))
+const path = computed<string>(() => (props.place ? '../place/' + props.place.id : '../general-map'))
 </script>
 
 <style scoped>
