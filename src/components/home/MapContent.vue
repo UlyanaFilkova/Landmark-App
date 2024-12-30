@@ -13,7 +13,7 @@ import { ref, computed, watch } from 'vue'
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 import MapComponent from '@/components/common/MapComponent.vue'
 import { useUserStore } from '@/stores/userStore.ts'
-import { getFilteredPlacesData } from '@/services/map'
+import { getFilteredPlacesData } from '@/services/place'
 
 import type { Place, MapPoint } from '@/types/interfaces.ts'
 

@@ -4,7 +4,7 @@
     <BaseLoader v-if="isLoading" />
     <MapHeader class="map-header" />
     <div class="content">
-      <MapBlock :places="places" />
+      <MapContent :places="places" />
       <h2 class="map-header__h2">Top Places</h2>
       <TopPlaces :places="places" />
     </div>
@@ -15,9 +15,9 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useMapStore } from '@/stores/mapStore'
 
-import MapHeader from '@/components/map/MapHeader.vue'
-import MapBlock from '@/components/map/MapBlock.vue'
-import TopPlaces from '@/components/map/TopPlaces.vue'
+import MapHeader from '@/components/home/MapHeader.vue'
+import MapContent from '@/components/home/MapContent.vue'
+import TopPlaces from '@/components/home/TopPlaces.vue'
 import BaseLoader from '@/components/base/BaseLoader.vue'
 import GlobalError from '@/components/base/GlobalError.vue'
 

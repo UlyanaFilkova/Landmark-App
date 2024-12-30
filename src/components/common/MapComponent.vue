@@ -10,7 +10,7 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
-import { convertBase64ToFiles } from '@/utils/typeConversion.ts'
+import { convertBase64ToFiles, getFileUrl } from '@/utils/typeConversion.ts'
 
 import type { MapPoint } from '@/types/interfaces.ts'
 
@@ -33,7 +33,6 @@ const longitude = ref(props.points[0]?.location[1] || 27.5667)
 const createPopUp = (point: MapPoint) => {
   const popupContainer = document.createElement('div')
 
-  const getFileUrl = (file: File) => URL.createObjectURL(file)
   const photos = point.photos ? convertBase64ToFiles(point.photos) : []
 
   const htmlContent = `
@@ -148,9 +147,6 @@ watch(
       updateMapCenter(newPointsValue[0].location[0], newPointsValue[0].location[1])
     } else {
       addMarkers(newPointsValue)
-    }
-    if (mapEntity.value) {
-      mapEntity.value.invalidateSize()
     }
   },
   { immediate: true },
