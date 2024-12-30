@@ -4,28 +4,26 @@
       <div class="groups">
         <div class="group">
           <label>Latitude:</label>
-          <div>{{ latitude }}</div>
+          <div>{{ place.location[0] }}</div>
         </div>
         <div class="group">
           <label>Longitude:</label>
-          <div>{{ longitude }}</div>
+          <div>{{ place.location[1] }}</div>
         </div>
       </div>
     </div>
 
-    <div ref="mapContainer" id="map" class="map-container"></div>
+    <MapComponent :places="[place]" :single="true" :readonly="true" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { usePlaceMap } from '@/composables/usePlaceMap.ts'
+import MapComponent from '@/components/common/MapComponent.vue'
+import type { Place } from '@/types/interfaces.ts'
 
-const props = defineProps<{
-  latitude: number
-  longitude: number
+defineProps<{
+  place: Place
 }>()
-
-const { mapContainer } = usePlaceMap(props.latitude, props.longitude, true)
 </script>
 
 <style scoped>
@@ -34,11 +32,17 @@ const { mapContainer } = usePlaceMap(props.latitude, props.longitude, true)
 }
 
 .map-container {
-  height: 300px;
+  height: 50vh;
   width: 100%;
   border: 3px solid var(--color-forth);
   border-radius: 5px;
   margin-top: 20px;
+}
+
+@media (max-width: 576px) {
+  .map-container {
+    height: min(50vh, 100vw);
+  }
 }
 
 .error-message {

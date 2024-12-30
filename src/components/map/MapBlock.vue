@@ -3,7 +3,7 @@
     <div class="only-my-places" @click="handleCheckboxChange">
       <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
     </div>
-    <div ref="mapContainer" id="map" class="map-container"></div>
+    <MapComponent :places="filteredPlaces" :single="false" :readonly="true" />
   </div>
 </template>
 
@@ -11,8 +11,7 @@
 import { ref, computed, watch } from 'vue'
 
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
-
-import { useMap } from '@/composables/useMap.ts'
+import MapComponent from '@/components/common/MapComponent.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 import { getFilteredPlacesData } from '@/services/map'
 
@@ -24,8 +23,6 @@ const userStore = useUserStore()
 const userId = computed<string | undefined>(() => userStore.getUser?.id)
 
 const filteredPlaces = ref<Place[]>(props.places)
-
-const { mapContainer } = useMap(filteredPlaces)
 
 watch(
   () => props.places,
