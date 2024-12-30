@@ -12,10 +12,10 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
 import { convertBase64ToFiles } from '@/utils/typeConversion.ts'
 
-import type { Place } from '@/types/interfaces.ts'
+import type { MapPoint } from '@/types/interfaces.ts'
 
 const props = defineProps<{
-  places: Place[]
+  points: MapPoint[]
   readonly: boolean
   single: boolean
 }>()
@@ -27,22 +27,22 @@ const mapEntity = ref<Map>()
 const markers = ref<MarkerClusterGroup>()
 const markerEntity = ref<Marker | null>(null)
 
-const latitude = ref(props.places[0]?.location[0] || 53.9)
-const longitude = ref(props.places[0]?.location[1] || 27.5667)
+const latitude = ref(props.points[0]?.location[0] || 53.9)
+const longitude = ref(props.points[0]?.location[1] || 27.5667)
 
-const createPopUp = (place: Place) => {
+const createPopUp = (point: MapPoint) => {
   const popupContainer = document.createElement('div')
 
   const getFileUrl = (file: File) => URL.createObjectURL(file)
-  const photos = place.photos ? convertBase64ToFiles(place.photos) : []
+  const photos = point.photos ? convertBase64ToFiles(point.photos) : []
 
   const htmlContent = `
     <div class="popup-content">
-      <a href="/place/${place.id}" target="_blank" class="popup-title">
-        ${place.title}
+      <a href="/place/${point.id}" target="_blank" class="popup-title">
+        ${point.title}
       </a>
       <div class="star-rating" style="pointer-events: none;">
-        Rating: ${place.rating}<span class="star">★</span>
+        Rating: ${point.rating}<span class="star">★</span>
       </div>
       ${
         photos.length > 0
@@ -58,13 +58,13 @@ const createPopUp = (place: Place) => {
   return popupContainer
 }
 
-const addMarkers = (places: Place[]) => {
+const addMarkers = (points: MapPoint[]) => {
   if (mapEntity.value) {
     markers.value?.clearLayers()
-    places.forEach((place) => {
+    points.forEach((point) => {
       const markerEntity = props.single
-        ? marker(place.location)
-        : marker(place.location).bindPopup(createPopUp(place))
+        ? marker(point.location)
+        : marker(point.location).bindPopup(createPopUp(point))
       markers.value?.addLayer(markerEntity)
     })
   }
@@ -80,7 +80,7 @@ const initializeGeneralMap = () => {
       markers.value = new MarkerClusterGroup()
       mapEntity.value.addLayer(markers.value)
 
-      addMarkers(props.places)
+      addMarkers(props.points)
     }
 
     if (!props.readonly) {
@@ -121,7 +121,7 @@ const updateCoordinates = (lat: number, lon: number) => {
 
 const handleMapMove = () => {
   if (!mapEntity.value && props.single) {
-    addMarkers(props.places)
+    addMarkers(props.points)
   }
 }
 
@@ -140,14 +140,14 @@ watch(
 )
 
 watch(
-  () => props.places,
-  (newPlacesValue) => {
+  () => props.points,
+  (newPointsValue) => {
     if (props.single) {
-      latitude.value = newPlacesValue[0].location[0]
-      longitude.value = newPlacesValue[0].location[1]
-      updateMapCenter(newPlacesValue[0].location[0], newPlacesValue[0].location[1])
+      latitude.value = newPointsValue[0].location[0]
+      longitude.value = newPointsValue[0].location[1]
+      updateMapCenter(newPointsValue[0].location[0], newPointsValue[0].location[1])
     } else {
-      addMarkers(newPlacesValue)
+      addMarkers(newPointsValue)
     }
     if (mapEntity.value) {
       mapEntity.value.invalidateSize()
@@ -175,15 +175,6 @@ onMounted(() => {
   .map-container {
     height: min(70vh, 100vw);
   }
-}
-
-.only-my-places {
-  cursor: pointer;
-  display: flex;
-  gap: 10px;
-  margin: 10px 0 15px 0;
-  align-items: center;
-  justify-content: center;
 }
 
 .leaflet-popup-close-button span {

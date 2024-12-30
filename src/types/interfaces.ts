@@ -9,6 +9,14 @@ export interface Place {
   authorId: string
 }
 
+export interface MapPoint {
+  id: string
+  title: string
+  location: [number, number]
+  rating: number
+  photos: string[]
+}
+
 export interface FullUser {
   uid: string
   username: string

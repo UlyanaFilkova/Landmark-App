@@ -13,17 +13,28 @@
       </div>
     </div>
 
-    <MapComponent :places="[place]" :single="true" :readonly="true" />
+    <MapComponent :points="[point]" :single="true" :readonly="true" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import MapComponent from '@/components/common/MapComponent.vue'
-import type { Place } from '@/types/interfaces.ts'
+import type { Place, MapPoint } from '@/types/interfaces.ts'
 
-defineProps<{
+const props = defineProps<{
   place: Place
 }>()
+
+const point = computed<MapPoint>(() => {
+  return {
+    id: props.place.id,
+    title: props.place.title,
+    location: props.place.location,
+    rating: props.place.rating,
+    photos: props.place.photos,
+  }
+})
 </script>
 
 <style scoped>

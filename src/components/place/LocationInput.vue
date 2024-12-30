@@ -36,7 +36,7 @@
     </div>
 
     <MapComponent
-      :places="places"
+      :points="[point]"
       :readonly="false"
       :single="true"
       @update:сoordinates="updateCoordinatesFromMap"
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import MapComponent from '@/components/common/MapComponent.vue'
-import type { Place } from '@/types/interfaces.ts'
+import type { MapPoint } from '@/types/interfaces.ts'
 
 interface Props {
   latitude: number
@@ -62,18 +62,15 @@ const props = withDefaults(defineProps<Props>(), {
 const latitude = ref(props.latitude)
 const longitude = ref(props.longitude)
 
-const places = computed<Place[]>(() => [
-  {
+const point = computed<MapPoint>(() => {
+  return {
     id: '',
     title: '',
-    description: '',
     location: [latitude.value, longitude.value],
-    photos: [],
     rating: 0,
-    voices: 0,
-    authorId: '',
-  },
-])
+    photos: [],
+  }
+})
 
 const emit = defineEmits(['update:latitude', 'update:longitude'])
 

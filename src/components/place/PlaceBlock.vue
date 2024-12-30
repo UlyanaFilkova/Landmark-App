@@ -28,7 +28,7 @@
 
     <div class="place-details-group">
       <h3>Location</h3>
-      <LocationMap :place="place" />
+      <LocationData :place="place" />
     </div>
 
     <div class="place-details-group">
@@ -59,7 +59,7 @@ import { ref, watchEffect, computed } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
 
 import StarRating from '@/components/base/StarRating.vue'
-import LocationMap from '@/components/place/LocationMap.vue'
+import LocationData from '@/components/place/LocationData.vue'
 
 import { useMapStore } from '@/stores/mapStore.ts'
 import { useUserStore } from '@/stores/userStore.ts'
