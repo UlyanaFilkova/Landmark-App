@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
-import { tileLayer, marker, map, Map, MarkerClusterGroup, Marker } from 'leaflet'
+import { tileLayer, marker, map, Map, MarkerClusterGroup, Marker, Icon } from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -29,6 +29,8 @@ const markerEntity = ref<Marker | null>(null)
 
 const latitude = ref(props.points[0]?.location[0] || 53.9)
 const longitude = ref(props.points[0]?.location[1] || 27.5667)
+
+Icon.Default.imagePath = '/leaflet-icons/'
 
 const createPopUp = (point: MapPoint) => {
   const popupContainer = document.createElement('div')
@@ -242,5 +244,8 @@ onMounted(() => {
 .star-rating .star {
   font-size: 20px;
   color: #ffd700;
+}
+.leaflet-marker-icon {
+  background-image: url('https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png');
 }
 </style>
