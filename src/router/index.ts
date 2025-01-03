@@ -5,7 +5,7 @@ import { checkUserAuthentication } from '@/services/user'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) {
       return savedPosition
     } else {
@@ -14,7 +14,7 @@ const router = createRouter({
   },
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const userId = (await checkUserAuthentication()) || ''
   const isUserAuthenticated = userId.length > 0
 
