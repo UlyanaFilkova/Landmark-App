@@ -1,6 +1,6 @@
 <template>
   <div class="file-input">
-    <label>{{ $t('inputs.fileInput.label') }}:</label>
+    <label>{{ t('inputs.fileInput.label') }}:</label>
     <div
       class="drop-area"
       @dragover.prevent="handleDragOver"
@@ -20,17 +20,17 @@
         type="button"
         @click="triggerFileInput"
         :disabled="isDisabled"
-        :text="$t('inputs.fileInput.buttonText')"
+        :text="t('inputs.fileInput.buttonText')"
         class="small-button grey"
       >
       </BaseButton>
       <p v-if="isFileLimitReached" class="warning-message">
-        {{ $t('inputs.fileInput.warningMessage') }}
+        {{ t('inputs.fileInput.warningMessage') }}
       </p>
-      <p class="drop-area-text">{{ $t('inputs.fileInput.dragAndDropText') }}</p>
+      <p class="drop-area-text">{{ t('inputs.fileInput.dragAndDropText') }}</p>
     </div>
     <div v-if="modelValue.length > 0">
-      <label>{{ $t('inputs.fileInput.uploadedFiles') }}:</label>
+      <label>{{ t('inputs.fileInput.uploadedFiles') }}:</label>
       <ul>
         <li v-for="(file, index) in modelValue" :key="index">
           <div class="file-container">
@@ -42,8 +42,8 @@
         </li>
       </ul>
     </div>
-    <p v-if="fileTypeInvalid" class="error-message">{{ $t('inputs.fileInput.errorMessage') }}</p>
-    <p v-if="fileSizeError" class="error-message">{{ $t('inputs.fileInput.fileSizeError') }}</p>
+    <p v-if="fileTypeInvalid" class="error-message">{{ t('inputs.fileInput.errorMessage') }}</p>
+    <p v-if="fileSizeError" class="error-message">{{ t('inputs.fileInput.fileSizeError') }}</p>
     <vue-easy-lightbox
       :visible="visible"
       :imgs="imageUrls"
@@ -56,10 +56,13 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, ref, computed } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
+import { useI18n } from 'vue-i18n'
 
 import BaseButton from '@/components/base/BaseButton.vue'
 
 import { convertFileToBase64, getFileUrl } from '@/utils/typeConversion.ts'
+
+const { t } = useI18n()
 
 interface Props {
   modelValue: File[]

@@ -1,29 +1,29 @@
 <template>
   <div class="location-input">
     <div class="form-group form-group-inline">
-      <label class="main-label">{{ $t('place.location') }}:</label>
+      <label class="main-label">{{ t('place.location') }}:</label>
       <div class="inputs">
         <div class="input-group">
-          <label>{{ $t('place.latitude') }}:</label>
+          <label>{{ t('place.latitude') }}:</label>
           <input
             v-model="latitude"
             @input="updateLatitude()"
             type="number"
             step="any"
-            :placeholder="$t('place.latitude')"
+            :placeholder="t('place.latitude')"
             required
             min="-90"
             max="90"
           />
         </div>
         <div class="input-group">
-          <label>{{ $t('place.longitude') }}:</label>
+          <label>{{ t('place.longitude') }}:</label>
           <input
             v-model="longitude"
             @input="updateLongitude()"
             type="number"
             step="any"
-            :placeholder="$t('place.longitude')"
+            :placeholder="t('place.longitude')"
             required
             min="-180"
             max="180"
@@ -31,7 +31,7 @@
         </div>
       </div>
       <p v-if="locationInvalid" class="error-message">
-        {{ $t('inputs.validation.invalidLocation') }}
+        {{ t('inputs.validation.invalidLocation') }}
       </p>
     </div>
 
@@ -46,8 +46,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MapComponent from '@/components/common/MapComponent.vue'
 import type { MapPoint } from '@/types/interfaces.ts'
+const { t } = useI18n()
 
 interface Props {
   latitude: number

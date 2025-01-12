@@ -1,16 +1,16 @@
 <template>
   <div class="map-header">
     <div class="map-header-container">
-      <h1 class="map-header__h1">{{ $t('common.titles.map') }}</h1>
+      <h1 class="map-header__h1">{{ t('common.titles.map') }}</h1>
       <RouterLink v-if="userHasAddPermission" :to="{ name: 'addPlace' }">
-        <BaseButton class="medium-button" :text="$t('common.buttons.addNewPlace')" />
+        <BaseButton class="medium-button" :text="t('common.buttons.addNewPlace')" />
       </RouterLink>
     </div>
     <div class="map-header-container single">
-      <h2 class="map-header__h2">{{ $t('common.titles.topPlaces') }}</h2>
+      <h2 class="map-header__h2">{{ t('common.titles.topPlaces') }}</h2>
       <BaseButton
         class="medium-button grey"
-        :text="$t('common.buttons.logout')"
+        :text="t('common.buttons.logout')"
         @click="handleLogoutClick"
       />
     </div>
@@ -19,9 +19,12 @@
 
 <script setup lang="ts">
 import { watch, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import BaseButton from '@/components/base/BaseButton.vue'
 import { useUserStore } from '@/stores/userStore.ts'
+
+const { t } = useI18n()
 
 const userStore = useUserStore()
 

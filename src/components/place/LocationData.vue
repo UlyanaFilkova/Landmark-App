@@ -3,11 +3,11 @@
     <div class="form-group form-group-inline">
       <div class="groups">
         <div class="group">
-          <label>{{ $t('place.latitude') }}:</label>
+          <label>{{ t('place.latitude') }}:</label>
           <div>{{ place.location[0] }}</div>
         </div>
         <div class="group">
-          <label>{{ $t('place.longitude') }}:</label>
+          <label>{{ t('place.longitude') }}:</label>
           <div>{{ place.location[1] }}</div>
         </div>
       </div>
@@ -19,8 +19,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import MapComponent from '@/components/common/MapComponent.vue'
 import type { Place, MapPoint } from '@/types/interfaces.ts'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   place: Place

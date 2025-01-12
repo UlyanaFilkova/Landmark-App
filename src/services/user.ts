@@ -109,7 +109,7 @@ export const checkUser = async (username: string, password: string): Promise<str
     return 'loginError'
   } catch (error) {
     console.error('Error checking user:', error)
-    return 'generalError'
+    return 'checkUserError'
   }
 }
 

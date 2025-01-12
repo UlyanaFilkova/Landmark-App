@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <h1>{{ $t('login.header') }}</h1>
+    <h1>{{ t('login.header') }}</h1>
     <FormInput
       v-for="(field, index) in inputFields"
       :key="index"
@@ -19,7 +19,7 @@
     <BaseButton
       :disabled="submitButtonDisabled || requestIsProcessing"
       class="medium-button"
-      :text="$t('login.button')"
+      :text="t('login.button')"
     />
   </form>
 </template>

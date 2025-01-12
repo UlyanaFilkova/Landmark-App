@@ -1,7 +1,7 @@
 <template>
-  <h2>{{ headerText }}</h2>
+  <h2>{{ t(`common.titles.${headerText}`) }}</h2>
   <form @submit.prevent="handleSubmit" class="new-place-form">
-    <label class="light-label">{{ $t('place.title') }}:</label>
+    <label class="light-label">{{ t('place.title') }}:</label>
     <FormInput
       v-model:modelValue="formData.title"
       type="text"
@@ -15,7 +15,7 @@
       v-model:modelValue="formData.description"
       type="text"
       id="description"
-      label="Description"
+      :label="t('place.description')"
       :maxlength="1000"
       :required="true"
     />
@@ -26,7 +26,7 @@
       :locationInvalid="locationInvalid"
     />
 
-    <label>{{ $t('common.titles.rating') }}:</label>
+    <label>{{ t('place.rating') }}:</label>
     <StarRating
       :rating="formData.rating"
       :readonly="false"
@@ -47,7 +47,7 @@
     />
 
     <BaseButton
-      :text="buttonText"
+      :text="t(`common.buttons.${buttonText}`)"
       class="medium-button"
       :disabled="isSubmitButtonDisabled"
     ></BaseButton>
@@ -57,6 +57,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import LocationInput from '@/components/place/LocationInput.vue'
 import StarRating from '@/components/base/StarRating.vue'
@@ -72,6 +73,7 @@ import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
 const router = useRouter()
+const { t } = useI18n()
 
 const props = defineProps<{
   isEditing: boolean
@@ -88,7 +90,7 @@ const initialFormData = {
 }
 
 const headerText = ref<string>('')
-const buttonText = ref<string>('Add place')
+const buttonText = ref<string>('')
 const isSubmitting = ref<boolean>(false)
 
 const formData = ref({ ...initialFormData })
@@ -174,8 +176,6 @@ const handleSubmit = async () => {
     } catch (error) {
       console.error('Error converting files to Base64:', error)
     }
-  } else {
-    alert('Please fill out all fields correctly.')
   }
 }
 
@@ -193,7 +193,6 @@ const loadCurrentPlace = () => {
     formData.value.photos = convertBase64ToFiles(props.place.photos || [])
 
     originalFormData.value = { ...formData.value }
-    buttonText.value = 'Save place'
   }
 }
 
@@ -201,9 +200,11 @@ watch(
   () => props.isEditing,
   () => {
     if (!props.isEditing) {
-      headerText.value = 'Add a new place'
+      headerText.value = 'addNewPlace'
+      buttonText.value = 'addNewPlace'
     } else {
-      headerText.value = 'Edit place'
+      headerText.value = 'editPlace'
+      buttonText.value = 'savePlace'
     }
   },
   { immediate: true },

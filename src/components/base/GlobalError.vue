@@ -1,8 +1,13 @@
 <template>
   <div class="error-message">
-    <p>{{ $t('errors.loading_error') }}</p>
+    <p>{{ t('errors.loading_error') }}</p>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+</script>
 
 <style scoped>
 .error-message {

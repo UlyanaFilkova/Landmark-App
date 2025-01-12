@@ -5,13 +5,16 @@
       "register": "Register",
       "logout": "Log out",
       "back": "Back",
-      "addNewPlace": "Add new place"
+      "addNewPlace": "Add place",
+      "savePlace": "Save place"
     },
     "titles": {
       "map": "Map",
       "topPlaces": "Top Places",
       "rating": "Rating",
-      "myPlaces": "My places"
+      "myPlaces": "My places",
+      "addNewPlace": "Add a new place",
+      "editPlace": "Edit place"
     }
   },
   "inputs": {
@@ -68,7 +71,12 @@
     "description": "Description",
     "location": "Location",
     "latitude": "Latitude",
-    "longitude": "Longitude"
+    "longitude": "Longitude",
+    "rating": "rating",
+    "yourRating": "Your Rating",
+    "photos": "Photos",
+    "noPhotos": "No Photos",
+    "voices": "1 voice | {count} voices"
   },
   "modal": {
     "confirmDeletion": "Confirm deletion",
@@ -80,6 +88,6 @@
     "loadingError": "There was an error loading the data. Please try again later.",
     "usernameTaken": "This username is already taken",
     "loginError": "Invalid email or password",
-    "generalError": "There was an error while checking the user. Please try again later."
+    "checkUserError": "There was an error while checking the user. Please try again later."
   }
 }
