@@ -6,6 +6,26 @@
       "logout": "Выйти",
       "back": "Назад"
     },
+    "titles": {
+      "map": "Карта",
+      "topPlaces": "Лучшие места"
+    }
+  },
+  "inputs": {
+    "fileInput": {
+      "label": "Фотографии",
+      "buttonText": "Выбрать файлы",
+      "dragAndDropText": "Перетащите файлы сюда или нажмите кнопку, чтобы загрузить.",
+      "uploadedFiles": "Загруженные файлы:",
+      "fileSizeError": "Размер файла превышает допустимый. Пожалуйста, загрузите меньший файл.",
+      "warningMessage": "Вы достигли максимального количества файлов.",
+      "errorMessage": "Один или несколько файлов не являются допустимыми изображениями"
+    },
+    "placeholders": {
+      "email": "Электронная почта",
+      "password": "Пароль",
+      "repeatPassword": "Повторите пароль"
+    },
     "validation": {
       "emailRequired": "Электронная почта обязательна",
       "emailInvalid": "Некорректный адрес электронной почты",
@@ -13,11 +33,6 @@
       "passwordMinLength": "Пароль должен содержать не менее 6 символов",
       "repeatPasswordRequired": "Повторите пароль",
       "passwordsMustMatch": "Пароли должны совпадать"
-    },
-    "placeholders": {
-      "email": "Электронная почта",
-      "password": "Пароль",
-      "repeatPassword": "Повторите пароль"
     }
   },
   "login": {
@@ -26,8 +41,8 @@
     "link": "Войти",
     "question": "Еще нет аккаунта?",
     "placeholders": {
-      "email": "@:common.placeholders.email",
-      "password": "@:common.placeholders.password"
+      "email": "@:inputs.placeholders.email",
+      "password": "@:inputs.placeholders.password"
     }
   },
   "registration": {
@@ -36,9 +51,12 @@
     "link": "Создать",
     "question": "Уже есть аккаунт?",
     "placeholders": {
-      "email": "@:common.placeholders.email",
-      "password": "@:common.placeholders.password",
-      "repeatPassword": "@:common.placeholders.repeatPassword"
+      "email": "@:inputs.placeholders.email",
+      "password": "@:inputs.placeholders.password",
+      "repeatPassword": "@:inputs.placeholders.repeatPassword"
+    },
+    "errors": {
+      "usernameTaken": "Это имя пользователя уже занято."
     }
   },
   "modal": {

@@ -5,7 +5,7 @@
     <MapHeader class="map-header" />
     <div class="content">
       <MapContent :places="places" />
-      <h2 class="map-header__h2">Top Places</h2>
+      <h2 class="map-header__h2">{{ $t('common.titles.topPlaces') }}</h2>
       <TopPlaces :places="places" />
     </div>
   </div>

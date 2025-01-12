@@ -6,6 +6,27 @@
       "logout": "Log out",
       "back": "Back"
     },
+
+    "titles": {
+      "map": "Map",
+      "topPlaces": "Top Places"
+    }
+  },
+  "inputs": {
+    "fileInput": {
+      "label": "Photos",
+      "buttonText": "Choose Files",
+      "dragAndDropText": "Drag and drop files here, or click the button to upload.",
+      "uploadedFiles": "Uploaded files",
+      "fileSizeError": "File size exceeds limit. Please upload a smaller file.",
+      "warningMessage": "You have reached the maximum number of files.",
+      "errorMessage": "One or more files are not valid images"
+    },
+    "placeholders": {
+      "email": "Email",
+      "password": "Password",
+      "repeatPassword": "Repeat Password"
+    },
     "validation": {
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email",
@@ -13,11 +34,6 @@
       "passwordMinLength": "Password must be at least 6 characters long",
       "repeatPasswordRequired": "Please, repeat the password",
       "passwordsMustMatch": "Passwords must match"
-    },
-    "placeholders": {
-      "email": "Email",
-      "password": "Password",
-      "repeatPassword": "Repeat Password"
     }
   },
   "login": {
@@ -26,8 +42,8 @@
     "link": "Login",
     "question": "Don't have an account yet?",
     "placeholders": {
-      "email": "@:common.placeholders.email",
-      "password": "@:common.placeholders.password"
+      "email": "@:inputs.placeholders.email",
+      "password": "@:inputs.placeholders.password"
     }
   },
   "registration": {
@@ -36,9 +52,9 @@
     "link": "Create",
     "question": "Already have an account?",
     "placeholders": {
-      "email": "@:common.placeholders.email",
-      "password": "@:common.placeholders.password",
-      "repeatPassword": "@:common.placeholders.repeatPassword"
+      "email": "@:inputs.placeholders.email",
+      "password": "@:inputs.placeholders.password",
+      "repeatPassword": "@:inputs.placeholders.repeatPassword"
     },
     "errors": {
       "usernameTaken": "This username is already taken"

@@ -1,6 +1,6 @@
 <template>
   <div class="file-input">
-    <label>{{ label }}</label>
+    <label>{{ $t('inputs.fileInput.label') }}:</label>
     <div
       class="drop-area"
       @dragover.prevent="handleDragOver"
@@ -20,15 +20,17 @@
         type="button"
         @click="triggerFileInput"
         :disabled="isDisabled"
-        :text="buttonText"
+        :text="$t('inputs.fileInput.buttonText')"
         class="small-button grey"
       >
       </BaseButton>
-      <p v-if="isFileLimitReached" class="warning-message">{{ warningMessage }}</p>
-      <p class="drop-area-text">Drag and drop files here, or click the button to upload.</p>
+      <p v-if="isFileLimitReached" class="warning-message">
+        {{ $t('inputs.fileInput.warningMessage') }}
+      </p>
+      <p class="drop-area-text">{{ $t('inputs.fileInput.dragAndDropText') }}</p>
     </div>
     <div v-if="modelValue.length > 0">
-      <label>Uploaded files:</label>
+      <label>{{ $t('inputs.fileInput.uploadedFiles') }}:</label>
       <ul>
         <li v-for="(file, index) in modelValue" :key="index">
           <div class="file-container">
@@ -40,8 +42,8 @@
         </li>
       </ul>
     </div>
-    <p v-if="fileTypeInvalid" class="error-message">{{ errorMessage }}</p>
-    <p v-if="fileSizeError" class="error-message">{{ fileSizeErrorMessage }}</p>
+    <p v-if="fileTypeInvalid" class="error-message">{{ $t('inputs.fileInput.errorMessage') }}</p>
+    <p v-if="fileSizeError" class="error-message">{{ $t('inputs.fileInput.fileSizeError') }}</p>
     <vue-easy-lightbox
       :visible="visible"
       :imgs="imageUrls"
@@ -62,14 +64,10 @@ import { convertFileToBase64, getFileUrl } from '@/utils/typeConversion.ts'
 interface Props {
   modelValue: File[]
   id: string
-  label: string
   accept?: string
   multiple?: boolean
   maxFiles?: number
-  errorMessage?: string
-  buttonText?: string
   isFileLimitReached?: boolean
-  warningMessage?: string
   fileTypeInvalid?: boolean
   isDisabled?: boolean
 }
@@ -79,10 +77,7 @@ const props = withDefaults(defineProps<Props>(), {
   accept: 'image/*',
   multiple: true,
   maxFiles: 5,
-  errorMessage: '',
-  buttonText: 'Choose Files',
   isFileLimitReached: false,
-  warningMessage: '',
   fileTypeInvalid: false,
   isDisabled: false,
 })
@@ -94,7 +89,6 @@ const visible = ref(false)
 const currentImageIndex = ref(0)
 
 const fileSizeError = ref(false)
-const fileSizeErrorMessage = ref('File size exceeds limit. Please upload a smaller file.')
 
 const imageUrls = computed(() => props.modelValue.map((file) => URL.createObjectURL(file)))
 
@@ -111,6 +105,10 @@ const removeFile = (index: number) => {
   const newFiles = [...props.modelValue]
   newFiles.splice(index, 1)
   emit('update:modelValue', newFiles)
+
+  if (newFiles.length === 0) {
+    fileSizeError.value = false
+  }
 }
 
 const triggerFileInput = () => {
@@ -147,6 +145,7 @@ const handleFileChange = (event: Event) => {
 }
 
 const handleuploadedFile = (newFiles: File[]) => {
+  fileSizeError.value = false
   const validFiles = newFiles.filter(async (file) => {
     const base64String = await convertFileToBase64(file)
     if (base64String.length >= 1048576) {

@@ -1,13 +1,13 @@
 <template>
   <div class="map-header">
     <div class="map-header-container">
-      <h1 class="map-header__h1">Map</h1>
+      <h1 class="map-header__h1">{{ $t('common.titles.map') }}</h1>
       <RouterLink v-if="userHasAddPermission" :to="{ name: 'addPlace' }">
         <BaseButton class="medium-button" text="Add new place" />
       </RouterLink>
     </div>
     <div class="map-header-container single">
-      <h2 class="map-header__h2">Top Places</h2>
+      <h2 class="map-header__h2">{{ $t('common.titles.topPlaces') }}</h2>
       <BaseButton class="medium-button grey" text="Log out" @click="handleLogoutClick" />
     </div>
   </div>

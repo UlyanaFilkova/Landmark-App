@@ -103,12 +103,12 @@ const submitButtonDisabled = computed<boolean>(
 
 const getValidateMessage = (): string => {
   const validationErrors = {
-    'username.required': t('common.validation.emailRequired'),
-    'username.email': t('common.validation.emailInvalid'),
-    'password.required': t('common.validation.passwordRequired'),
-    'password.minLength': t('common.validation.passwordMinLength'),
-    'repeatPassword.required': t('common.validation.repeatPasswordRequired'),
-    'repeatPassword.sameAsPassword': t('common.validation.passwordsMustMatch'),
+    'username.required': t('inputs.validation.emailRequired'),
+    'username.email': t('inputs.validation.emailInvalid'),
+    'password.required': t('inputs.validation.passwordRequired'),
+    'password.minLength': t('inputs.validation.passwordMinLength'),
+    'repeatPassword.required': t('inputs.validation.repeatPasswordRequired'),
+    'repeatPassword.sameAsPassword': t('inputs.validation.passwordsMustMatch'),
   }
 
   if (v$.value.validationFields.$invalid) {
