@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <h1>Login</h1>
+    <h1>{{ $t('login.header') }}</h1>
     <FormInput
       v-for="(field, index) in inputFields"
       :key="index"
@@ -19,7 +19,7 @@
     <BaseButton
       :disabled="submitButtonDisabled || requestIsProcessing"
       class="medium-button"
-      text="Login"
+      :text="$t('login.button')"
     />
   </form>
 </template>
@@ -29,6 +29,7 @@ import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
+import { useI18n } from 'vue-i18n'
 
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
@@ -38,12 +39,13 @@ import { checkUser } from '@/services/user.ts'
 import type { InputField } from '@/types/interfaces.ts'
 
 const router = useRouter()
+const { t } = useI18n()
 
 const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'email',
-    placeholder: 'Email',
+    placeholder: t('login.placeholders.email'),
     name: 'username',
     autocomplete: 'username',
     required: true,
@@ -52,7 +54,7 @@ const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'password',
-    placeholder: 'Password',
+    placeholder: t('login.placeholders.password'),
     name: 'password',
     autocomplete: 'current-password',
     required: true,
@@ -82,10 +84,10 @@ const submitButtonDisabled = computed<boolean>(
 
 const getValidateMessage = (): string => {
   const validationErrors = {
-    'username.required': 'Email is required',
-    'username.email': 'Invalid email',
-    'password.required': 'Password is required',
-    'password.minLength': 'Password must be at least 6 characters long',
+    'username.required': t('common.validation.email_required'),
+    'username.email': t('common.validation.email_invalid'),
+    'password.required': t('common.validation.password_required'),
+    'password.minLength': t('common.validation.password_min_length'),
   }
 
   if (v$.value.validationFields.$invalid) {

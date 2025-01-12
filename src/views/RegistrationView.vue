@@ -1,5 +1,9 @@
 <template>
-  <AuthContainer linkText="Already have an account?" linkTo="login" linkAction="Login">
+  <AuthContainer
+    :linkText="$t('registration.question')"
+    linkTo="login"
+    :linkAction="$t('login.link')"
+  >
     <RegistrationForm />
   </AuthContainer>
 </template>

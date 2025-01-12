@@ -1,0 +1,43 @@
+{
+  "common": {
+    "buttons": {
+      "login": "Войти",
+      "register": "Зарегистрироваться",
+      "logout": "Выйти"
+    },
+    "validation": {
+      "email_required": "Электронная почта обязательна",
+      "email_invalid": "Некорректный адрес электронной почты",
+      "password_required": "Пароль обязателен",
+      "password_min_length": "Пароль должен содержать не менее 6 символов",
+      "repeat_password_required": "Повторите пароль",
+      "passwords_must_match": "Пароли должны совпадать"
+    },
+    "placeholders": {
+      "email": "Электронная почта",
+      "password": "Пароль",
+      "repeat_password": "Повторите пароль"
+    }
+  },
+  "login": {
+    "header": "Вход",
+    "button": "@:common.buttons.login",
+    "link": "Войти",
+    "question": "Еще нет аккаунта?",
+    "placeholders": {
+      "email": "@:common.placeholders.email",
+      "password": "@:common.placeholders.password"
+    }
+  },
+  "registration": {
+    "header": "Создать аккаунт",
+    "button": "@:common.buttons.register",
+    "link": "Создать",
+    "question": "Уже есть аккаунт?",
+    "placeholders": {
+      "email": "@:common.placeholders.email",
+      "password": "@:common.placeholders.password",
+      "repeat_password": "@:common.placeholders.repeat_password"
+    }
+  }
+}

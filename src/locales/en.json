@@ -1,0 +1,43 @@
+{
+  "common": {
+    "buttons": {
+      "login": "Log in",
+      "register": "Register",
+      "logout": "Log out"
+    },
+    "validation": {
+      "email_required": "Email is required",
+      "email_invalid": "Invalid email",
+      "password_required": "Password is required",
+      "password_min_length": "Password must be at least 6 characters long",
+      "repeat_password_required": "Please, repeat the password",
+      "passwords_must_match": "Passwords must match"
+    },
+    "placeholders": {
+      "email": "Email",
+      "password": "Password",
+      "repeat_password": "Repeat Password"
+    }
+  },
+  "login": {
+    "header": "Login",
+    "button": "@:common.buttons.login",
+    "link": "Login",
+    "question": "Don't have an account yet?",
+    "placeholders": {
+      "email": "@:common.placeholders.email",
+      "password": "@:common.placeholders.password"
+    }
+  },
+  "registration": {
+    "header": "Create an account",
+    "button": "@:common.buttons.register",
+    "link": "Create",
+    "question": "Already have an account?",
+    "placeholders": {
+      "email": "@:common.placeholders.email",
+      "password": "@:common.placeholders.password",
+      "repeat_password": "@:common.placeholders.repeat_password"
+    }
+  }
+}
