@@ -4,21 +4,23 @@
       "login": "Log in",
       "register": "Register",
       "logout": "Log out",
-      "back": "Back"
+      "back": "Back",
+      "addNewPlace": "Add new place"
     },
-
     "titles": {
       "map": "Map",
-      "topPlaces": "Top Places"
+      "topPlaces": "Top Places",
+      "rating": "Rating",
+      "myPlaces": "My places"
     }
   },
   "inputs": {
     "fileInput": {
       "label": "Photos",
       "buttonText": "Choose Files",
-      "dragAndDropText": "Drag and drop files here, or click the button to upload.",
+      "dragAndDropText": "Drag and drop files here, or click the button to upload",
       "uploadedFiles": "Uploaded files",
-      "fileSizeError": "File size exceeds limit. Please upload a smaller file.",
+      "fileSizeError": "File size exceeds limit. Please upload a smaller file",
       "warningMessage": "You have reached the maximum number of files.",
       "errorMessage": "One or more files are not valid images"
     },
@@ -33,7 +35,8 @@
       "passwordRequired": "Password is required",
       "passwordMinLength": "Password must be at least 6 characters long",
       "repeatPasswordRequired": "Please, repeat the password",
-      "passwordsMustMatch": "Passwords must match"
+      "passwordsMustMatch": "Passwords must match",
+      "invalidLocation": "Latitude must be between -90° and 90° and Longitude between -180° and 180°"
     }
   },
   "login": {
@@ -59,6 +62,13 @@
     "errors": {
       "usernameTaken": "This username is already taken"
     }
+  },
+  "place": {
+    "title": "Title",
+    "description": "Description",
+    "location": "Location",
+    "latitude": "Latitude",
+    "longitude": "Longitude"
   },
   "modal": {
     "confirmDeletion": "Confirm deletion",

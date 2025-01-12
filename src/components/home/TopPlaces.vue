@@ -1,6 +1,6 @@
 <template>
   <div class="top-places_container">
-    <div class="top-places-subtitle">Rating</div>
+    <div class="top-places-subtitle">{{ $t('common.titles.rating') }}</div>
     <dynamic-scroller
       :items="items"
       :min-item-size="100"

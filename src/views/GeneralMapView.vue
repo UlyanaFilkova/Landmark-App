@@ -105,7 +105,8 @@ onBeforeMount(() => {
     line-height: normal;
     margin-top: 30px;
   }
-  .content > * {
+  .content > *,
+  .map-header {
     width: 95%;
     margin: 10px auto 15px;
   }

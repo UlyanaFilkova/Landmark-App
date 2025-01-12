@@ -3,11 +3,11 @@
     <div class="form-group form-group-inline">
       <div class="groups">
         <div class="group">
-          <label>Latitude:</label>
+          <label>{{ $t('place.latitude') }}:</label>
           <div>{{ place.location[0] }}</div>
         </div>
         <div class="group">
-          <label>Longitude:</label>
+          <label>{{ $t('place.longitude') }}:</label>
           <div>{{ place.location[1] }}</div>
         </div>
       </div>

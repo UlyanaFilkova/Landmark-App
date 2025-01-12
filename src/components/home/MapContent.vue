@@ -1,7 +1,7 @@
 <template>
   <div class="map-content">
     <div class="only-my-places" @click="handleCheckboxChange">
-      <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+      <CustomCheckbox :checked="checkboxChecked" /><span>{{ $t('common.titles.myPlaces') }}</span>
     </div>
     <MapComponent :points="points" :single="false" :readonly="true" />
   </div>

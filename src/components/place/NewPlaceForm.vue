@@ -1,7 +1,7 @@
 <template>
   <h2>{{ headerText }}</h2>
   <form @submit.prevent="handleSubmit" class="new-place-form">
-    <label class="light-label">Title:</label>
+    <label class="light-label">{{ $t('place.title') }}:</label>
     <FormInput
       v-model:modelValue="formData.title"
       type="text"
@@ -26,7 +26,7 @@
       :locationInvalid="locationInvalid"
     />
 
-    <label>Rating:</label>
+    <label>{{ $t('common.titles.rating') }}:</label>
     <StarRating
       :rating="formData.rating"
       :readonly="false"
