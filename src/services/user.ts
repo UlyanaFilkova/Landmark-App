@@ -102,14 +102,14 @@ export const checkUser = async (username: string, password: string): Promise<str
         await saveTokenInCookies(user)
         return ''
       } catch {
-        return 'Invalid email or password'
+        return 'loginError'
       }
     }
 
-    return 'Invalid email or password'
+    return 'loginError'
   } catch (error) {
     console.error('Error checking user:', error)
-    return 'Error checking user'
+    return 'generalError'
   }
 }
 

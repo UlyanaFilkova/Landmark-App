@@ -65,7 +65,7 @@ const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'password',
-    placeholder: t('registration.placeholders.repeat_password'),
+    placeholder: t('registration.placeholders.repeatPassword'),
     name: 'repeat-password',
     autocomplete: 'new-password',
     required: true,
@@ -103,12 +103,12 @@ const submitButtonDisabled = computed<boolean>(
 
 const getValidateMessage = (): string => {
   const validationErrors = {
-    'username.required': t('common.validation.email_required'),
-    'username.email': t('common.validation.email_invalid'),
-    'password.required': t('common.validation.password_required'),
-    'password.minLength': t('common.validation.password_min_length'),
-    'repeatPassword.required': t('common.validation.repeat_password_required'),
-    'repeatPassword.sameAsPassword': t('common.validation.passwords_must_match'),
+    'username.required': t('common.validation.emailRequired'),
+    'username.email': t('common.validation.emailInvalid'),
+    'password.required': t('common.validation.passwordRequired'),
+    'password.minLength': t('common.validation.passwordMinLength'),
+    'repeatPassword.required': t('common.validation.repeatPasswordRequired'),
+    'repeatPassword.sameAsPassword': t('common.validation.passwordsMustMatch'),
   }
 
   if (v$.value.validationFields.$invalid) {
@@ -137,7 +137,7 @@ const handleSubmit = async (): Promise<void> => {
     requestIsProcessing.value = true
     const userExists = await checkUsernameExists(inputFields[0].model)
     if (userExists) {
-      errorMessage.value = t('registration.errors.username_taken')
+      errorMessage.value = t('errors.usernameTaken')
       requestIsProcessing.value = false
       return
     }

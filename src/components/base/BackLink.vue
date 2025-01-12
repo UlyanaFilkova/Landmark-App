@@ -1,7 +1,7 @@
 <template>
   <router-link :to="props.path" class="back-button">
     <BackIcon />
-    Back
+    {{ $t('common.buttons.back') }}
   </router-link>
 </template>
 

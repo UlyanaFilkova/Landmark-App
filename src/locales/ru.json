@@ -3,20 +3,21 @@
     "buttons": {
       "login": "Войти",
       "register": "Зарегистрироваться",
-      "logout": "Выйти"
+      "logout": "Выйти",
+      "back": "Назад"
     },
     "validation": {
-      "email_required": "Электронная почта обязательна",
-      "email_invalid": "Некорректный адрес электронной почты",
-      "password_required": "Пароль обязателен",
-      "password_min_length": "Пароль должен содержать не менее 6 символов",
-      "repeat_password_required": "Повторите пароль",
-      "passwords_must_match": "Пароли должны совпадать"
+      "emailRequired": "Электронная почта обязательна",
+      "emailInvalid": "Некорректный адрес электронной почты",
+      "passwordRequired": "Пароль обязателен",
+      "passwordMinLength": "Пароль должен содержать не менее 6 символов",
+      "repeatPasswordRequired": "Повторите пароль",
+      "passwordsMustMatch": "Пароли должны совпадать"
     },
     "placeholders": {
       "email": "Электронная почта",
       "password": "Пароль",
-      "repeat_password": "Повторите пароль"
+      "repeatPassword": "Повторите пароль"
     }
   },
   "login": {
@@ -37,7 +38,19 @@
     "placeholders": {
       "email": "@:common.placeholders.email",
       "password": "@:common.placeholders.password",
-      "repeat_password": "@:common.placeholders.repeat_password"
+      "repeatPassword": "@:common.placeholders.repeatPassword"
     }
+  },
+  "modal": {
+    "confirmDeletion": "Подтвердите удаление",
+    "confirmationMessage": "Вы уверены, что хотите удалить это место?",
+    "delete": "Удалить",
+    "cancel": "Отмена"
+  },
+  "errors": {
+    "loadingError": "Произошла ошибка при загрузке данных. Пожалуйста, попробуйте позже.",
+    "usernameTaken": "Это имя пользователя уже занято.",
+    "loginError": "Неверный адрес электронной почты или пароль.",
+    "generalError": "Произошла ошибка при проверке пользователя. Пожалуйста, попробуйте позже."
   }
 }

@@ -84,10 +84,10 @@ const submitButtonDisabled = computed<boolean>(
 
 const getValidateMessage = (): string => {
   const validationErrors = {
-    'username.required': t('common.validation.email_required'),
-    'username.email': t('common.validation.email_invalid'),
-    'password.required': t('common.validation.password_required'),
-    'password.minLength': t('common.validation.password_min_length'),
+    'username.required': t('common.validation.emailRequired'),
+    'username.email': t('common.validation.emailInvalid'),
+    'password.required': t('common.validation.passwordRequired'),
+    'password.minLength': t('common.validation.passwordMinLength'),
   }
 
   if (v$.value.validationFields.$invalid) {
@@ -118,7 +118,7 @@ const handleSubmit = async (): Promise<void> => {
       router.push({ name: 'generalMap' })
       clearForm()
     } else {
-      errorMessage.value = result
+      errorMessage.value = t(`errors.${result}`)
     }
     requestIsProcessing.value = false
     return
