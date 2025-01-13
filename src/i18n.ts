@@ -7,15 +7,16 @@ const messages = {
   ru,
 }
 
+const savedLocale = localStorage.getItem('app-language') || 'en'
+
 const i18n = createI18n({
   legacy: false,
-  locale: 'ru',
+  locale: savedLocale,
   fallbackLocale: 'en',
   messages,
 
   pluralRules: {
     ru(count) {
-      console.log(count)
       const mod10 = count % 10
       const mod100 = count % 100
 

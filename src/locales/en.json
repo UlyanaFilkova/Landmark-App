@@ -6,7 +6,9 @@
       "logout": "Log out",
       "back": "Back",
       "addNewPlace": "Add place",
-      "savePlace": "Save place"
+      "savePlace": "Save place",
+      "delete": "Delete",
+      "edit": "Edit"
     },
     "titles": {
       "map": "Map",

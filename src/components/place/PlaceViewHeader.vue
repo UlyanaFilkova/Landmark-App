@@ -3,9 +3,13 @@
     <BackLink path="../general-map" />
     <div v-if="userHasEditPermission" class="header-buttons">
       <RouterLink :to="{ name: 'edit', params: { id: place.id } }">
-        <BaseButton class="medium-button grey" text="Edit" />
+        <BaseButton class="medium-button grey" :text="t('common.buttons.edit')" />
       </RouterLink>
-      <BaseButton class="medium-button red" text="Delete" @click="showModal = true" />
+      <BaseButton
+        class="medium-button red"
+        :text="t('common.buttons.delete')"
+        @click="showModal = true"
+      />
       <ConfirmModal
         :isVisible="showModal"
         @confirm="handleDeleteClick"
@@ -18,6 +22,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import BackLink from '@/components/base/BackLink.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
@@ -31,6 +36,7 @@ import type { Place } from '@/types/interfaces.ts'
 const userStore = useUserStore()
 const mapStore = useMapStore()
 const router = useRouter()
+const { t } = useI18n()
 
 const showModal = ref<boolean>(false)
 

@@ -1,7 +1,7 @@
 <template>
   <div class="map-header">
     <div class="map-header-container">
-      <h1 class="map-header__h1">{{ t('common.titles.map') }}</h1>
+      <LanguageSelector />
       <RouterLink v-if="userHasAddPermission" :to="{ name: 'addPlace' }">
         <BaseButton class="medium-button" :text="t('common.buttons.addNewPlace')" />
       </RouterLink>
@@ -22,6 +22,7 @@ import { watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import BaseButton from '@/components/base/BaseButton.vue'
+import LanguageSelector from '@/components/base/LanguageSelector.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 
 const { t } = useI18n()
@@ -81,6 +82,7 @@ watch(
     width: auto;
     flex-grow: 1;
     align-items: center;
+    gap: 10px;
   }
   .map-header-container.single {
     width: fit-content;
