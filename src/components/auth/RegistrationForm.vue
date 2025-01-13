@@ -46,7 +46,7 @@ const { t } = useI18n()
 const inputFields = reactive<InputField[]>([
   {
     model: '',
-    type: 'email',
+    type: 'text',
     placeholder: t('registration.placeholders.email'),
     name: 'username',
     autocomplete: 'username',

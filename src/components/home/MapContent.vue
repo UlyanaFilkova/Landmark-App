@@ -12,7 +12,7 @@ import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
-import MapComponent from '@/components/common/MapComponent.vue'
+import MapComponent from '@/components/base/MapComponent.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 import { getFilteredPlacesData } from '@/services/place'
 

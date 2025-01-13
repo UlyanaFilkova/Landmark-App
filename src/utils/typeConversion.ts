@@ -18,6 +18,7 @@ export const convertFilesToBase64 = (files: File[]): Promise<string[]> => {
 
     files.forEach((file) => {
       const reader = new FileReader()
+
       reader.onload = () => {
         base64Files.push(reader.result as string)
         processedCount++
@@ -39,6 +40,7 @@ export const convertFileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     let base64File: string = ''
     const reader = new FileReader()
+
     reader.onload = () => {
       base64File = reader.result as string
       resolve(base64File)

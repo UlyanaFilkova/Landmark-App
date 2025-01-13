@@ -28,7 +28,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
-import { required, email, minLength } from '@vuelidate/validators'
+import { required, email } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
 
 import FormInput from '@/components/base/FormInput.vue'
@@ -44,7 +44,7 @@ const { t } = useI18n()
 const inputFields = reactive<InputField[]>([
   {
     model: '',
-    type: 'email',
+    type: 'text',
     placeholder: t('login.placeholders.email'),
     name: 'username',
     autocomplete: 'username',
@@ -67,7 +67,7 @@ const requestIsProcessing = ref<boolean>(false)
 const rules = {
   validationFields: {
     username: { required, email },
-    password: { required, minLength: minLength(6) },
+    password: { required },
   },
 }
 
@@ -87,7 +87,6 @@ const getValidateMessage = (): string => {
     'username.required': t('inputs.validation.emailRequired'),
     'username.email': t('inputs.validation.emailInvalid'),
     'password.required': t('inputs.validation.passwordRequired'),
-    'password.minLength': t('inputs.validation.passwordMinLength'),
   }
 
   if (v$.value.validationFields.$invalid) {

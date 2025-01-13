@@ -22,7 +22,7 @@ import { watch, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import BaseButton from '@/components/base/BaseButton.vue'
-import LanguageSelector from '@/components/base/LanguageSelector.vue'
+import LanguageSelector from '@/components/home/LanguageSelector.vue'
 import { useUserStore } from '@/stores/userStore.ts'
 
 const { t } = useI18n()

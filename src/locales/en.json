@@ -74,7 +74,7 @@
     "location": "Location",
     "latitude": "Latitude",
     "longitude": "Longitude",
-    "rating": "rating",
+    "rating": "Rating",
     "yourRating": "Your Rating",
     "photos": "Photos",
     "noPhotos": "No Photos",
