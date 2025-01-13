@@ -55,6 +55,7 @@ export const checkUserAuthentication = async (): Promise<string | void> => {
         if (user) {
           try {
             const token = await user.getIdToken()
+            await saveTokenInCookies(user)
             if (token === idToken) {
               const userId = user.uid
 
