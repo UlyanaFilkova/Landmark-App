@@ -1,6 +1,6 @@
 <template>
   <div class="top-places_container">
-    <div class="top-places-subtitle">Rating</div>
+    <div class="top-places-subtitle">{{ t('common.titles.rating') }}</div>
     <dynamic-scroller
       :items="items"
       :min-item-size="100"
@@ -20,11 +20,14 @@
 import { ref, computed, watch } from 'vue'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller } from 'vue-virtual-scroller'
+import { useI18n } from 'vue-i18n'
 
 import PlaceCard from '@/components/home/PlaceCard.vue'
 
 import { calculateMetricRating } from '@/utils/typeConversion.ts'
 import type { Place } from '@/types/interfaces.ts'
+
+const { t } = useI18n()
 
 const props = defineProps<{ places: Place[] }>()
 

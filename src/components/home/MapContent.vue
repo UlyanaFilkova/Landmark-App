@@ -1,7 +1,7 @@
 <template>
   <div class="map-content">
     <div class="only-my-places" @click="handleCheckboxChange">
-      <CustomCheckbox :checked="checkboxChecked" /><span>Only my places</span>
+      <CustomCheckbox :checked="checkboxChecked" /><span>{{ t('common.titles.myPlaces') }}</span>
     </div>
     <MapComponent :points="points" :single="false" :readonly="true" />
   </div>
@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 import MapComponent from '@/components/common/MapComponent.vue'
@@ -16,6 +17,8 @@ import { useUserStore } from '@/stores/userStore.ts'
 import { getFilteredPlacesData } from '@/services/place'
 
 import type { Place, MapPoint } from '@/types/interfaces.ts'
+
+const { t } = useI18n()
 
 const props = defineProps<{ places: Place[] }>()
 

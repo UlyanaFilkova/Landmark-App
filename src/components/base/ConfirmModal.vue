@@ -1,17 +1,25 @@
 <template>
   <div class="modal-overlay" v-if="isVisible">
     <div class="modal">
-      <h2>Confirm deletion</h2>
-      <p>Are you sure you want to delete this place?</p>
-      <BaseButton text="Delete" class="small-button red margin-right" @click="confirmDeletion" />
-      <BaseButton text="Cancel" class="small-button grey" @click="cancelDeletion" />
+      <h2>{{ t('modal.confirmDeletion') }}</h2>
+      <p>{{ t('modal.confirmationMessage') }}</p>
+      <BaseButton
+        :text="t('modal.delete')"
+        class="small-button red margin-right"
+        @click="confirmDeletion"
+      />
+      <BaseButton :text="t('modal.cancel')" class="small-button grey" @click="cancelDeletion" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
 import { toRefs, defineProps, defineEmits } from 'vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+
+const { t } = useI18n()
 
 const props = defineProps<{ isVisible: boolean }>()
 

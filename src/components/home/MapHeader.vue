@@ -1,23 +1,31 @@
 <template>
   <div class="map-header">
     <div class="map-header-container">
-      <h1 class="map-header__h1">Map</h1>
+      <LanguageSelector />
       <RouterLink v-if="userHasAddPermission" :to="{ name: 'addPlace' }">
-        <BaseButton class="medium-button" text="Add new place" />
+        <BaseButton class="medium-button" :text="t('common.buttons.addNewPlace')" />
       </RouterLink>
     </div>
     <div class="map-header-container single">
-      <h2 class="map-header__h2">Top Places</h2>
-      <BaseButton class="medium-button grey" text="Log out" @click="handleLogoutClick" />
+      <h2 class="map-header__h2">{{ t('common.titles.topPlaces') }}</h2>
+      <BaseButton
+        class="medium-button grey"
+        :text="t('common.buttons.logout')"
+        @click="handleLogoutClick"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { watch, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import BaseButton from '@/components/base/BaseButton.vue'
+import LanguageSelector from '@/components/base/LanguageSelector.vue'
 import { useUserStore } from '@/stores/userStore.ts'
+
+const { t } = useI18n()
 
 const userStore = useUserStore()
 
@@ -43,6 +51,7 @@ watch(
   padding: 20px 0 0 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 4%;
 }
 .map-header-container {
@@ -73,10 +82,17 @@ watch(
     width: auto;
     flex-grow: 1;
     align-items: center;
+    gap: 10px;
   }
   .map-header-container.single {
     width: fit-content;
     flex-grow: 0;
+  }
+}
+
+@media (max-width: 410px) {
+  .map-header__h1 {
+    display: none;
   }
 }
 

@@ -1,13 +1,16 @@
 <template>
   <router-link :to="props.path" class="back-button">
     <BackIcon />
-    Back
+    {{ t('common.buttons.back') }}
   </router-link>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { defineProps } from 'vue'
 import BackIcon from '@/components/icons/BackIcon.vue'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   path: string

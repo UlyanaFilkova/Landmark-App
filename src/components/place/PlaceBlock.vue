@@ -2,19 +2,19 @@
   <div v-if="place" class="place-details">
     <h1 class="place-title">{{ place.title }}</h1>
     <div class="place-details-group">
-      <h3>Description</h3>
+      <h3>{{ t('place.description') }}</h3>
       {{ place.description }}
     </div>
 
     <div class="ratings place-details-group">
       <div class="average-rating">
-        <h3>Rating</h3>
+        <h3>{{ t('place.rating') }}</h3>
         <StarRating :rating="place.rating" readonly :starSize="30" textClass="big" />
-        <span class="rating-voices">{{ place.voices }} voices</span>
+        <span class="rating-voices">{{ t('place.voices', { count: place.voices }) }}</span>
       </div>
 
       <div v-if="!isAdmin" class="user-rating">
-        <h3>Your Rating</h3>
+        <h3>{{ t('place.yourRating') }}</h3>
         <StarRating
           :rating="userRating"
           :readonly="false"
@@ -27,12 +27,12 @@
     </div>
 
     <div class="place-details-group">
-      <h3>Location</h3>
+      <h3>{{ t('place.location') }}</h3>
       <LocationData :place="place" />
     </div>
 
     <div class="place-details-group">
-      <h3>Photos</h3>
+      <h3>{{ t('place.photos') }}</h3>
       <div class="photo-grid">
         <img
           v-for="(photo, index) in place.photos"
@@ -42,7 +42,7 @@
           class="photo-thumbnail"
         />
       </div>
-      <div v-if="place.photos.length === 0">No photos</div>
+      <div v-if="place.photos.length === 0">{{ t('place.noPhotos') }}</div>
     </div>
 
     <vue-easy-lightbox
@@ -57,6 +57,7 @@
 <script setup lang="ts">
 import { ref, watchEffect, computed } from 'vue'
 import VueEasyLightbox from 'vue-easy-lightbox'
+import { useI18n } from 'vue-i18n'
 
 import StarRating from '@/components/base/StarRating.vue'
 import LocationData from '@/components/place/LocationData.vue'
@@ -66,10 +67,11 @@ import { useUserStore } from '@/stores/userStore.ts'
 
 import type { Place } from '@/types/interfaces.ts'
 
-const props = defineProps<{ place: Place | null }>()
-
 const mapStore = useMapStore()
 const userStore = useUserStore()
+const { t } = useI18n()
+
+const props = defineProps<{ place: Place | null }>()
 
 const photoViewerVisible = ref<boolean>(false)
 const photoViewerIndex = ref<number>(0)
@@ -133,7 +135,7 @@ watchEffect(() => {
 }
 h3 {
   font-weight: 500;
-  margin-bottom: 10px;
+  margin: 10px 0 20px 0;
 }
 
 .place-details-group {

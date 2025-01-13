@@ -6,6 +6,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { tileLayer, marker, map, Map, MarkerClusterGroup, Marker, Icon } from 'leaflet'
 import type { LeafletMouseEvent } from 'leaflet'
+import { useI18n } from 'vue-i18n'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
@@ -13,6 +14,8 @@ import 'leaflet.markercluster'
 import { convertBase64ToFiles, getFileUrl } from '@/utils/typeConversion.ts'
 
 import type { MapPoint } from '@/types/interfaces.ts'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   points: MapPoint[]
@@ -43,7 +46,7 @@ const createPopUp = (point: MapPoint) => {
         ${point.title}
       </a>
       <div class="star-rating" style="pointer-events: none;">
-        Rating: ${point.rating}<span class="star">★</span>
+        ${t('common.titles.rating')}: ${point.rating}<span class="star">★</span>
       </div>
       ${
         photos.length > 0

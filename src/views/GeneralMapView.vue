@@ -5,7 +5,7 @@
     <MapHeader class="map-header" />
     <div class="content">
       <MapContent :places="places" />
-      <h2 class="map-header__h2">Top Places</h2>
+      <h2 class="map-header__h2">{{ t('common.titles.topPlaces') }}</h2>
       <TopPlaces :places="places" />
     </div>
   </div>
@@ -14,6 +14,7 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount, computed } from 'vue'
 import { useMapStore } from '@/stores/mapStore'
+import { useI18n } from 'vue-i18n'
 
 import MapHeader from '@/components/home/MapHeader.vue'
 import MapContent from '@/components/home/MapContent.vue'
@@ -24,6 +25,7 @@ import GlobalError from '@/components/base/GlobalError.vue'
 import type { Place } from '@/types/interfaces.ts'
 
 const store = useMapStore()
+const { t } = useI18n()
 const isLoading = ref(true)
 const isError = ref(false)
 const places = computed<Place[]>(() => store.getPlaces || [])
@@ -105,7 +107,8 @@ onBeforeMount(() => {
     line-height: normal;
     margin-top: 30px;
   }
-  .content > * {
+  .content > *,
+  .map-header {
     width: 95%;
     margin: 10px auto 15px;
   }

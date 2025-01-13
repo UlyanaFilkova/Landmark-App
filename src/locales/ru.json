@@ -1,0 +1,95 @@
+{
+  "common": {
+    "buttons": {
+      "login": "Войти",
+      "register": "Зарегистрироваться",
+      "logout": "Выйти",
+      "back": "Назад",
+      "addNewPlace": "Добавить место",
+      "savePlace": "Сохранить место",
+      "delete": "Удалить",
+      "edit": "Редактировать"
+    },
+    "titles": {
+      "map": "Карта",
+      "topPlaces": "Лучшие места",
+      "rating": "Рейтинг",
+      "myPlaces": "Мои места",
+      "addNewPlace": "Добавить новое место",
+      "editPlace": "Редактировать место"
+    }
+  },
+  "inputs": {
+    "fileInput": {
+      "label": "Фотографии",
+      "buttonText": "Выберите файлы",
+      "dragAndDropText": "Перетащите файлы сюда или нажмите кнопку, чтобы загрузить",
+      "uploadedFiles": "Загруженные файлы:",
+      "fileSizeError": "Размер файла превышает допустимый. Пожалуйста, загрузите меньший файл",
+      "warningMessage": "Вы достигли максимального количества файлов.",
+      "errorMessage": "Один или несколько файлов не являются допустимыми изображениями"
+    },
+    "placeholders": {
+      "email": "Электронная почта",
+      "password": "Пароль",
+      "repeatPassword": "Повторите пароль"
+    },
+    "validation": {
+      "emailRequired": "Электронная почта обязательна",
+      "emailInvalid": "Некорректный адрес электронной почты",
+      "passwordRequired": "Пароль обязателен",
+      "passwordMinLength": "Пароль должен содержать не менее 6 символов",
+      "repeatPasswordRequired": "Повторите пароль",
+      "passwordsMustMatch": "Пароли должны совпадать",
+      "invalidLocation": "Широта должна быть от -90° до 90° и долгота от -180° до 180°"
+    }
+  },
+  "login": {
+    "header": "Вход",
+    "button": "@:common.buttons.login",
+    "link": "Войти",
+    "question": "Еще нет аккаунта?",
+    "placeholders": {
+      "email": "@:inputs.placeholders.email",
+      "password": "@:inputs.placeholders.password"
+    }
+  },
+  "registration": {
+    "header": "Создать аккаунт",
+    "button": "@:common.buttons.register",
+    "link": "Создать",
+    "question": "Уже есть аккаунт?",
+    "placeholders": {
+      "email": "@:inputs.placeholders.email",
+      "password": "@:inputs.placeholders.password",
+      "repeatPassword": "@:inputs.placeholders.repeatPassword"
+    },
+    "errors": {
+      "usernameTaken": "Это имя пользователя уже занято."
+    }
+  },
+  "place": {
+    "title": "Название",
+    "description": "Описание",
+    "location": "Местоположение",
+    "latitude": "Широта",
+    "longitude": "Долгота",
+    "rating": "Рейтинг",
+    "yourRating": "Ваш рейтинг",
+    "photos": "Фотографии",
+    "noPhotos": "Нет фотографий",
+    "voices": "{count} голос | {count} голоса | {count} голосов"
+  },
+  "modal": {
+    "confirmDeletion": "Подтвердите удаление",
+    "confirmationMessage": "Вы уверены, что хотите удалить это место?",
+    "delete": "Удалить",
+    "cancel": "Отмена"
+  },
+  "errors": {
+    "loadingError": "Произошла ошибка при загрузке данных. Пожалуйста, попробуйте позже.",
+    "usernameTaken": "Это имя пользователя уже занято.",
+    "loginError": "Неверный адрес электронной почты или пароль.",
+    "checkUserError": "Произошла ошибка при проверке пользователя. Пожалуйста, попробуйте позже."
+  }
+}

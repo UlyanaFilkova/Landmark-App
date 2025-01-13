@@ -24,10 +24,15 @@ defineProps<Props>()
 .login-container {
   max-width: 400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 22px;
   border: 1px solid var(--color-border-one);
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+@media (min-width: 576px) {
+  .login-container {
+    min-width: 300px;
+  }
 }
 
 .form-link {

@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <h1>Create an account</h1>
+    <h1>{{ t('registration.header') }}</h1>
     <FormInput
       v-for="(field, index) in inputFields"
       :key="index"
@@ -19,7 +19,7 @@
     <BaseButton
       :disabled="submitButtonDisabled || requestIsProcessing"
       class="medium-button"
-      text="Register"
+      :text="t('registration.button')"
     />
   </form>
 </template>
@@ -29,6 +29,7 @@ import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
+import { useI18n } from 'vue-i18n'
 
 import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
@@ -37,11 +38,16 @@ import { registerUser, checkUsernameExists } from '@/services/user.ts'
 
 import type { InputField } from '@/types/interfaces.ts'
 
+const errorMessage = ref<string>('')
+const requestIsProcessing = ref<boolean>(false)
+const router = useRouter()
+const { t } = useI18n()
+
 const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'email',
-    placeholder: 'Email',
+    placeholder: t('registration.placeholders.email'),
     name: 'username',
     autocomplete: 'username',
     required: true,
@@ -50,7 +56,7 @@ const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'password',
-    placeholder: 'Password',
+    placeholder: t('registration.placeholders.password'),
     name: 'password',
     autocomplete: 'new-password',
     required: true,
@@ -59,17 +65,13 @@ const inputFields = reactive<InputField[]>([
   {
     model: '',
     type: 'password',
-    placeholder: 'Repeat Password',
+    placeholder: t('registration.placeholders.repeatPassword'),
     name: 'repeat-password',
     autocomplete: 'new-password',
     required: true,
     errorMessage: '',
   },
 ])
-
-const errorMessage = ref<string>('')
-const requestIsProcessing = ref<boolean>(false)
-const router = useRouter()
 
 const rules = {
   validationFields: {
@@ -101,12 +103,12 @@ const submitButtonDisabled = computed<boolean>(
 
 const getValidateMessage = (): string => {
   const validationErrors = {
-    'username.required': 'Email is required',
-    'username.email': 'Invalid email',
-    'password.required': 'Password is required',
-    'password.minLength': 'Password must be at least 6 characters long',
-    'repeatPassword.required': 'Please, repeat the password',
-    'repeatPassword.sameAsPassword': 'Passwords must match',
+    'username.required': t('inputs.validation.emailRequired'),
+    'username.email': t('inputs.validation.emailInvalid'),
+    'password.required': t('inputs.validation.passwordRequired'),
+    'password.minLength': t('inputs.validation.passwordMinLength'),
+    'repeatPassword.required': t('inputs.validation.repeatPasswordRequired'),
+    'repeatPassword.sameAsPassword': t('inputs.validation.passwordsMustMatch'),
   }
 
   if (v$.value.validationFields.$invalid) {
@@ -135,7 +137,7 @@ const handleSubmit = async (): Promise<void> => {
     requestIsProcessing.value = true
     const userExists = await checkUsernameExists(inputFields[0].model)
     if (userExists) {
-      errorMessage.value = 'This username is already taken'
+      errorMessage.value = t('errors.usernameTaken')
       requestIsProcessing.value = false
       return
     }
