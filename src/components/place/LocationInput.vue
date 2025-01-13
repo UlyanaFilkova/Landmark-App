@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import MapComponent from '@/components/common/MapComponent.vue'
+import MapComponent from '@/components/base/MapComponent.vue'
 import type { MapPoint } from '@/types/interfaces.ts'
 const { t } = useI18n()
 
@@ -145,5 +145,17 @@ input {
 
 input:focus {
   outline: 1.5px solid var(--color-14-hover);
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>

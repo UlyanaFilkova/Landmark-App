@@ -76,7 +76,15 @@ const addMarkers = (points: MapPoint[]) => {
 
 const initializeGeneralMap = () => {
   if (mapContainer.value) {
-    mapEntity.value = map(mapContainer.value).setView([53.9, 27.5667], 11)
+    mapEntity.value = map(mapContainer.value, {
+      attributionControl: false,
+      maxBounds: [
+        [-90, -180],
+        [90, 180],
+      ],
+      maxBoundsViscosity: 1.0,
+      minZoom: 0.7,
+    }).setView([53.9, 27.5667], 11)
 
     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapEntity.value)
 
@@ -192,6 +200,10 @@ onMounted(() => {
 .leaflet-popup-close-button:hover span {
   display: block;
   color: var(--color-delete-span-hover);
+}
+
+.leaflet-bottom .leaflet-right {
+  display: none;
 }
 
 .popup-content {
